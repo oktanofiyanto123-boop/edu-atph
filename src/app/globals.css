@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --primary: #059669;
+    --primary-foreground: #ffffff;
+    --secondary: #0f172a;
+    --secondary-foreground: #f8fafc;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #10b981;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #e2e8f0;
+    --ring: #059669;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: #090d16;
+    --foreground: #f8fafc;
+    --card: #111827;
+    --card-foreground: #f8fafc;
+    --primary: #10b981;
+    --primary-foreground: #090d16;
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #059669;
+    --accent-foreground: #ffffff;
+    --destructive: #f87171;
+    --destructive-foreground: #090d16;
+    --border: #1f2937;
+    --ring: #10b981;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.dark .glass-panel {
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(31, 41, 55, 0.8);
+}
+
+.gradient-agri {
+  background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #10b981 100%);
+}
+
+.gradient-navy {
+  background: linear-gradient(135deg, #090d16 0%, #0f172a 60%, #1e293b 100%);
+}
+
+/* Reading content typography styling for materials */
+.prose-atph {
+  line-height: 1.8;
+  color: #334155;
+}
+.dark .prose-atph {
+  color: #cbd5e1;
+}
+.prose-atph h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #064e3b;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+.dark .prose-atph h2 {
+  color: #34d399;
+}
+.prose-atph h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.dark .prose-atph h3 {
+  color: #f1f5f9;
+}
+.prose-atph p {
+  margin-bottom: 1rem;
+}
+.prose-atph ul, .prose-atph ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.prose-atph li {
+  margin-bottom: 0.5rem;
+}
+.prose-atph strong {
+  color: #0f172a;
+}
+.dark .prose-atph strong {
+  color: #ffffff;
+}
+
+/* Print layout for certificates and transcripts */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
 }
