@@ -23,6 +23,10 @@ import {
   File,
   FileCheck,
   Loader2,
+  Folder,
+  FolderOpen,
+  GraduationCap,
+  Layers,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 import { TeachingMaterial, MaterialCategory, ClassItem, MaterialAttachment } from '@/types';
@@ -38,6 +42,7 @@ export default function AdminMaterialsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedClass, setSelectedClass] = useState('all');
+  const [selectedFolder, setSelectedFolder] = useState<'all' | 'X' | 'XI' | 'XII'>('all');
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,6 +90,19 @@ export default function AdminMaterialsPage() {
     setTimeout(() => setNotification(null), 3000);
   };
 
+  // Calculate count per folder
+  const countX = materials.filter(
+    (m) => DataProvider.getMaterialGradeLevel(m.targetClassId, m.targetClassName) === 'X'
+  ).length;
+
+  const countXI = materials.filter(
+    (m) => DataProvider.getMaterialGradeLevel(m.targetClassId, m.targetClassName) === 'XI'
+  ).length;
+
+  const countXII = materials.filter(
+    (m) => DataProvider.getMaterialGradeLevel(m.targetClassId, m.targetClassName) === 'XII'
+  ).length;
+
   const filteredMaterials = materials.filter((m) => {
     const matchesSearch =
       m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -92,7 +110,11 @@ export default function AdminMaterialsPage() {
     const matchesCategory = selectedCategory === 'all' || m.categoryId === selectedCategory;
     const matchesClass =
       selectedClass === 'all' || m.targetClassId === 'all' || m.targetClassId === selectedClass;
-    return matchesSearch && matchesCategory && matchesClass;
+
+    const gradeLevel = DataProvider.getMaterialGradeLevel(m.targetClassId, m.targetClassName);
+    const matchesFolder = selectedFolder === 'all' || gradeLevel === selectedFolder;
+
+    return matchesSearch && matchesCategory && matchesClass && matchesFolder;
   });
 
   const handleOpenAdd = () => {
@@ -442,6 +464,73 @@ export default function AdminMaterialsPage() {
           </button>
         </div>
 
+        {/* FOLDER TABS KELAS X, XI, XII */}
+        <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80">
+          <button
+            type="button"
+            onClick={() => setSelectedFolder('all')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              selectedFolder === 'all'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Layers className="w-4 h-4 text-slate-500" />
+            <span>Semua Folder ({materials.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedFolder('X')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              selectedFolder === 'X'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/25'
+                : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+            }`}
+          >
+            {selectedFolder === 'X' ? (
+              <FolderOpen className="w-4 h-4" />
+            ) : (
+              <Folder className="w-4 h-4" />
+            )}
+            <span>Folder Kelas X ({countX})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedFolder('XI')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              selectedFolder === 'XI'
+                ? 'bg-teal-600 text-white shadow-md shadow-teal-600/25'
+                : 'text-teal-700 dark:text-teal-400 hover:bg-teal-50 dark:hover:bg-teal-950/40'
+            }`}
+          >
+            {selectedFolder === 'XI' ? (
+              <FolderOpen className="w-4 h-4" />
+            ) : (
+              <Folder className="w-4 h-4" />
+            )}
+            <span>Folder Kelas XI ({countXI})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSelectedFolder('XII')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
+              selectedFolder === 'XII'
+                ? 'bg-amber-600 text-white shadow-md shadow-amber-600/25'
+                : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+            }`}
+          >
+            {selectedFolder === 'XII' ? (
+              <FolderOpen className="w-4 h-4" />
+            ) : (
+              <Folder className="w-4 h-4" />
+            )}
+            <span>Folder Kelas XII ({countXII})</span>
+          </button>
+        </div>
+
         {/* Materials Table Card */}
         <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
@@ -450,7 +539,7 @@ export default function AdminMaterialsPage() {
                 <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                   <th className="py-4 px-6">Modul Materi & Topik</th>
                   <th className="py-4 px-6">Kategori ATPH</th>
-                  <th className="py-4 px-6">Kelas Target</th>
+                  <th className="py-4 px-6">Folder & Kelas Target</th>
                   <th className="py-4 px-6">Berkas & Media</th>
                   <th className="py-4 px-6">Status</th>
                   <th className="py-4 px-6 text-right">Aksi</th>
@@ -460,28 +549,50 @@ export default function AdminMaterialsPage() {
                 {filteredMaterials.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-12 text-center text-slate-400">
-                      Tidak ada materi yang sesuai kriteria pencarian.
+                      Tidak ada materi yang sesuai kriteria pencarian di folder ini.
                     </td>
                   </tr>
                 ) : (
-                  filteredMaterials.map((m) => (
-                    <tr key={m.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="py-4 px-6 max-w-sm">
-                        <p className="font-bold text-slate-900 dark:text-white">
-                          {m.title}
-                        </p>
-                        <p className="text-[11px] text-slate-500 truncate mt-0.5">
-                          Topik: {m.topic}
-                        </p>
-                      </td>
-                      <td className="py-4 px-6">
-                        <span className="inline-block px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300">
-                          {m.categoryName || 'ATPH'}
-                        </span>
-                      </td>
-                      <td className="py-4 px-6 font-semibold text-slate-600 dark:text-slate-300">
-                        {m.targetClassName || 'Semua Kelas'}
-                      </td>
+                  filteredMaterials.map((m) => {
+                    const gradeLevel = DataProvider.getMaterialGradeLevel(
+                      m.targetClassId,
+                      m.targetClassName
+                    );
+
+                    return (
+                      <tr key={m.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="py-4 px-6 max-w-sm">
+                          <p className="font-bold text-slate-900 dark:text-white">
+                            {m.title}
+                          </p>
+                          <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                            Topik: {m.topic}
+                          </p>
+                        </td>
+                        <td className="py-4 px-6">
+                          <span className="inline-block px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300">
+                            {m.categoryName || 'ATPH'}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="space-y-1">
+                            <span
+                              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                                gradeLevel === 'XII'
+                                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
+                                  : gradeLevel === 'XI'
+                                  ? 'bg-teal-100 text-teal-800 dark:bg-teal-950/80 dark:text-teal-300'
+                                  : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
+                              }`}
+                            >
+                              <Folder className="w-3 h-3" />
+                              <span>Folder Kelas {gradeLevel}</span>
+                            </span>
+                            <p className="text-[11px] text-slate-500 font-medium">
+                              {m.targetClassName || 'Semua Kelas'}
+                            </p>
+                          </div>
+                        </td>
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-2 text-slate-400">
                           {m.attachments && m.attachments.length > 0 && (
@@ -542,8 +653,9 @@ export default function AdminMaterialsPage() {
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
+                  );
+                })
+              )}
               </tbody>
             </table>
           </div>

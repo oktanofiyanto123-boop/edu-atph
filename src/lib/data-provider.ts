@@ -296,6 +296,15 @@ export const DataProvider = {
     return false;
   },
 
+  getMaterialGradeLevel(targetClassId?: string, targetClassName?: string): 'X' | 'XI' | 'XII' | 'all' {
+    const id = (targetClassId || '').toLowerCase();
+    const name = (targetClassName || '').toLowerCase();
+    if (id.includes('12') || id.includes('cls-xii') || name.includes('xii')) return 'XII';
+    if (id.includes('11') || id.includes('cls-xi') || name.includes('xi')) return 'XI';
+    if (id.includes('10') || id.includes('cls-x') || name.includes('x')) return 'X';
+    return 'all';
+  },
+
   addClass(cls: Omit<ClassItem, 'id' | 'createdAt'>): ClassItem {
     const classes = this.getClasses();
     const newClass: ClassItem = {

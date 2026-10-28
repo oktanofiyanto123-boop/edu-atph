@@ -610,6 +610,115 @@ PHT bukan berarti anti-pestisida, melainkan pendekatan ekologis untuk membatasi 
     createdAt: '2026-08-10T09:00:00Z',
     updatedAt: '2026-08-10T09:00:00Z',
   },
+  {
+    id: 'mat-pembiakan-vegetatif-xi',
+    title: 'Teknik Pembiakan Vegetatif Okulasi & Sambung Pucuk Tanaman Buah (Kelas XI)',
+    slug: 'pembiakan-vegetatif-okulasi-sambung-pucuk',
+    description: 'Modul praktikum kejuruan Kelas XI: Teknik penyambungan batang bawah (rootstock) dan entres unggul pada tanaman mangga, alpukat, dan jeruk.',
+    categoryId: 'cat-4',
+    categoryName: 'Pembibitan Tanaman',
+    targetClassId: 'cls-xi-at-1',
+    targetClassName: 'XI AT 1',
+    topic: 'Okulasi Mata Tunas, Cleft Grafting, dan Pemeliharaan Bibit Pascasambung',
+    learningObjectives: [
+      'Memilih batang bawah sehat berakar tunggang kuat dan batang atas (entres) bersertifikat',
+      'Mempraktikkan teknik sambung pucuk (cleft grafting) dengan tingkat keberhasilan minimal 85%',
+      'Melakukan pemeliharaan sungkup dan penyiraman terkontrol di nursery greenhouse',
+    ],
+    content: `
+### 1. Prinsip Dasar Sambung Pucuk (Grafting)
+Sambung pucuk adalah seni menggabungkan dua bagian tanaman yang masih hidup sedemikian rupa sehingga keduanya bersatu dan tumbuh menjadi satu tanaman utuh yang memiliki sifat unggul kedua tetuanya.
+
+#### Kunci Keberhasilan:
+- **Kesesuaian Kambium:** Lapisan kambium antara batang bawah dan entres harus bertemu rapat tanpa rongga udara.
+- **Kebersihan Alat:** Pisau okulasi harus sangat tajam dan steril (dibersihkan dengan alkohol 70%).
+- **Pengikatan & Penutupan Sungkup:** Gunakan plastik parafilm atau tali PE 0.2 mm dengan ikatan genting dari bawah ke atas agar air hujan tidak merembes.
+    `,
+    imageUrl: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80',
+    attachments: [],
+    orderIndex: 2,
+    status: 'published',
+    createdAt: '2026-08-11T08:00:00Z',
+    updatedAt: '2026-08-11T08:00:00Z',
+  },
+  {
+    id: 'mat-fertigasi-melon-xi',
+    title: 'Manajemen Irigasi Tetes & Fertigasi Presisi Tanaman Melon Greenhouse (Kelas XI)',
+    slug: 'fertigasi-presisi-melon-greenhouse',
+    description: 'Panduan operasional sistem drip irrigation, perhitungan formula hara N-P-K bertahap, dan pemangkasan cabang lateral melon.',
+    categoryId: 'cat-6',
+    categoryName: 'Budidaya Tanaman Hortikultura',
+    targetClassId: 'cls-xi-at-2',
+    targetClassName: 'XI AT 2',
+    topic: 'Kebutuhan Debit Air, Dosing Pump, dan Manajemen Brix Buah',
+    learningObjectives: [
+      'Mengoperasikan dripper emitter dengan debit terkalibrasi 2 liter/jam per tanaman',
+      'Mengatur rasio hara Kalium tinggi pada fase pembuahan untuk meningkatkan kadar gula (Brix > 13)',
+      'Melakukan seleksi 1 buah terbaik per pohon pada ruas daun ke-9 hingga ke-12',
+    ],
+    content: `
+### Sistem Fertigasi Presisi pada Melon Golden
+Fertigasi (fertilisasi + irigasi) memberikan larutan hara langsung ke daerah rizosfer tanaman secara seragam dan terukur dengan pemantauan EC berkala.
+    `,
+    imageUrl: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=1200&q=80',
+    attachments: [],
+    orderIndex: 3,
+    status: 'published',
+    createdAt: '2026-08-12T08:00:00Z',
+    updatedAt: '2026-08-12T08:00:00Z',
+  },
+  {
+    id: 'mat-pascapanen-kewirausahaan-xii',
+    title: 'Standardisasi Mutu Pascapanen, Sortasi, & Kemasan Vakum Sayuran Premium (Kelas XII)',
+    slug: 'standardisasi-mutu-pascapanen-kemasan-vakum',
+    description: 'Modul kejuruan Kelas XII: Standar mutu ekspor/supermarket, grading SNI, penanganan rantai dingin (cold chain 4°C), dan modified atmosphere packaging (MAP).',
+    categoryId: 'cat-13',
+    categoryName: 'Panen dan Pascapanen',
+    targetClassId: 'cls-xii-at-1',
+    targetClassName: 'XII AT 1',
+    topic: 'Pascapanen Sayuran Buah & Daun, Grading SNI, dan Packaging Modern',
+    learningObjectives: [
+      'Menerapkan tahapan pembersihan, trimming, sortasi ukuran dan bentuk sesuai standar supermarket',
+      'Mengoperasikan vacuum sealer dan labeling nutrition facts ber-barcode',
+      'Menjaga suhu rantai dingin (cold chain 2-5°C) guna memperpanjang masa simpan (shelf-life)',
+    ],
+    content: `
+### Standar Operasional Prosedur (SOP) Pascapanen Hortikultura
+Pascapanen menentukan 70% penerimaan harga jual di pasar retail modern. Penurunan mutu fisik dan susut bobot dapat ditekan melalui precooling dan sanitasi klorin food-grade 50-100 ppm.
+    `,
+    imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80',
+    attachments: [],
+    orderIndex: 1,
+    status: 'published',
+    createdAt: '2026-08-15T08:00:00Z',
+    updatedAt: '2026-08-15T08:00:00Z',
+  },
+  {
+    id: 'mat-agripreneur-digital-xii',
+    title: 'Analisis Kelayakan Finansial Usaha Tani & Pemasaran Digital Hasil Panen ATPH (Kelas XII)',
+    slug: 'analisis-finansial-pemasaran-digital-agribisnis',
+    description: 'Kewirausahaan Agribisnis Kelas XII: Perhitungan HPP, R/C Ratio, BEP (Break Even Point), Payback Period, serta strategi direct-to-consumer (D2C) marketplace pertanian.',
+    categoryId: 'cat-15',
+    categoryName: 'Agripreneurship',
+    targetClassId: 'cls-xii-at-2',
+    targetClassName: 'XII AT 2',
+    topic: 'Rencana Bisnis Pertanian Mandiri (Business Model Canvas) & E-Commerce',
+    learningObjectives: [
+      'Menghitung harga pokok produksi (HPP) per kilogram hasil panen greenhouse',
+      'Menghitung rasio kelayakan investasi (R/C ratio > 1.3 dan B/C ratio)',
+      'Membuat strategi kampanye penjualan online dengan konten storytelling pertanian organik',
+    ],
+    content: `
+### Analisis Keuangan Usaha Agribisnis SMK
+Siswa dilatih menyusun laporan laba rugi, cash flow harian, dan menetapkan titik impas (Break Even Point) baik dalam unit maupun rupiah.
+    `,
+    imageUrl: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80',
+    attachments: [],
+    orderIndex: 2,
+    status: 'published',
+    createdAt: '2026-08-16T08:00:00Z',
+    updatedAt: '2026-08-16T08:00:00Z',
+  },
 ];
 
 export const INITIAL_ASSIGNMENTS: Assignment[] = [
