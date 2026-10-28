@@ -3,10 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import AdminSidebar from '@/components/layout/AdminSidebar';
+import { AdminNavProvider } from '@/context/AdminNavContext';
 import { DataProvider } from '@/lib/data-provider';
 import { UserProfile } from '@/types';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
@@ -30,11 +31,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, [router, pathname]);
 
-  // Bypass sidebar and container layout for the admin login page
-  if (pathname === '/admin/login') {
-    return <>{children}</>;
-  }
-
   if (!authorized) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white text-sm">
@@ -47,11 +43,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 relative overflow-x-hidden">
       <AdminSidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto w-full transition-all duration-300">
         {children}
-      </div>
+      </main>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  // Bypass sidebar and container layout for the admin login page
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
+  return (
+    <AdminNavProvider>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </AdminNavProvider>
   );
 }

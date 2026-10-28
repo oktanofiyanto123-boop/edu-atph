@@ -47,7 +47,6 @@ export default function StudentLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showAdminRedirect, setShowAdminRedirect] = useState(false);
 
   // PWA Install State
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -128,7 +127,6 @@ export default function StudentLoginPage() {
   const handleStudentQuickLogin = async (withInstall = false) => {
     setLoading(true);
     setErrorMessage('');
-    setShowAdminRedirect(false);
 
     if (withInstall || installOnLogin) {
       if (deferredPrompt && !isInstalled) {
@@ -157,26 +155,22 @@ export default function StudentLoginPage() {
 
     if (!cleanEmail) {
       setErrorMessage('Silakan masukkan alamat email siswa Anda.');
-      setShowAdminRedirect(false);
       return;
     }
 
     if (!cleanPassword) {
       setErrorMessage('Silakan masukkan kata sandi Anda (password resmi: skaneba123).');
-      setShowAdminRedirect(false);
       return;
     }
 
     // Validasi kata sandi wajib skaneba123
     if (cleanPassword !== 'skaneba123') {
       setErrorMessage('Kata sandi salah! Password resmi siswa adalah: skaneba123');
-      setShowAdminRedirect(false);
       return;
     }
 
     setLoading(true);
     setErrorMessage('');
-    setShowAdminRedirect(false);
 
     // If install on login is active and prompt available, trigger Android install immediately
     if (installOnLogin && deferredPrompt && !isInstalled) {
@@ -194,12 +188,15 @@ export default function StudentLoginPage() {
         cleanEmail.includes('okta.nofiyanto');
 
       if (isAdminAttempt) {
-        setLoading(false);
-        setErrorMessage(
-          'Akses Ditolak: Akun Administrator tidak diizinkan masuk melalui portal siswa. Silakan gunakan Portal Administrator khusus guru.'
-        );
-        setShowAdminRedirect(true);
-        return;
+        const adminUser = DataProvider.login(cleanEmail, cleanPassword, 'admin');
+        if (adminUser && adminUser.role === 'admin') {
+          router.push('/admin/dashboard');
+          return;
+        } else {
+          setLoading(false);
+          setErrorMessage('Kata sandi administrator salah. Silakan periksa kembali.');
+          return;
+        }
       }
 
       // Login akun siswa dengan email sendiri, password skaneba123, dan kelas yang dipilih
@@ -310,17 +307,6 @@ export default function StudentLoginPage() {
                 <ShieldAlert className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
                 <span className="font-semibold leading-relaxed">{errorMessage}</span>
               </div>
-              {showAdminRedirect && (
-                <div className="pt-2">
-                  <Link
-                    href="/admin/login"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition-colors"
-                  >
-                    <span>Buka Portal Administrator</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              )}
             </div>
           )}
 
@@ -530,20 +516,6 @@ export default function StudentLoginPage() {
               </span>
             </button>
           </form>
-
-          {/* Teacher link notice */}
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Guru / Administrator?{' '}
-              <Link
-                href="/admin/login"
-                className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
-              >
-                <span>Masuk Portal Administrator</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-            </p>
-          </div>
         </div>
 
         {/* Link to Information & Curriculum */}

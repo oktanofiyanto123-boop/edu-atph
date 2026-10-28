@@ -27,6 +27,9 @@ import {
   FolderOpen,
   GraduationCap,
   Layers,
+  Globe,
+  EyeOff,
+  SendHorizonal,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 import { TeachingMaterial, MaterialCategory, ClassItem, MaterialAttachment } from '@/types';
@@ -398,6 +401,17 @@ export default function AdminMaterialsPage() {
     }
   };
 
+  const handleToggleStatus = (m: TeachingMaterial) => {
+    const newStatus = m.status === 'published' ? 'draft' : 'published';
+    DataProvider.updateMaterial(m.id, { status: newStatus });
+    showNotification(
+      newStatus === 'published'
+        ? `✅ Materi "${m.title}" kini diterbitkan dan terlihat oleh siswa.`
+        : `📋 Materi "${m.title}" dijadikan draf — tersembunyi dari siswa.`
+    );
+    loadData();
+  };
+
   return (
     <div className="flex-1 flex flex-col">
       <DashboardHeader
@@ -622,20 +636,36 @@ export default function AdminMaterialsPage() {
                         </div>
                       </td>
                       <td className="py-4 px-6">
-                        <span
-                          className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
+                        <button
+                          onClick={() => handleToggleStatus(m)}
+                          title={m.status === 'published' ? 'Klik untuk jadikan draf (sembunyikan dari siswa)' : 'Klik untuk terbitkan (tampilkan ke siswa)'}
+                          className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full transition-all hover:scale-105 active:scale-95 ${
                             m.status === 'published'
-                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900'
                               : m.status === 'draft'
-                              ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                              ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900'
                               : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                           }`}
                         >
-                          {m.status}
-                        </span>
+                          {m.status === 'published' ? (
+                            <Globe className="w-3 h-3" />
+                          ) : (
+                            <EyeOff className="w-3 h-3" />
+                          )}
+                          <span className="uppercase">{m.status === 'published' ? 'Published' : m.status === 'draft' ? 'Draft' : m.status}</span>
+                        </button>
                       </td>
                       <td className="py-4 px-6 text-right">
                         <div className="inline-flex items-center gap-1">
+                          {m.status !== 'published' && (
+                            <button
+                              onClick={() => handleToggleStatus(m)}
+                              title="Terbitkan sekarang ke siswa"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                            >
+                              <SendHorizonal className="w-4 h-4" />
+                            </button>
+                          )}
                           <button
                             onClick={() => handleOpenEdit(m)}
                             title="Edit Materi & Lampiran"

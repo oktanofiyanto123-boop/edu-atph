@@ -383,24 +383,39 @@ export const DataProvider = {
     let stored = getItem<TeachingMaterial[]>(STORAGE_KEYS.MATERIALS, INITIAL_MATERIALS);
     let hasChanges = false;
 
-    // Synchronize stored items with fresh INITIAL_MATERIALS (e.g. updated PDF attachments or content)
+    // Only add INITIAL_MATERIALS items that are completely missing from stored data.
+    // We do NOT overwrite admin-edited materials — admin changes to status, content,
+    // pdfUrl, and attachments must be preserved.
+    const storedIds = new Set(stored.map((sm) => sm.id));
+
+    // Inject only truly missing initial materials (never previously stored)
+    const missing = INITIAL_MATERIALS.filter((im) => !storedIds.has(im.id));
+
+    // For stored items that match an initial item, only backfill fields that are
+    // completely empty (e.g. a dummy/placeholder pdfUrl set by older code).
     const updatedStored = stored.map((sm) => {
       const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
       if (initMatch) {
-        const needsUpdate =
-          !sm.pdfUrl ||
-          sm.pdfUrl.includes('dummy.pdf') ||
-          (initMatch.updatedAt && sm.updatedAt && initMatch.updatedAt > sm.updatedAt) ||
-          sm.id === 'mat-media-tanam';
-        if (needsUpdate) {
+        // Only sync the pdfUrl from initial data when the stored one is a
+        // known placeholder dummy file — never overwrite a real URL or empty string
+        // that the admin intentionally left blank.
+        const hasDummyPdf = sm.pdfUrl && sm.pdfUrl.includes('dummy.pdf');
+        if (hasDummyPdf) {
           hasChanges = true;
-          return { ...sm, ...initMatch };
+          // Only replace the pdfUrl and attachments from initial; keep all other
+          // admin edits (status, content, title, etc.) intact.
+          return {
+            ...sm,
+            pdfUrl: initMatch.pdfUrl || sm.pdfUrl,
+            attachments: (initMatch.attachments && initMatch.attachments.length > 0)
+              ? initMatch.attachments
+              : sm.attachments,
+          };
         }
       }
       return sm;
     });
 
-    const missing = INITIAL_MATERIALS.filter((im) => !updatedStored.some((sm) => sm.id === im.id));
     if (missing.length > 0 || hasChanges) {
       const merged = [...missing, ...updatedStored];
       setItem(STORAGE_KEYS.MATERIALS, merged);

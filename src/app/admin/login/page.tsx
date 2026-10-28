@@ -5,15 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   ShieldCheck,
-  GraduationCap,
   LogIn,
   Lock,
   Mail,
   ArrowLeft,
-  Sparkles,
   AlertCircle,
   KeyRound,
-  Users,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 
@@ -23,24 +20,6 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleQuickLogin = (role: 'admin' | 'student') => {
-    setLoading(true);
-    setErrorMessage('');
-    setTimeout(() => {
-      const user = DataProvider.login('', role);
-      if (user) {
-        if (user.role === 'admin') {
-          router.push('/admin/dashboard');
-        } else {
-          router.push('/student/dashboard');
-        }
-      } else {
-        setErrorMessage('Gagal memuat profil pengguna.');
-        setLoading(false);
-      }
-    }, 350);
-  };
 
   const handleFormLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,78 +87,11 @@ export default function AdminLoginPage() {
             </div>
           )}
 
-          {/* Quick Access Section */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-400">
-              <span className="uppercase tracking-wider">Akses Langsung Sistem</span>
-              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-800/50">
-                Otentikasi Siap
-              </span>
-            </div>
-
-            {/* Admin Fast Button */}
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              disabled={loading}
-              className="w-full p-4 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 bg-emerald-950/40 hover:bg-emerald-900/30 text-emerald-200 flex items-center justify-between text-left transition-all group"
-            >
-              <div className="flex items-center gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 group-hover:scale-105 transition-transform">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-white">
-                    Masuk sebagai Administrator
-                  </p>
-                  <p className="text-xs text-emerald-400 font-medium">
-                    Okta Nofiyanto • Hak Akses Penuh
-                  </p>
-                </div>
-              </div>
-              <Sparkles className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
-            </button>
-
-            {/* Student Preview Button (Admin Portal can log in as Student) */}
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('student')}
-              disabled={loading}
-              className="w-full p-3.5 rounded-2xl border border-slate-700 hover:border-teal-500/50 bg-slate-800/60 hover:bg-slate-800 text-slate-300 flex items-center justify-between text-left transition-all group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-teal-700/80 text-white flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-200">
-                    Mode Pengujian / Siswa
-                  </p>
-                  <p className="text-[11px] text-slate-400 font-medium">
-                    Rizky Pratama • Kelas X ATPH
-                  </p>
-                </div>
-              </div>
-              <Users className="w-4 h-4 text-slate-400 group-hover:text-teal-400 transition-colors" />
-            </button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-800" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-900 px-3 text-slate-500 font-bold tracking-wider">
-                Atau Kredensial Email
-              </span>
-            </div>
-          </div>
-
-          {/* Form Login */}
+          {/* Form Login Administrator */}
           <form onSubmit={handleFormLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Alamat Email Pengajar / Siswa
+                Alamat Email Administrator
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">

@@ -57,7 +57,19 @@ export async function uploadFileToStorage(
         });
 
       if (error) {
-        console.warn('Supabase storage upload failed, falling back:', error.message);
+        // Surface a more helpful error for common issues
+        const msg = error.message || String(error);
+        if (msg.toLowerCase().includes('bucket') && msg.toLowerCase().includes('not found')) {
+          throw new Error(
+            'Bucket "materials" belum ada di Supabase Storage. Buat bucket bernama "materials" yang bersifat publik di dashboard Supabase Anda, lalu coba lagi.'
+          );
+        }
+        if (msg.toLowerCase().includes('policy') || msg.toLowerCase().includes('violates') || msg.toLowerCase().includes('rls')) {
+          throw new Error(
+            `Upload ditolak oleh kebijakan Supabase (RLS). Pastikan bucket "materials" bersifat publik dan policy INSERT diizinkan untuk anon. Detail: ${msg}`
+          );
+        }
+        throw new Error(`Upload gagal: ${msg}`);
       } else if (data) {
         const { data: publicData } = supabase.storage
           .from('materials')
@@ -72,7 +84,8 @@ export async function uploadFileToStorage(
         };
       }
     } catch (err) {
-      console.error('Exception during Supabase storage upload:', err);
+      // Re-throw so the UI can show the specific error to the admin
+      throw err;
     }
   }
 
