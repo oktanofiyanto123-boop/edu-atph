@@ -500,164 +500,16 @@ Untuk mencapai kualitas selada krispi dan bebas rasa pahit:
     id: 'mat-media-tanam',
     title: 'Penyiapan Media Tanam: Fondasi Rumah Bagi Akar & Keberhasilan Budidaya',
     slug: 'penyiapan-media-tanam',
-    description: 'Modul Pembelajaran Lengkap & Dokumen PDF Full Penyiapan Media Tanam: Konsep rumah bagi akar, 5 fungsi biologis rizosfer, perbandingan 6 bahan baku, formula 1:1:1, uji mutu cepat, serta komparasi sistem Tanah, Hidroponik, Aeroponik, dan Akuaponik.',
+    description: 'Modul Pembelajaran Resmi & Dokumen PDF Lengkap Penyiapan Media Tanam (28 Slide): Konsep rumah bagi akar, 5 fungsi rizosfer, 6 bahan baku, formula 1:1:1, serta sistem Tanah, Hidroponik, Aeroponik, dan Akuaponik.',
     categoryId: 'cat-2',
     categoryName: 'Penyiapan Media Tanam',
     targetClassId: 'cls-10-atph',
     targetClassName: 'X ATPH',
     topic: 'Fisika & Kimia Media Tanam, Formulasi Campuran, dan Sistem Media Modern',
-    learningObjectives: [
-      'Memahami 5 fungsi mendasar media tanam sebagai zona perakaran yang sehat (penopang, air, oksigen, hara, mikroba).',
-      'Menganalisis karakteristik fisik dan kimia 6 bahan media (tanah topsoil, kompos, sekam bakar, cocopeat, pasir, pupuk kandang).',
-      'Menerapkan formula awal standar 1:1:1 (Tanah : Kompos : Sekam Bakar) dengan tekstur gembur, remah, dan aeratif.',
-      'Menerapkan K3LH dan tahapan teknis penyiapan media: seleksi/pengayakan, pencampuran homogen, dan pengisian wadah.',
-      'Melakukan uji cepat kualitas media pra-tanam (uji remas kepalan, uji laju drainase, uji aroma humus, dan cek pH).',
-      'Menguasai logika penyiapan media pada 4 sistem pertanian: Konvensional/Polybag, Hidroponik (Rockwool/Hydroton), Aeroponik (Kabut tanpa media padat), dan Akuaponik (Simbiosis Growbed Ikan-Bakteri-Tanaman).',
-    ],
-    content: `
-# BAB PENYIAPAN MEDIA TANAM: RUMAH BAGI AKAR
-**Mata Pelajaran:** Dasar-Dasar Agribisnis Tanaman (ATPH)  
-**Jenjang:** SMK/MAK Kelas X (Fase E) — Agribisnis Tanaman Pangan dan Hortikultura  
-**Sumber Modul:** Dokumen Panduan Resmi Penyiapan Media Tanam (28 Halaman Modul Lengkap)
-
----
-
-## 🌿 1. Pendahuluan: Mengapa Media Tanam Begitu Krusial?
-Media tanam yang tepat merupakan salah satu fondasi utama keberhasilan budidaya tanaman. Bagian tanaman yang tampak subur di atas permukaan tanah—mulai dari batang kokoh, daun hijau mengilap, bunga serempak, hingga buah lebat—seluruhnya ditopang oleh apa yang terjadi di bawah permukaan: **kesehatan perakaran di dalam media tanam**.
-
-Akar membutuhkan kondisi lingkungan rizosfer yang seimbang antara pasokan kelembapan dan udara. Jika media terlalu padat dan becek, akar akan mengalami hipoksia (kekurangan oksigen) dan membusuk (*damping-off* atau busuk akar). Sebaliknya, bila media terlalu porous tanpa daya ikat air, tanaman akan mudah mengalami stres kekeringan.
-
----
-
-## 🛡️ 2. Lima Fungsi Utama, Satu Zona Akar Sehat
-Akar tanaman bukan sekadar jangkar penahan angin, melainkan organ penyerap aktif. Media tanam yang ideal menjalankan 5 fungsi esensial:
-
-1. **Penopang Mekanis Tanaman:** Menyediakan stabilitas fisik agar batang tanaman dapat berdiri tegak menyongsong radiasi sinar matahari.
-2. **Penyedia Air & Kelembapan Lapang:** Menahan cadangan air kapiler tanpa mengorbankan pori-pori drainase (menjaga *water holding capacity*).
-3. **Penyuplai Oksigen (Aerasi Perakaran):** Menyediakan pori aerasi agar bulu-bulu akar dapat berespirasi secara aerobik untuk menghasilkan energi serapan nutrisi.
-4. **Penyedia & Penyangga Nutrisi (Kapasitas Tukar Kation / KTK):** Mengikat ion hara makro (N, P, K, Ca, Mg, S) dan mikro (Fe, Mn, Zn, B, Cu, Mo) agar tidak hilang tercuci air siraman.
-5. **Rumah Koloni Mikroorganisme Menguntungkan:** Menjadi habitat simbiosis jamur mikoriza dan bakteri rizosfer (*PGPR - Plant Growth-Promoting Rhizobacteria*) yang memproteksi akar dari patogen tular tanah.
-
----
-
-## ⚖️ 3. Media yang Baik Itu Seimbang
-Kunci media tanam unggul terletak pada **keseimbangan fisik dan kimia**:
-- **Keseimbangan Drainase & Retensi Air:** Air siraman harus leluasa meresap tanpa menggenang (bebas becek), namun media tetap terasa lembap seperti spons sehabis diperas.
-- **Tingkat Kemasaman (pH) Ideal (5.8 – 6.8):** Rentang pH netral hingga agak masam ini menjamin seluruh unsur hara tersedia dalam bentuk larutan tanah yang siap diserap akar.
-- **Kondisi Bebas Patogen (Higienis):** Bebas dari spora jamur parasit (*Fusarium sp.*, *Phytophthora sp.*), nematoda bintil akar, telur hama penggerek, dan biji gulma.
-
----
-
-## 🧪 4. Enam Bahan Utama & Karakteristik Masing-Masing
-Sebelum mencampur, seorang teknisi ATPH wajib mengenali karakter masing-masing bahan baku:
-
-| Nama Bahan | Karakteristik Utama | Kelebihan | Kelemahan / Catatan Kritis | Proporsi Pemakaian |
-| :--- | :--- | :--- | :--- | :--- |
-| **1. Topsoil (Tanah Lapisan Atas)** | Lapisan tanah 0–20 cm bertekstur lempung berpasir | Struktur padat alami, mengikat akar kokoh, mengandung mineral tanah asli | Rentan memadat jika disiram berulang-ulang, berat bobot | 30% – 40% |
-| **2. Kompos Organik Matang** | Hasil dekomposisi sisa hijauan/daun berwarna cokelat kehitaman | Kaya bahan organik (C-organik), memicu mikrobiologi tanah, meningkatkan KTK | Harus dipastikan benar-benar matang (dingin, C/N ratio 10–20) | 20% – 30% |
-| **3. Arang Sekam Padi** | Hasil karbonisasi sekam padi tanpa menjadi abu putih | Bobot sangat ringan, pori aerasi tinggi, menaikkan pH, steril alami | Miskin unsur hara kimiawi, cepat mengalirkan air | 25% – 35% |
-| **4. Pasir Kasar / Pasir Malang** | Butiran silika vulkanik remah berdiameter 1–3 mm | Memperlancar drainase secara instan, mencegah media becek | Bobot berat, tidak mengikat nutrisi, tidak menahan air | 10% – 15% (Opsional) |
-| **5. Cocopeat (Serbuk Sabut Kelapa)** | Serbuk pengolahan sabut kelapa yang telah diayak | Daya serap air luar biasa (menampung 8–9x bobot kering) | Mengandung zat tanin alami (wajib dicuci hingga air bilasan bening) | 15% – 25% |
-| **6. Pupuk Kandang Terfermentasi** | Kotoran sapi/kambing/unggas yang telah difermentasi mikroba | Nutrisi makro lengkap pelepasan lambat (*slow release*), menyuburkan tanah | Tidak boleh digunakan mentah (panas fermentasi merusak akar muda) | 10% – 20% |
-
----
-
-## 🥣 5. Rumus Formulasi Awal: 1 + 1 + 1
-Bagi pemula dan standar pembibitan hortikultura di SMK Pertanian, gunakan formula dasar teruji:
-
-$$\mathbf{1\ Bagian\ Topsoil} + \mathbf{1\ Bagian\ Kompos\ Matang} + \mathbf{1\ Bagian\ Arang\ Sekam}$$
-
-**Karakter Hasil:**
-Campuran terasa remah, gembur, mudah melepaskan air berlebih, namun mempertahankan kelembapan mikro di sekitar akar.
-
----
-
-## 🦺 6. Prosedur K3LH (Kesehatan, Keselamatan Kerja & Lingkungan Hidup)
-Penyiapan media tanam melibatkan debu arang, jamur kompos, dan alat tajam. SOP K3LH yang wajib dipatuhi:
-1. **Gunakan Sarung Tangan:** Melindungi tangan dari bakteri tanah, goresan kerikil tajam, dan gigitan serangga.
-2. **Gunakan Masker Debu:** Mencegah spora jamur dan partikel silika halus dari sekam bakar terhirup ke saluran pernapasan.
-3. **Posisikan Tubuh Ergonomis:** Hindari membungkuk saat menyekop dalam waktu lama; tekuk lutut saat mengangkat ember media berat.
-4. **Alat Kerja Standar:** Siapkan cangkul, sekop tangan, ayakan kawat (mesh 0.5–1 cm), ember ukur, dan wadah polybag/tray.
-
----
-
-## 📋 7. Tiga Langkah Kerja Baku Pembuatan Media Tanam
-### Langkah 1: Pilih, Periksa, dan Bersihkan (Sortir & Ayak)
-- Ambil tanah lapisan atas (topsoil), jemur sebentar agar tidak menggumpal basah.
-- Ayak tanah dan kompos menggunakan kawat kasa untuk memisahkan bongkahan batu, plastik, ranting kayu keras, dan sisa akar mati.
-- Cuci cocopeat jika menggunakan bahan sabut hingga kadar garam dan tanin hilang.
-
-### Langkah 2: Campur Sampai Homogen
-- Hampar bahan secara berlapis: lapisan tanah, di atasnya lapisan kompos, lalu arang sekam.
-- Gunakan sekop untuk membalik tumpukan dari sisi luar ke tengah secara memutar minimal 3–4 kali pengadukan sampai corak warna tercampur rata merata (tidak ada kantong tanah liat tersendiri).
-- Jika campuran terlalu kering, perciki air bersih sedikit demi sedikit sampai mencapai kelembapan ideal (40–50%).
-
-### Langkah 3: Isi Wadah Tanpa Memadatkan
-- Masukkan media ke dalam polybag, pot, atau tray semai.
-- **Peringatan Penting:** Cukup ketuk-ketuk dasar polybag ke tanah secara perlahan agar media merata mengisi rongga bawah. **JANGAN menekan media dengan kepalan tangan terlalu kuat**, karena tekanan padat akan merusak pori-pori makro yang dibutuhkan untuk sirkulasi oksigen.
-- Sisakan ruang 1–2 cm dari bibir atas wadah untuk menampung air siraman.
-
----
-
-## 🔍 8. Empat Uji Cepat Kualitas Media Pra-Tanam
-Sebelum bibit dipindahkan, lakukan pengujian cepat lapangan:
-1. **Uji Kepal / Remas:** Ambil segenggam media basah, remas kuat lalu buka telapak tangan.
-   - *Lolos:* Membentuk kepalan utuh, namun saat disentuh lembut dengan jari langsung buyar/remah.
-   - *Gagal:* Terlalu liat/lengket seperti dodol (kurang arang sekam) atau tidak bisa membentuk kepalan sama sekali (kurang tanah/kompos).
-2. **Uji Laju Drainase:** Siramkan satu gayung air ke dalam pot/polybag berlubang.
-   - *Lolos:* Air meresap lenyap dalam waktu 5–10 detik dan segera menetes keluar lewat lubang bawah tanpa genangan di permukaan.
-3. **Uji Aroma (Bau):** Dekatkan media ke hidung.
-   - *Lolos:* Beraroma segar alami seperti tanah humus hutan sehabis hujan.
-   - *Gagal:* Berbau busuk menyengat atau bau amonia asam tajam (menandakan kompos/pupuk kandang belum matang sempurna).
-4. **Uji pH:** Ukur dengan soil pH meter (target nilai: 6.0 – 6.8).
-
----
-
-## 💧 9. Logika Media Tanpa Tanah (Soilless): Hidroponik, Aeroponik & Akuaponik
-Modul PDF juga membedah cara akar hidup di era pertanian modern:
-
-### A. Media Hidroponik (Nutrisi Hadir Lewat Larutan)
-- Media di hidroponik bersifat **inert** (tidak menyumbang nutrisi kimiawi). Fungsinya murni sebagai pegangan akar.
-- **Rockwool:** Serat batuan basal dengan kapasitas simpan air dan aerasi seimbang. Ideal untuk semai benih presisi.
-- **Hydroton:** Butiran tanah liat bulat yang dibakar dengan suhu tinggi. Aerasi sangat maksimal, dapat dicuci dan digunakan kembali berulang-ulang.
-- **Perlite & Vermikulit:** Batuan vulkanik kembang yang sangat steril dan ringan untuk menjaga kelembapan mikro.
-
-### B. Media Aeroponik (Akar Menggantung Bebas di Udara)
-- Sistem aeroponik **tidak menggunakan media padat di zona perakaran**.
-- Akar menggantung bebas di ruang gelap bersuhu sejuk dan disemprot kabut nutrisi berukuran mikro (droplet 20–50 mikron) secara bersiklus.
-- **Penyangga:** Hanya busa (*sponge block*) atau *foam collar* kecil yang menjepit pangkal batang pada bibir netpot.
-- **Kelebihan:** Oksigen 100% melimpah di zona perakaran, memacu laju metabolisme tercepat di antara semua sistem.
-- **Tantangan:** Sangat bergantung pada kontinuitas listrik dan kebersihan nozzle pengkabut agar tidak tersumbat.
-
-### C. Media Akuaponik (Satu Sirkulasi, Tiga Kehidupan)
-- Menghubungkan ekosistem **Ikan (Akuakultur)**, **Bakteri Pengurai**, dan **Tanaman (Hidroponik)**.
-- Media di wadah tanaman (*growbed*) seperti kerikil vulkanik atau hydroton berfungsi ganda:
-  1. Penopang fisik perakaran sayuran.
-  2. **Biofilter:** Rumah koloni bakteri nitrifikasi (*Nitrosomonas* dan *Nitrobacter*) yang mengubah feses ikan (amonia beracun) menjadi nitrat (makanan lezat bagi sayuran).
-
----
-
-## 📊 10. Matriks Komparasi 4 Sistem Media Tanam
-| Indikator | 1. Tanah / Polybag Tradisional | 2. Hidroponik Substrat | 3. Aeroponik Modern | 4. Akuaponik Terpadu |
-| :--- | :--- | :--- | :--- | :--- |
-| **Bentuk Fisik Media** | Campuran tanah, kompos, sekam | Rockwool, hydroton, cocopeat | Tanpa media (hanya spons leher batang) | Kerikil / hydroton biofilter |
-| **Sumber Hara** | Hara organik tanah & pupuk susulan | Pupuk anorganik terukur (AB Mix) | Kabut pupuk anorganik (AB Mix) | Feses ikan hasil daur ulang bakteri |
-| **Kebutuhan Air** | Boros (banyak rembes & menguap) | Hemat (sistem tertutup/resirkulasi) | Sangat hemat (kabut mikro terarah) | Sangat hemat (air berputar terus) |
-| **Pasokan Oksigen Akar** | Tergantung porositas tanah | Cukup hingga baik | **Maksimal (100% Udara Bebas)** | Baik (sistem pasang-surut bell siphon) |
-| **Resiko Kegagalan Listrik** | Sangat rendah (tahan berhari-hari) | Rendah hingga sedang | **Tinggi (akar mengering dalam hitungan jam)** | Sedang (oksigen ikan terganggu) |
-
----
-
-## 🎯 11. Tugas Refleksi & Studi Kasus Siswa ATPH
-1. Anda diberi modal untuk menanam 100 bibit cabai rawit merah di pekarangan sekolah yang memiliki tanah liat merah padat. Bagaimana Anda memodifikasi formula 1:1:1 agar tanaman cabai tidak terserang layu bakteri?
-2. Mengapa cocopeat mentah dari pengrajin kelapa tidak boleh langsung digunakan untuk menyemai benih selada? Jelaskan proses pencucian yang benar!
-3. Pada sistem aeroponik, apa konsekuensinya jika nozzle kabut mengalami penyumbatan selama 4 jam di siang hari yang terik? Langkah preventif apa yang harus disiapkan?
-
----
-*Unduh dan pelajari dokumen PDF modul 28 slide selengkapnya pada pemutar/lampiran di bawah untuk referensi presentasi visual dan diagram teknis.*
-    `,
+    learningObjectives: [],
+    content: '',
     imageUrl: 'https://images.unsplash.com/photo-1592417817098-8f3d6910985c?auto=format&fit=crop&w=1200&q=80',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    videoUrl: '',
     pdfUrl: '/materials/penyiapan-media-tanam.pdf',
     attachments: [
       {
@@ -671,7 +523,7 @@ Modul PDF juga membedah cara akar hidup di era pertanian modern:
     orderIndex: 2,
     status: 'published',
     createdAt: '2026-08-05T08:00:00Z',
-    updatedAt: '2026-10-28T07:30:00Z',
+    updatedAt: '2026-10-28T08:15:00Z',
   },
 
   {
