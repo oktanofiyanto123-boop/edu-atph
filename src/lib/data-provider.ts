@@ -77,24 +77,93 @@ export const DataProvider = {
     setItem(STORAGE_KEYS.CURRENT_USER, user);
   },
 
-  login(email: string, role?: 'admin' | 'student'): UserProfile | null {
+  login(
+    email: string = '',
+    passwordOrRole: string = '',
+    role?: 'admin' | 'student'
+  ): UserProfile | null {
     const users = this.getUsers();
-    const found = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-    if (found) {
-      this.setCurrentUser(found);
-      return found;
+    const cleanEmail = (email || '').trim().toLowerCase();
+
+    // 1. Determine role
+    let targetRole: 'admin' | 'student' | undefined = role;
+    let password = '';
+
+    if (passwordOrRole === 'admin' || passwordOrRole === 'student') {
+      targetRole = passwordOrRole;
+    } else {
+      password = passwordOrRole;
     }
-    // Quick role login fallback
-    if (role === 'admin') {
-      const admin = users.find((u) => u.role === 'admin') || INITIAL_USERS[0];
-      this.setCurrentUser(admin);
-      return admin;
-    }
-    if (role === 'student') {
+
+    // Quick role login fallback (empty email)
+    if (!cleanEmail) {
+      if (targetRole === 'admin') {
+        const admin = users.find((u) => u.role === 'admin') || INITIAL_USERS[0];
+        this.setCurrentUser(admin);
+        return admin;
+      }
       const student = users.find((u) => u.role === 'student') || INITIAL_USERS[1];
       this.setCurrentUser(student);
       return student;
     }
+
+    // 2. Email provided
+    const found = users.find((u) => u.email.toLowerCase() === cleanEmail);
+
+    // If student portal login
+    if (targetRole === 'student' || (!targetRole && found?.role === 'student')) {
+      // Must check password
+      if (password !== 'skaneba123') {
+        return null;
+      }
+
+      if (found) {
+        if (found.role === 'admin') return null; // Admin blocked from student role
+        this.setCurrentUser(found);
+        return found;
+      }
+
+      // New student registered on-the-fly with their own email!
+      const namePart = cleanEmail.split('@')[0].replace(/[._-]/g, ' ');
+      const formattedName =
+        namePart
+          .split(' ')
+          .filter(Boolean)
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+          .join(' ') || 'Siswa ATPH';
+
+      const newStudent: UserProfile = {
+        id: `usr-student-${Date.now()}`,
+        email: cleanEmail,
+        fullName: formattedName,
+        role: 'student',
+        nisn: `00${Math.floor(10000000 + Math.random() * 90000000)}`,
+        classId: 'cls-10-atph',
+        className: 'X ATPH',
+        major: 'Agribisnis Tanaman Pangan dan Hortikultura',
+        avatarUrl:
+          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=250&q=80',
+        isActive: true,
+        createdAt: new Date().toISOString(),
+      };
+      users.push(newStudent);
+      setItem(STORAGE_KEYS.USERS, users);
+      this.setCurrentUser(newStudent);
+      return newStudent;
+    }
+
+    // Admin login
+    if (found) {
+      this.setCurrentUser(found);
+      return found;
+    }
+
+    if (cleanEmail.includes('admin') || cleanEmail.includes('okta')) {
+      const admin = users.find((u) => u.role === 'admin') || INITIAL_USERS[0];
+      this.setCurrentUser(admin);
+      return admin;
+    }
+
     return null;
   },
 
