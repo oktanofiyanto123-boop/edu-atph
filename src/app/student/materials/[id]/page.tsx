@@ -1,5 +1,7 @@
 'use client';
 
+export const instant = false;
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';

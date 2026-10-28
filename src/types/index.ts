@@ -38,7 +38,7 @@ export interface MaterialAttachment {
   name: string;
   fileUrl: string;
   fileSize: string;
-  fileType: 'pdf' | 'doc' | 'image' | 'video' | 'other';
+  fileType: 'pdf' | 'doc' | 'sheet' | 'slide' | 'image' | 'video' | 'archive' | 'other';
 }
 
 export interface TeachingMaterial {
@@ -93,6 +93,14 @@ export interface Assignment {
 
 export type SubmissionStatus = 'belum_dikerjakan' | 'draft' | 'sudah_dikumpulkan' | 'terlambat' | 'sudah_dinilai';
 
+export interface SubmissionAttachment {
+  id: string;
+  name: string;
+  fileUrl: string;
+  fileSize: string;
+  fileType: 'pdf' | 'doc' | 'sheet' | 'slide' | 'image' | 'archive' | 'video' | 'other';
+}
+
 export interface Submission {
   id: string;
   assignmentId: string;
@@ -107,6 +115,8 @@ export interface Submission {
   fileUrl?: string;
   fileName?: string;
   fileSize?: string;
+  fileType?: string;
+  attachments?: SubmissionAttachment[];
   submittedAt: string;
   status: SubmissionStatus;
   grade?: number; // 0 - 100

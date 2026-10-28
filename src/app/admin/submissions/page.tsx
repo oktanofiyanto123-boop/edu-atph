@@ -19,6 +19,7 @@ import {
 import { DataProvider } from '@/lib/data-provider';
 import { Submission, ClassItem, Assignment } from '@/types';
 import { formatDate } from '@/lib/utils';
+import FileBadge from '@/components/common/FileBadge';
 
 export default function AdminSubmissionsPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -176,19 +177,38 @@ export default function AdminSubmissionsPage() {
                         {formatDate(sub.submittedAt)}
                       </td>
                       <td className="py-4 px-6">
-                        {sub.fileName ? (
+                        {sub.attachments && sub.attachments.length > 0 ? (
+                          <div className="flex flex-col gap-1.5 max-w-[200px]">
+                            {sub.attachments.slice(0, 2).map((att) => (
+                              <a
+                                key={att.id}
+                                href={att.fileUrl || '#'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download={att.name}
+                                className="hover:opacity-80 transition-opacity"
+                                title={att.name}
+                              >
+                                <FileBadge fileName={att.name} fileSize={att.fileSize} fileType={att.fileType} />
+                              </a>
+                            ))}
+                            {sub.attachments.length > 2 && (
+                              <span className="text-[10px] text-emerald-600 font-bold">
+                                +{sub.attachments.length - 2} berkas lainnya
+                              </span>
+                            )}
+                          </div>
+                        ) : sub.fileName ? (
                           <a
                             href={sub.fileUrl || '#'}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 hover:underline"
+                            className="hover:opacity-80 transition-opacity inline-block"
                           >
-                            <FileText className="w-3.5 h-3.5" />
-                            <span className="truncate max-w-[140px]">{sub.fileName}</span>
-                            <ExternalLink className="w-3 h-3" />
+                            <FileBadge fileName={sub.fileName} fileSize={sub.fileSize} fileType={sub.fileType} />
                           </a>
                         ) : (
-                          <span className="text-[11px] text-slate-400 italic">Jawaban teks</span>
+                          <span className="text-[11px] text-slate-400 italic">Hanya jawaban teks</span>
                         )}
                       </td>
                       <td className="py-4 px-6">
@@ -246,27 +266,58 @@ export default function AdminSubmissionsPage() {
             {/* Jawaban Siswa Box */}
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 space-y-3">
               <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                Isi Jawaban Siswa:
+                Isi Uraian Siswa:
               </p>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
                 {activeSubmission.textContent || 'Tidak ada teks tambahan.'}
               </p>
-              {activeSubmission.fileName && (
-                <div className="pt-2 flex items-center justify-between text-xs">
-                  <span className="font-semibold text-slate-600 dark:text-slate-400">
-                    File Lampiran: {activeSubmission.fileName} ({activeSubmission.fileSize || '1.4 MB'})
-                  </span>
+
+              {/* Berkas Lampiran Siswa */}
+              {activeSubmission.attachments && activeSubmission.attachments.length > 0 ? (
+                <div className="pt-2 space-y-2">
+                  <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Berkas Lampiran Siswa ({activeSubmission.attachments.length} berkas):
+                  </p>
+                  <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                    {activeSubmission.attachments.map((att) => (
+                      <div
+                        key={att.id}
+                        className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs"
+                      >
+                        <FileBadge fileName={att.name} fileSize={att.fileSize} fileType={att.fileType} />
+                        <a
+                          href={att.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download={att.name}
+                          className="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 flex items-center gap-1 transition-colors"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Unduh</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : activeSubmission.fileName ? (
+                <div className="pt-2 flex items-center justify-between text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <FileBadge
+                    fileName={activeSubmission.fileName}
+                    fileSize={activeSubmission.fileSize}
+                    fileType={activeSubmission.fileType}
+                  />
                   <a
                     href={activeSubmission.fileUrl || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
+                    download={activeSubmission.fileName}
                     className="font-bold text-emerald-600 hover:underline flex items-center gap-1"
                   >
                     <span>Unduh & Buka</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
-              )}
+              ) : null}
             </div>
 
             <form onSubmit={handleSaveGrade} className="space-y-4">

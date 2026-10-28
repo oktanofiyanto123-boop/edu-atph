@@ -9,11 +9,16 @@ export function formatBytes(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 }
 
-export function detectFileType(fileName: string): 'pdf' | 'doc' | 'image' | 'video' | 'other' {
+export type SupportedFileType = 'pdf' | 'doc' | 'sheet' | 'slide' | 'image' | 'video' | 'archive' | 'other';
+
+export function detectFileType(fileName: string): SupportedFileType {
   const ext = fileName.split('.').pop()?.toLowerCase();
   if (ext === 'pdf') return 'pdf';
   if (['doc', 'docx', 'odt', 'rtf', 'txt', 'pages'].includes(ext || '')) return 'doc';
-  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext || '')) return 'image';
+  if (['xls', 'xlsx', 'csv', 'ods', 'numbers'].includes(ext || '')) return 'sheet';
+  if (['ppt', 'pptx', 'odp', 'key'].includes(ext || '')) return 'slide';
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'heic'].includes(ext || '')) return 'image';
+  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext || '')) return 'archive';
   if (['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext || '')) return 'video';
   return 'other';
 }
@@ -22,7 +27,7 @@ export interface UploadResult {
   url: string;
   name: string;
   fileSize: string;
-  fileType: 'pdf' | 'doc' | 'image' | 'video' | 'other';
+  fileType: SupportedFileType;
   storagePath?: string;
 }
 

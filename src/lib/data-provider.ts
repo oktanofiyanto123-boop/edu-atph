@@ -415,7 +415,37 @@ export const DataProvider = {
 
   // --- SUBMISSIONS ---
   getSubmissions(): Submission[] {
-    return getItem<Submission[]>(STORAGE_KEYS.SUBMISSIONS, INITIAL_SUBMISSIONS);
+    let stored = getItem<Submission[]>(STORAGE_KEYS.SUBMISSIONS, INITIAL_SUBMISSIONS);
+    let changed = false;
+    const updated = stored.map((s) => {
+      const initMatch = INITIAL_SUBMISSIONS.find((is) => is.id === s.id);
+      if (initMatch && (!s.attachments || s.attachments.length === 0)) {
+        changed = true;
+        return { ...s, ...initMatch };
+      }
+      if (!s.attachments && s.fileName) {
+        changed = true;
+        return {
+          ...s,
+          attachments: [
+            {
+              id: `att-${s.id}`,
+              name: s.fileName,
+              fileUrl: s.fileUrl || '',
+              fileSize: s.fileSize || '1.2 MB',
+              fileType: (s.fileType as any) || 'pdf',
+            },
+          ],
+        };
+      }
+      return s;
+    });
+
+    if (changed) {
+      setItem(STORAGE_KEYS.SUBMISSIONS, updated);
+      return updated;
+    }
+    return stored;
   },
 
   getSubmissionsByAssignment(assignmentId: string): Submission[] {
