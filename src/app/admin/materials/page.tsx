@@ -1070,22 +1070,43 @@ export default function AdminMaterialsPage() {
                 </div>
               )}
 
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={isUploadingFile}
-                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01] flex items-center gap-2"
-                >
-                  {isUploadingFile && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  {editingMaterial ? 'Perbarui Materi' : 'Terbitkan Modul & Berkas'}
-                </button>
+              <div className="pt-4 flex items-center justify-between gap-3 border-t border-slate-100 dark:border-slate-800">
+                {editingMaterial ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (confirm(`Yakin ingin menghapus materi "${editingMaterial.title}"?`)) {
+                        DataProvider.deleteMaterial(editingMaterial.id);
+                        showNotification(`Materi "${editingMaterial.title}" telah dihapus.`);
+                        setIsModalOpen(false);
+                        loadData();
+                      }
+                    }}
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors flex items-center gap-1.5"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Hapus Materi</span>
+                  </button>
+                ) : (
+                  <div />
+                )}
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isUploadingFile}
+                    className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01] flex items-center gap-2"
+                  >
+                    {isUploadingFile && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    {editingMaterial ? 'Perbarui Materi' : 'Terbitkan Modul & Berkas'}
+                  </button>
+                </div>
               </div>
             </form>
           </div>

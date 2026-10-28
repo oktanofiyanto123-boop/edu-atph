@@ -43,6 +43,8 @@ const STORAGE_KEYS = {
   GRADES: 'eduatph_grades',
   ANNOUNCEMENTS: 'eduatph_announcements',
   PROGRESS: 'eduatph_progress',
+  DELETED_MATERIALS: 'eduatph_deleted_materials',
+  DELETED_USERS: 'eduatph_deleted_users',
 };
 
 function getItem<T>(key: string, fallback: T): T {
@@ -211,7 +213,47 @@ export const DataProvider = {
   },
 
   getUsers(): UserProfile[] {
-    return getItem<UserProfile[]>(STORAGE_KEYS.USERS, INITIAL_USERS);
+    const stored = getItem<UserProfile[]>(STORAGE_KEYS.USERS, INITIAL_USERS);
+    const deletedIds = new Set(getItem<string[]>(STORAGE_KEYS.DELETED_USERS, []));
+    return stored.filter((u) => !deletedIds.has(u.id));
+  },
+
+  deleteUser(id: string): boolean {
+    const deleted = getItem<string[]>(STORAGE_KEYS.DELETED_USERS, []);
+    if (!deleted.includes(id)) {
+      deleted.push(id);
+      setItem(STORAGE_KEYS.DELETED_USERS, deleted);
+    }
+
+    let users = this.getUsers();
+    const target = users.find((u) => u.id === id);
+    if (!target || target.role === 'admin') return false;
+
+    users = users.filter((u) => u.id !== id);
+    setItem(STORAGE_KEYS.USERS, users);
+
+    // Clean up related records for this student
+    try {
+      let grades = getItem<any[]>(STORAGE_KEYS.GRADES, []);
+      grades = grades.filter((g) => g.studentId !== id);
+      setItem(STORAGE_KEYS.GRADES, grades);
+
+      let submissions = getItem<any[]>(STORAGE_KEYS.SUBMISSIONS, []);
+      submissions = submissions.filter((s) => s.studentId !== id);
+      setItem(STORAGE_KEYS.SUBMISSIONS, submissions);
+
+      let attempts = getItem<any[]>(STORAGE_KEYS.QUIZ_ATTEMPTS, []);
+      attempts = attempts.filter((a) => a.studentId !== id);
+      setItem(STORAGE_KEYS.QUIZ_ATTEMPTS, attempts);
+    } catch {
+      // Ignore subsidiary cleanup errors
+    }
+
+    return true;
+  },
+
+  deleteStudent(id: string): boolean {
+    return this.deleteUser(id);
   },
 
   addUser(user: Omit<UserProfile, 'id' | 'createdAt'>): UserProfile {
@@ -383,40 +425,43 @@ export const DataProvider = {
     let stored = getItem<TeachingMaterial[]>(STORAGE_KEYS.MATERIALS, INITIAL_MATERIALS);
     let hasChanges = false;
 
-    // Only add INITIAL_MATERIALS items that are completely missing from stored data.
-    // We do NOT overwrite admin-edited materials — admin changes to status, content,
-    // pdfUrl, and attachments must be preserved.
+    // Track deleted IDs so deleted initial materials are never re-injected
+    const deletedIds = new Set(getItem<string[]>(STORAGE_KEYS.DELETED_MATERIALS, []));
+
+    // Only add INITIAL_MATERIALS items that are completely missing from stored data AND not deleted by admin.
     const storedIds = new Set(stored.map((sm) => sm.id));
 
-    // Inject only truly missing initial materials (never previously stored)
-    const missing = INITIAL_MATERIALS.filter((im) => !storedIds.has(im.id));
+    // Inject only truly missing initial materials (never previously stored and not deleted)
+    const missing = INITIAL_MATERIALS.filter((im) => !storedIds.has(im.id) && !deletedIds.has(im.id));
 
     // For stored items that match an initial item, only backfill fields that are
     // completely empty (e.g. a dummy/placeholder pdfUrl set by older code).
-    const updatedStored = stored.map((sm) => {
-      const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
-      if (initMatch) {
-        // Only sync the pdfUrl from initial data when the stored one is a
-        // known placeholder dummy file — never overwrite a real URL or empty string
-        // that the admin intentionally left blank.
-        const hasDummyPdf = sm.pdfUrl && sm.pdfUrl.includes('dummy.pdf');
-        if (hasDummyPdf) {
-          hasChanges = true;
-          // Only replace the pdfUrl and attachments from initial; keep all other
-          // admin edits (status, content, title, etc.) intact.
-          return {
-            ...sm,
-            pdfUrl: initMatch.pdfUrl || sm.pdfUrl,
-            attachments: (initMatch.attachments && initMatch.attachments.length > 0)
-              ? initMatch.attachments
-              : sm.attachments,
-          };
+    const updatedStored = stored
+      .filter((sm) => !deletedIds.has(sm.id))
+      .map((sm) => {
+        const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
+        if (initMatch) {
+          // Only sync the pdfUrl from initial data when the stored one is a
+          // known placeholder dummy file — never overwrite a real URL or empty string
+          // that the admin intentionally left blank.
+          const hasDummyPdf = sm.pdfUrl && sm.pdfUrl.includes('dummy.pdf');
+          if (hasDummyPdf) {
+            hasChanges = true;
+            // Only replace the pdfUrl and attachments from initial; keep all other
+            // admin edits (status, content, title, etc.) intact.
+            return {
+              ...sm,
+              pdfUrl: initMatch.pdfUrl || sm.pdfUrl,
+              attachments: (initMatch.attachments && initMatch.attachments.length > 0)
+                ? initMatch.attachments
+                : sm.attachments,
+            };
+          }
         }
-      }
-      return sm;
-    });
+        return sm;
+      });
 
-    if (missing.length > 0 || hasChanges) {
+    if (missing.length > 0 || hasChanges || updatedStored.length !== stored.length) {
       const merged = [...missing, ...updatedStored];
       setItem(STORAGE_KEYS.MATERIALS, merged);
       return merged;
@@ -455,6 +500,12 @@ export const DataProvider = {
   },
 
   deleteMaterial(id: string): boolean {
+    const deleted = getItem<string[]>(STORAGE_KEYS.DELETED_MATERIALS, []);
+    if (!deleted.includes(id)) {
+      deleted.push(id);
+      setItem(STORAGE_KEYS.DELETED_MATERIALS, deleted);
+    }
+
     let materials = this.getMaterials();
     materials = materials.filter((m) => m.id !== id);
     setItem(STORAGE_KEYS.MATERIALS, materials);

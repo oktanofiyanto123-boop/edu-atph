@@ -165,6 +165,14 @@ export default function AdminStudentsPage() {
     showNotification(`Tautan reset kata sandi telah dikirim ke ${email}.`);
   };
 
+  const handleDeleteStudent = (id: string, name: string) => {
+    if (confirm(`Apakah Anda yakin ingin menghapus akun siswa "${name}"? Seluruh data nilai dan tugas siswa ini akan dibersihkan.`)) {
+      DataProvider.deleteStudent(id);
+      showNotification(`Siswa "${name}" berhasil dihapus.`);
+      loadData();
+    }
+  };
+
   // -------------------------------------------------------------
   // BATCH IMPORT & TEMPLATE DOWNLOAD FUNCTIONS
   // -------------------------------------------------------------
@@ -543,6 +551,13 @@ export default function AdminStudentsPage() {
                           >
                             <KeyRound className="w-4 h-4" />
                           </button>
+                          <button
+                            onClick={() => handleDeleteStudent(s.id, s.fullName)}
+                            title="Hapus Akun Siswa"
+                            className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -863,20 +878,41 @@ export default function AdminStudentsPage() {
                 />
               </div>
 
-              <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20"
-                >
-                  {editingStudent ? 'Simpan Perubahan' : 'Daftarkan Siswa'}
-                </button>
+              <div className="pt-4 flex items-center justify-between gap-3 border-t border-slate-100 dark:border-slate-800">
+                {editingStudent ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (confirm(`Apakah Anda yakin ingin menghapus akun siswa "${editingStudent.fullName}"? Seluruh data nilai dan tugas terkait akan dibersihkan.`)) {
+                        DataProvider.deleteStudent(editingStudent.id);
+                        showNotification(`Siswa "${editingStudent.fullName}" berhasil dihapus.`);
+                        setIsModalOpen(false);
+                        loadData();
+                      }
+                    }}
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors flex items-center gap-1.5"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Hapus Siswa</span>
+                  </button>
+                ) : (
+                  <div />
+                )}
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20"
+                  >
+                    {editingStudent ? 'Simpan Perubahan' : 'Daftarkan Siswa'}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
