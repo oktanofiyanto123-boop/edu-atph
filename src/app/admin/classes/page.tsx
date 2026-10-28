@@ -120,7 +120,9 @@ export default function AdminClassesPage() {
         {/* Classes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {classes.map((cls) => {
-            const memberCount = students.filter((s) => s.classId === cls.id).length;
+            const memberCount = students.filter(
+              (s) => s.classId === cls.id || s.className === cls.name
+            ).length;
             return (
               <div
                 key={cls.id}

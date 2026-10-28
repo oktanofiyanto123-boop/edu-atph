@@ -47,7 +47,7 @@ export default function StudentDashboardPage() {
     const allMaterials = DataProvider.getMaterials().filter(
       (m) =>
         m.status === 'published' &&
-        (m.targetClassId === 'all' || m.targetClassId === user?.classId)
+        DataProvider.isClassMatch(m.targetClassId, user?.classId)
     );
     setMaterials(allMaterials);
 
@@ -55,7 +55,7 @@ export default function StudentDashboardPage() {
     const allAssignments = DataProvider.getAssignments().filter(
       (a) =>
         a.status === 'published' &&
-        (a.targetClassId === 'all' || a.targetClassId === user?.classId)
+        DataProvider.isClassMatch(a.targetClassId, user?.classId)
     );
     setAssignments(allAssignments);
 
@@ -63,7 +63,7 @@ export default function StudentDashboardPage() {
     const allQuizzes = DataProvider.getQuizzes().filter(
       (q) =>
         q.isPublished &&
-        (q.targetClassId === 'all' || q.targetClassId === user?.classId)
+        DataProvider.isClassMatch(q.targetClassId, user?.classId)
     );
     setQuizzes(allQuizzes);
 

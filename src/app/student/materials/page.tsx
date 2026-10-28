@@ -34,7 +34,7 @@ export default function StudentMaterialsPage() {
     const list = DataProvider.getMaterials().filter(
       (m) =>
         m.status === 'published' &&
-        (m.targetClassId === 'all' || m.targetClassId === user?.classId)
+        DataProvider.isClassMatch(m.targetClassId, user?.classId)
     );
     setMaterials(list);
   };

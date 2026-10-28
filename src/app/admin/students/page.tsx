@@ -86,7 +86,10 @@ export default function AdminStudentsPage() {
       s.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (s.nisn && s.nisn.includes(searchQuery));
-    const matchesClass = selectedClass === 'all' || s.classId === selectedClass;
+    const matchesClass =
+      selectedClass === 'all' ||
+      s.classId === selectedClass ||
+      s.className === selectedClass;
     return matchesSearch && matchesClass;
   });
 
@@ -97,7 +100,7 @@ export default function AdminStudentsPage() {
       fullName: '',
       email: '',
       nisn: '',
-      classId: classes[0]?.id || 'cls-10-atph',
+      classId: classes[0]?.id || 'cls-x-at-1',
       major: 'Agribisnis Tanaman Pangan dan Hortikultura',
     });
     setIsModalOpen(true);
@@ -130,7 +133,7 @@ export default function AdminStudentsPage() {
         email: formData.email,
         nisn: formData.nisn,
         classId: formData.classId,
-        className: matchedClass?.name || 'X ATPH',
+        className: matchedClass?.name || 'X AT 1',
         major: formData.major,
       });
       showNotification('Data siswa berhasil diperbarui');
@@ -141,7 +144,7 @@ export default function AdminStudentsPage() {
         nisn: formData.nisn,
         role: 'student',
         classId: formData.classId,
-        className: matchedClass?.name || 'X ATPH',
+        className: matchedClass?.name || 'X AT 1',
         major: formData.major,
         isActive: true,
       });
@@ -239,7 +242,7 @@ export default function AdminStudentsPage() {
             }
           }
 
-          const targetClass = matchedClass || classes[0] || { id: 'cls-10-atph', name: 'X ATPH' };
+          const targetClass = matchedClass || classes[0] || { id: 'cls-x-at-1', name: 'X AT 1' };
 
           // Generate default email if missing but name exists
           const resolvedEmail =

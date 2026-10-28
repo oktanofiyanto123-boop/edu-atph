@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   KeyRound,
   Info,
+  School,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 
@@ -37,6 +38,7 @@ export default function StudentLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [selectedClass, setSelectedClass] = useState('cls-x-at-1');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -118,7 +120,7 @@ export default function StudentLoginPage() {
     setShowAdminRedirect(false);
 
     setTimeout(() => {
-      const user = DataProvider.login('', 'student');
+      const user = DataProvider.login('', 'student', undefined, selectedClass);
       if (user) {
         router.push('/student/dashboard');
       } else {
@@ -175,8 +177,8 @@ export default function StudentLoginPage() {
         return;
       }
 
-      // Login akun siswa dengan email sendiri dan password skaneba123
-      const user = DataProvider.login(cleanEmail, cleanPassword, 'student');
+      // Login akun siswa dengan email sendiri, password skaneba123, dan kelas yang dipilih
+      const user = DataProvider.login(cleanEmail, cleanPassword, 'student', selectedClass);
       if (user && user.role === 'student') {
         router.push('/student/dashboard');
       } else {
@@ -284,7 +286,7 @@ export default function StudentLoginPage() {
           {/* Quick Access Switcher (Student Only) */}
           <div className="space-y-2.5">
             <div className="flex items-center justify-between text-xs font-bold text-slate-400">
-              <span className="uppercase tracking-wider">Akses Langsung Siswa Demo</span>
+              <span className="uppercase tracking-wider">Akses Cepat Siswa Demo</span>
               <span className="text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                 1-Klik
               </span>
@@ -305,7 +307,7 @@ export default function StudentLoginPage() {
                     Masuk Cepat Siswa (Rizky Pratama)
                   </p>
                   <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">
-                    Kelas X ATPH • Tanpa input sandi
+                    Akun Percobaan Siswa • Tanpa input sandi
                   </p>
                 </div>
               </div>
@@ -319,13 +321,57 @@ export default function StudentLoginPage() {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-white dark:bg-slate-900 px-3 text-slate-400 font-bold tracking-wider">
-                Atau Masuk dengan Email Sendiri
+                Atau Masuk dengan Email & Pilih Kelas
               </span>
             </div>
           </div>
 
           {/* Form Login Siswa */}
           <form onSubmit={handleFormLogin} className="space-y-4">
+            {/* PILIHAN KELAS SISWA (X AT 1/2/3, XI AT 1/2/3, XII AT 1/2/3) */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Pilihan Kelas (Rombel ATPH)
+                </label>
+                <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                  Wajib Dipilih
+                </span>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-emerald-600 dark:text-emerald-400">
+                  <School className="w-4 h-4" />
+                </div>
+                <select
+                  value={selectedClass}
+                  onChange={(e) => setSelectedClass(e.target.value)}
+                  className="w-full pl-10 pr-8 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer appearance-none"
+                >
+                  <optgroup label="── TINGKAT X (Dasar Kejuruan ATPH) ──">
+                    <option value="cls-x-at-1">X AT 1 (Kelas 10 Agribisnis Tanaman 1)</option>
+                    <option value="cls-x-at-2">X AT 2 (Kelas 10 Agribisnis Tanaman 2)</option>
+                    <option value="cls-x-at-3">X AT 3 (Kelas 10 Agribisnis Tanaman 3)</option>
+                  </optgroup>
+                  <optgroup label="── TINGKAT XI (Praktik Budidaya Lanjutan) ──">
+                    <option value="cls-xi-at-1">XI AT 1 (Kelas 11 Agribisnis Tanaman 1)</option>
+                    <option value="cls-xi-at-2">XI AT 2 (Kelas 11 Agribisnis Tanaman 2)</option>
+                    <option value="cls-xi-at-3">XI AT 3 (Kelas 11 Agribisnis Tanaman 3)</option>
+                  </optgroup>
+                  <optgroup label="── TINGKAT XII (Pascapanen & Kewirausahaan) ──">
+                    <option value="cls-xii-at-1">XII AT 1 (Kelas 12 Agribisnis Tanaman 1)</option>
+                    <option value="cls-xii-at-2">XII AT 2 (Kelas 12 Agribisnis Tanaman 2)</option>
+                    <option value="cls-xii-at-3">XII AT 3 (Kelas 12 Agribisnis Tanaman 3)</option>
+                  </optgroup>
+                </select>
+                <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+                  <ArrowRight className="w-3.5 h-3.5 rotate-90" />
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1">
+                Akun langsung terhubung ke Manajemen Kelas & Siswa guru sesuai rombel di atas.
+              </p>
+            </div>
+
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 Alamat Email Siswa

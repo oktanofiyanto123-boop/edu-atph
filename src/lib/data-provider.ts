@@ -80,7 +80,8 @@ export const DataProvider = {
   login(
     email: string = '',
     passwordOrRole: string = '',
-    role?: 'admin' | 'student'
+    role?: 'admin' | 'student',
+    selectedClassId?: string
   ): UserProfile | null {
     const users = this.getUsers();
     const cleanEmail = (email || '').trim().toLowerCase();
@@ -95,6 +96,16 @@ export const DataProvider = {
       password = passwordOrRole;
     }
 
+    // Resolve target class if selected
+    const allClasses = this.getClasses();
+    const targetClass = selectedClassId
+      ? allClasses.find(
+          (c) =>
+            c.id === selectedClassId ||
+            c.name.toLowerCase() === selectedClassId.toLowerCase()
+        )
+      : null;
+
     // Quick role login fallback (empty email)
     if (!cleanEmail) {
       if (targetRole === 'admin') {
@@ -103,6 +114,11 @@ export const DataProvider = {
         return admin;
       }
       const student = users.find((u) => u.role === 'student') || INITIAL_USERS[1];
+      if (targetClass) {
+        student.classId = targetClass.id;
+        student.className = targetClass.name;
+        setItem(STORAGE_KEYS.USERS, users);
+      }
       this.setCurrentUser(student);
       return student;
     }
@@ -119,11 +135,18 @@ export const DataProvider = {
 
       if (found) {
         if (found.role === 'admin') return null; // Admin blocked from student role
+
+        // Update class if chosen on login so it immediately links to Manajemen Kelas & Siswa
+        if (targetClass) {
+          found.classId = targetClass.id;
+          found.className = targetClass.name;
+          setItem(STORAGE_KEYS.USERS, users);
+        }
         this.setCurrentUser(found);
         return found;
       }
 
-      // New student registered on-the-fly with their own email!
+      // New student registered on-the-fly with their own email and chosen class!
       const namePart = cleanEmail.split('@')[0].replace(/[._-]/g, ' ');
       const formattedName =
         namePart
@@ -132,14 +155,16 @@ export const DataProvider = {
           .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
           .join(' ') || 'Siswa ATPH';
 
+      const assignedClass = targetClass || allClasses[0] || { id: 'cls-x-at-1', name: 'X AT 1' };
+
       const newStudent: UserProfile = {
         id: `usr-student-${Date.now()}`,
         email: cleanEmail,
         fullName: formattedName,
         role: 'student',
         nisn: `00${Math.floor(10000000 + Math.random() * 90000000)}`,
-        classId: 'cls-10-atph',
-        className: 'X ATPH',
+        classId: assignedClass.id,
+        className: assignedClass.name,
         major: 'Agribisnis Tanaman Pangan dan Hortikultura',
         avatarUrl:
           'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=250&q=80',
@@ -235,7 +260,40 @@ export const DataProvider = {
 
   // --- CLASSES ---
   getClasses(): ClassItem[] {
-    return getItem<ClassItem[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    const stored = getItem<ClassItem[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    // Ensure all 9 initial classes are present in the list
+    const existingIds = new Set(stored.map((c) => c.id));
+    const missing = INITIAL_CLASSES.filter((c) => !existingIds.has(c.id));
+    if (missing.length > 0) {
+      // Filter out old placeholder classes if replacing with 9 official classes
+      const filtered = stored.filter((c) => !['cls-10-atph', 'cls-11-atph', 'cls-12-atph'].includes(c.id));
+      const merged = [...filtered, ...INITIAL_CLASSES];
+      const uniqueClasses = Array.from(new Map(merged.map((c) => [c.id, c])).values());
+      setItem(STORAGE_KEYS.CLASSES, uniqueClasses);
+      return uniqueClasses;
+    }
+    return stored;
+  },
+
+  isClassMatch(targetClassId?: string, studentClassId?: string): boolean {
+    if (!targetClassId || targetClassId === 'all') return true;
+    if (!studentClassId) return true;
+    if (targetClassId === studentClassId) return true;
+
+    // Grade-level matching (e.g. materials for 'cls-10-atph' match 'cls-x-at-1', 'cls-x-at-2', 'cls-x-at-3')
+    const isTargetX = targetClassId.includes('10') || targetClassId.includes('cls-x');
+    const isStudentX = studentClassId.includes('10') || studentClassId.includes('cls-x');
+    if (isTargetX && isStudentX) return true;
+
+    const isTargetXI = targetClassId.includes('11') || targetClassId.includes('cls-xi');
+    const isStudentXI = studentClassId.includes('11') || studentClassId.includes('cls-xi');
+    if (isTargetXI && isStudentXI) return true;
+
+    const isTargetXII = targetClassId.includes('12') || targetClassId.includes('cls-xii');
+    const isStudentXII = studentClassId.includes('12') || studentClassId.includes('cls-xii');
+    if (isTargetXII && isStudentXII) return true;
+
+    return false;
   },
 
   addClass(cls: Omit<ClassItem, 'id' | 'createdAt'>): ClassItem {
@@ -767,7 +825,7 @@ export const DataProvider = {
   getAnnouncements(targetClassId?: string): Announcement[] {
     const list = getItem<Announcement[]>(STORAGE_KEYS.ANNOUNCEMENTS, INITIAL_ANNOUNCEMENTS);
     if (targetClassId && targetClassId !== 'all') {
-      return list.filter((a) => a.targetClassId === 'all' || a.targetClassId === targetClassId);
+      return list.filter((a) => this.isClassMatch(a.targetClassId, targetClassId));
     }
     return list;
   },

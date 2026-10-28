@@ -31,7 +31,7 @@ export default function StudentProgressPage() {
     const allMaterials = DataProvider.getMaterials().filter(
       (m) =>
         m.status === 'published' &&
-        (m.targetClassId === 'all' || m.targetClassId === user?.classId)
+        DataProvider.isClassMatch(m.targetClassId, user?.classId)
     );
     setMaterials(allMaterials);
 

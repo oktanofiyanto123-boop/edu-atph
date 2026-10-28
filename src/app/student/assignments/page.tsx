@@ -53,7 +53,7 @@ export default function StudentAssignmentsPage() {
     const list = DataProvider.getAssignments().filter(
       (a) =>
         a.status === 'published' &&
-        (a.targetClassId === 'all' || a.targetClassId === user?.classId)
+        DataProvider.isClassMatch(a.targetClassId, user?.classId)
     );
     setAssignments(list);
 

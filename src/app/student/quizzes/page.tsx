@@ -29,7 +29,7 @@ export default function StudentQuizzesPage() {
     const list = DataProvider.getQuizzes().filter(
       (q) =>
         q.isPublished &&
-        (q.targetClassId === 'all' || q.targetClassId === user?.classId)
+        DataProvider.isClassMatch(q.targetClassId, user?.classId)
     );
     setQuizzes(list);
 
