@@ -35,7 +35,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/login" className="hover:text-emerald-400 transition-colors">
-                  Masuk ke Portal
+                  Portal Siswa
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/login" className="text-emerald-400 font-semibold hover:underline transition-colors">
+                  Portal Guru / Admin
                 </Link>
               </li>
               <li>

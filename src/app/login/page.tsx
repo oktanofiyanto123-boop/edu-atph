@@ -5,148 +5,162 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Sprout,
-  Shield,
   GraduationCap,
   LogIn,
   Lock,
   Mail,
-  ArrowLeft,
+  ArrowRight,
   Sparkles,
   AlertCircle,
-  CheckCircle,
+  ShieldAlert,
+  ArrowLeft,
+  BookOpen,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 
-export default function LoginPage() {
+export default function StudentLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showAdminRedirect, setShowAdminRedirect] = useState(false);
 
-  const handleQuickLogin = (role: 'admin' | 'student') => {
+  const handleStudentQuickLogin = () => {
     setLoading(true);
     setErrorMessage('');
+    setShowAdminRedirect(false);
+
     setTimeout(() => {
-      const user = DataProvider.login('', role);
+      const user = DataProvider.login('', 'student');
       if (user) {
-        if (user.role === 'admin') {
-          router.push('/admin/dashboard');
-        } else {
-          router.push('/student/dashboard');
-        }
+        router.push('/student/dashboard');
       } else {
-        setErrorMessage('Gagal memuat profil pengguna.');
+        setErrorMessage('Gagal memuat data akun siswa.');
         setLoading(false);
       }
-    }, 400);
+    }, 350);
   };
 
   const handleFormLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
-      setErrorMessage('Silakan masukkan email Anda.');
+      setErrorMessage('Silakan masukkan alamat email siswa Anda.');
+      setShowAdminRedirect(false);
       return;
     }
+
     setLoading(true);
     setErrorMessage('');
+    setShowAdminRedirect(false);
 
     setTimeout(() => {
-      const user = DataProvider.login(email);
-      if (user) {
-        if (user.role === 'admin') {
-          router.push('/admin/dashboard');
-        } else {
-          router.push('/student/dashboard');
-        }
-      } else {
-        // Fallback: if email contains admin/okta, login as admin, otherwise student
-        if (email.toLowerCase().includes('okta') || email.toLowerCase().includes('admin')) {
-          DataProvider.login('', 'admin');
-          router.push('/admin/dashboard');
-        } else {
-          DataProvider.login('', 'student');
-          router.push('/student/dashboard');
-        }
+      const cleanEmail = email.trim().toLowerCase();
+
+      // Cek apakah akun yang diinput adalah administrator
+      const users = DataProvider.getUsers();
+      const targetUser = users.find((u) => u.email.toLowerCase() === cleanEmail);
+
+      const isAdminAttempt =
+        (targetUser && targetUser.role === 'admin') ||
+        cleanEmail.includes('admin') ||
+        cleanEmail.includes('okta.nofiyanto');
+
+      if (isAdminAttempt) {
+        setLoading(false);
+        setErrorMessage(
+          'Akses Ditolak: Akun Administrator tidak diizinkan masuk melalui portal siswa. Silakan gunakan Portal Administrator khusus guru.'
+        );
+        setShowAdminRedirect(true);
+        return;
       }
-    }, 500);
+
+      // Login akun siswa
+      const user = DataProvider.login(cleanEmail, 'student');
+      if (user && user.role === 'student') {
+        router.push('/student/dashboard');
+      } else {
+        // Fallback default student
+        DataProvider.login('', 'student');
+        router.push('/student/dashboard');
+      }
+    }, 450);
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
       {/* Background glow effects */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
-        <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
+        <Link href="/beranda" className="inline-flex items-center gap-2 mb-4 group">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-xl shadow-emerald-600/30 group-hover:scale-105 transition-all">
             <Sprout className="w-7 h-7" />
           </div>
         </Link>
-        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-          Masuk ke EduATPH
-        </h2>
-        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-          Portal Pembelajaran Agribisnis Tanaman Pangan & Hortikultura
+
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-2">
+          <GraduationCap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <span>Ruang Belajar Siswa ATPH</span>
+        </div>
+
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          Masuk Portal Siswa
+        </h1>
+        <p className="mt-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+          Akses materi agribisnis, evaluasi kuis, dan pengumpulan tugas
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="bg-white dark:bg-slate-900 py-8 px-6 shadow-xl rounded-3xl border border-slate-200 dark:border-slate-800 sm:px-10 space-y-6">
           {errorMessage && (
-            <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-700 dark:text-rose-300 text-xs font-semibold flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span>{errorMessage}</span>
+            <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 text-xs space-y-2">
+              <div className="flex items-start gap-2">
+                <ShieldAlert className="w-4 h-4 flex-shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                <span className="font-semibold leading-relaxed">{errorMessage}</span>
+              </div>
+              {showAdminRedirect && (
+                <div className="pt-2">
+                  <Link
+                    href="/admin/login"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition-colors"
+                  >
+                    <span>Buka Portal Administrator</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Quick Access Switchers */}
+          {/* Quick Access Switcher (Student Only) */}
           <div className="space-y-3">
             <p className="text-xs font-bold uppercase tracking-wider text-slate-400 text-center">
-              Akses Cepat Pengguna
+              Akses Cepat Siswa
             </p>
-            <button
-              type="button"
-              onClick={() => handleQuickLogin('admin')}
-              disabled={loading}
-              className="w-full p-3.5 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 hover:bg-emerald-50 text-emerald-900 dark:text-emerald-300 flex items-center justify-between text-left transition-all group"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/30">
-                  <Shield className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs font-black text-slate-900 dark:text-white">
-                    Masuk sebagai Administrator
-                  </p>
-                  <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">
-                    Okta Nofiyanto • Akses Penuh
-                  </p>
-                </div>
-              </div>
-              <Sparkles className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
-            </button>
 
             <button
               type="button"
-              onClick={() => handleQuickLogin('student')}
+              onClick={handleStudentQuickLogin}
               disabled={loading}
-              className="w-full p-3.5 rounded-2xl border-2 border-teal-500/30 hover:border-teal-500 bg-teal-50/50 dark:bg-teal-950/30 hover:bg-teal-50 text-teal-900 dark:text-teal-300 flex items-center justify-between text-left transition-all group"
+              className="w-full p-4 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/30 hover:bg-emerald-50 text-emerald-950 dark:text-emerald-200 flex items-center justify-between text-left transition-all group shadow-xs"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-md shadow-teal-600/30">
+              <div className="flex items-center gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/30 group-hover:scale-105 transition-transform">
                   <GraduationCap className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-black text-slate-900 dark:text-white">
+                  <p className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     Masuk sebagai Siswa
                   </p>
-                  <p className="text-[11px] text-teal-700 dark:text-teal-400 font-semibold">
+                  <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">
                     Rizky Pratama • Kelas X ATPH
                   </p>
                 </div>
               </div>
-              <Sparkles className="w-4 h-4 text-teal-600 group-hover:scale-110 transition-transform" />
+              <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
             </button>
           </div>
 
@@ -155,8 +169,8 @@ export default function LoginPage() {
               <div className="w-full border-t border-slate-200 dark:border-slate-800" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white dark:bg-slate-900 px-3 text-slate-400 font-bold">
-                Atau Masuk dengan Email
+              <span className="bg-white dark:bg-slate-900 px-3 text-slate-400 font-bold tracking-wider">
+                Atau Email Siswa
               </span>
             </div>
           </div>
@@ -164,8 +178,8 @@ export default function LoginPage() {
           {/* Form Login */}
           <form onSubmit={handleFormLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                Alamat Email
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Alamat Email Siswa
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -175,14 +189,14 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="nama@siswa.eduatph.sch.id"
+                  placeholder="rizky.pratama@siswa.eduatph.sch.id"
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 Kata Sandi
               </label>
               <div className="relative">
@@ -202,28 +216,36 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+              className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
             >
               <LogIn className="w-4 h-4" />
-              <span>{loading ? 'Memproses Masuk...' : 'Masuk ke Portal'}</span>
+              <span>{loading ? 'Memproses Masuk...' : 'Masuk ke Ruang Belajar'}</span>
             </button>
           </form>
 
-          {/* Privacy Note */}
-          <div className="pt-2 text-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
-            <p>
-              Akun siswa dibuat dan diotorisasi oleh administrator Okta Nofiyanto.
+          {/* Teacher link notice */}
+          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Guru / Administrator?{' '}
+              <Link
+                href="/admin/login"
+                className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
+              >
+                <span>Masuk Portal Administrator</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
             </p>
           </div>
         </div>
 
+        {/* Link to Information & Curriculum */}
         <div className="mt-6 text-center">
           <Link
-            href="/"
+            href="/beranda"
             className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke Halaman Beranda</span>
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Lihat Profil Jurusan & 15 Modul Kurikulum ATPH</span>
           </Link>
         </div>
       </div>

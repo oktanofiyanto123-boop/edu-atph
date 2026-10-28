@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import DashboardHeader from '@/components/layout/DashboardHeader';
 import {
   BookOpen,
@@ -16,10 +16,20 @@ import {
   FileText,
   Image as ImageIcon,
   Sparkles,
+  UploadCloud,
+  Paperclip,
+  Download,
+  AlertCircle,
+  File,
+  FileCheck,
+  Loader2,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
-import { TeachingMaterial, MaterialCategory, ClassItem } from '@/types';
+import { TeachingMaterial, MaterialCategory, ClassItem, MaterialAttachment } from '@/types';
 import { formatDate } from '@/lib/utils';
+import { uploadMultipleFiles, uploadFileToStorage, formatBytes, detectFileType } from '@/lib/storage';
+
+// formatBytes and detectFileType are imported from '@/lib/storage'
 
 export default function AdminMaterialsPage() {
   const [materials, setMaterials] = useState<TeachingMaterial[]>([]);
@@ -47,7 +57,15 @@ export default function AdminMaterialsPage() {
     status: 'published' as 'published' | 'draft' | 'archived',
     orderIndex: 1,
   });
+  const [attachments, setAttachments] = useState<MaterialAttachment[]>([]);
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState('');
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const loadData = () => {
     setMaterials(DataProvider.getMaterials());
@@ -56,6 +74,9 @@ export default function AdminMaterialsPage() {
   };
 
   useEffect(() => {
+    // Clean up any large base64 data stored in previous sessions
+    // (old versions stored full file contents in localStorage which caused quota errors)
+    DataProvider.cleanupMaterialBase64();
     loadData();
   }, []);
 
@@ -76,6 +97,7 @@ export default function AdminMaterialsPage() {
 
   const handleOpenAdd = () => {
     setEditingMaterial(null);
+    setAttachments([]);
     setFormData({
       title: '',
       slug: '',
@@ -96,6 +118,7 @@ export default function AdminMaterialsPage() {
 
   const handleOpenEdit = (mat: TeachingMaterial) => {
     setEditingMaterial(mat);
+    setAttachments(mat.attachments || []);
     setFormData({
       title: mat.title,
       slug: mat.slug,
@@ -103,7 +126,7 @@ export default function AdminMaterialsPage() {
       categoryId: mat.categoryId,
       targetClassId: mat.targetClassId,
       topic: mat.topic,
-      learningObjectivesText: mat.learningObjectives.join('\n'),
+      learningObjectivesText: mat.learningObjectives?.join('\n') || '',
       content: mat.content,
       imageUrl: mat.imageUrl || '',
       videoUrl: mat.videoUrl || '',
@@ -114,9 +137,124 @@ export default function AdminMaterialsPage() {
     setIsModalOpen(true);
   };
 
+  // -------------------------------------------------------------
+  // FILE UPLOAD HANDLERS (Supabase Storage Cloud)
+  // -------------------------------------------------------------
+  const handleDocumentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    await processFileUpload(files);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const processFileUpload = async (files: FileList | File[]) => {
+    setIsUploadingFile(true);
+    setUploadError(null);
+    setUploadProgress(`Mengunggah 0/${files.length} file...`);
+
+    try {
+      const newAttachments = await uploadMultipleFiles(
+        files,
+        'documents',
+        (processed, total) => {
+          setUploadProgress(`Mengunggah ${processed}/${total} file...`);
+        }
+      );
+
+      if (newAttachments.length > 0) {
+        // Auto-set pdfUrl if a PDF is uploaded and pdfUrl is empty
+        const firstPdf = newAttachments.find((a) => a.fileType === 'pdf');
+        if (firstPdf && !formData.pdfUrl) {
+          setFormData((prev) => ({ ...prev, pdfUrl: firstPdf.fileUrl }));
+        }
+
+        setAttachments((prev) => [...prev, ...newAttachments]);
+        showNotification(`${newAttachments.length} file berhasil diunggah ke cloud storage.`);
+      } else {
+        setUploadError('Tidak ada file yang berhasil diunggah. Periksa koneksi internet Anda.');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      setUploadError('Terjadi kesalahan saat mengunggah file. Coba lagi.');
+    } finally {
+      setIsUploadingFile(false);
+      setUploadProgress('');
+    }
+  };
+
+  const handleCoverImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingFile(true);
+    setUploadError(null);
+    try {
+      const result = await uploadFileToStorage(file, 'covers');
+      setFormData((prev) => ({ ...prev, imageUrl: result.url }));
+      showNotification('Foto cover materi berhasil diunggah ke cloud storage.');
+    } catch (err) {
+      console.error('Cover upload error:', err);
+      setUploadError('Gagal mengunggah foto cover.');
+    } finally {
+      setIsUploadingFile(false);
+      if (imageInputRef.current) imageInputRef.current.value = '';
+    }
+  };
+
+  // Drag & Drop handlers
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      await processFileUpload(files);
+    }
+  }, [formData.pdfUrl]);
+
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
+    showNotification('Lampiran file dihapus.');
+  };
+
+  // -------------------------------------------------------------
+  // SAVE MATERIAL
+  // -------------------------------------------------------------
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title) return;
+
+    // Block save while file upload is still in progress
+    if (isUploadingFile) {
+      showNotification('Tunggu hingga file selesai diunggah...');
+      return;
+    }
+
+    if (!formData.title.trim()) {
+      setUploadError('Judul materi wajib diisi.');
+      return;
+    }
+    if (!formData.topic.trim()) {
+      setUploadError('Topik / pokok bahasan wajib diisi.');
+      return;
+    }
+    if (!formData.content.trim()) {
+      setUploadError('Isi materi pembelajaran wajib diisi.');
+      return;
+    }
+
+    setUploadError(null);
 
     const selectedCat = categories.find((c) => c.id === formData.categoryId);
     const selectedCls = classes.find((c) => c.id === formData.targetClassId);
@@ -127,49 +265,107 @@ export default function AdminMaterialsPage() {
 
     const slug = formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    if (editingMaterial) {
-      DataProvider.updateMaterial(editingMaterial.id, {
-        title: formData.title,
-        slug,
-        description: formData.description,
-        categoryId: formData.categoryId,
-        categoryName: selectedCat?.name,
-        targetClassId: formData.targetClassId,
-        targetClassName: selectedCls?.name || 'Semua Kelas',
-        topic: formData.topic,
-        learningObjectives: objectives,
-        content: formData.content,
-        imageUrl: formData.imageUrl,
-        videoUrl: formData.videoUrl,
-        pdfUrl: formData.pdfUrl,
-        status: formData.status,
-        orderIndex: Number(formData.orderIndex),
-      });
-      showNotification('Materi pembelajaran berhasil diperbarui');
-    } else {
-      DataProvider.addMaterial({
-        title: formData.title,
-        slug,
-        description: formData.description,
-        categoryId: formData.categoryId,
-        categoryName: selectedCat?.name,
-        targetClassId: formData.targetClassId,
-        targetClassName: selectedCls?.name || 'Semua Kelas',
-        topic: formData.topic,
-        learningObjectives: objectives,
-        content: formData.content,
-        imageUrl: formData.imageUrl,
-        videoUrl: formData.videoUrl,
-        pdfUrl: formData.pdfUrl,
-        attachments: [],
-        status: formData.status,
-        orderIndex: Number(formData.orderIndex),
-      });
-      showNotification('Materi pembelajaran baru berhasil diterbitkan');
-    }
+    // Strip any residual large base64 data URLs from attachments to prevent localStorage quota errors
+    // Only keep Supabase cloud URLs and small DataURLs (< 256KB)
+    const safeAttachments = attachments.map((att) => {
+      if (att.fileUrl.startsWith('data:') && att.fileUrl.length > 262144) {
+        return { ...att, fileUrl: '' }; // strip oversized base64
+      }
+      return att;
+    });
 
-    setIsModalOpen(false);
-    loadData();
+    try {
+      if (editingMaterial) {
+        DataProvider.updateMaterial(editingMaterial.id, {
+          title: formData.title,
+          slug,
+          description: formData.description,
+          categoryId: formData.categoryId,
+          categoryName: selectedCat?.name,
+          targetClassId: formData.targetClassId,
+          targetClassName: selectedCls?.name || 'Semua Kelas',
+          topic: formData.topic,
+          learningObjectives: objectives,
+          content: formData.content,
+          imageUrl: formData.imageUrl,
+          videoUrl: formData.videoUrl,
+          pdfUrl: formData.pdfUrl,
+          attachments: safeAttachments,
+          status: formData.status,
+          orderIndex: Number(formData.orderIndex),
+        });
+        showNotification('Materi pembelajaran berhasil diperbarui');
+      } else {
+        DataProvider.addMaterial({
+          title: formData.title,
+          slug,
+          description: formData.description,
+          categoryId: formData.categoryId,
+          categoryName: selectedCat?.name,
+          targetClassId: formData.targetClassId,
+          targetClassName: selectedCls?.name || 'Semua Kelas',
+          topic: formData.topic,
+          learningObjectives: objectives,
+          content: formData.content,
+          imageUrl: formData.imageUrl,
+          videoUrl: formData.videoUrl,
+          pdfUrl: formData.pdfUrl,
+          attachments: safeAttachments,
+          status: formData.status,
+          orderIndex: Number(formData.orderIndex),
+        });
+        showNotification('Materi pembelajaran baru berhasil diterbitkan');
+      }
+
+      setIsModalOpen(false);
+      loadData();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Failed to save material:', err);
+      // Likely a localStorage quota error — auto-cleanup then retry
+      if (msg.toLowerCase().includes('quota') || msg.toLowerCase().includes('exceeded')) {
+        const cleaned = DataProvider.cleanupMaterialBase64();
+        if (cleaned > 0) {
+          // Retry once after cleanup
+          try {
+            if (editingMaterial) {
+              DataProvider.updateMaterial(editingMaterial.id, {
+                title: formData.title,
+                description: formData.description,
+                content: formData.content,
+                attachments: safeAttachments,
+                status: formData.status,
+              });
+            } else {
+              DataProvider.addMaterial({
+                title: formData.title,
+                slug: formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                description: formData.description,
+                categoryId: formData.categoryId,
+                targetClassId: formData.targetClassId,
+                topic: formData.topic,
+                learningObjectives: [],
+                content: formData.content,
+                attachments: safeAttachments,
+                status: formData.status,
+                orderIndex: Number(formData.orderIndex),
+              });
+            }
+            showNotification('Materi berhasil disimpan (data lama dibersihkan otomatis).');
+            setIsModalOpen(false);
+            loadData();
+            return;
+          } catch {
+            /* fall through to error message */
+          }
+        }
+        setUploadError(
+          'Penyimpanan lokal penuh. Coba hapus beberapa materi lama, atau reload halaman ini dan coba lagi.'
+        );
+      } else {
+        setUploadError(`Gagal menyimpan materi: ${msg}`);
+      }
+    }
   };
 
   const handleDelete = (id: string, title: string) => {
@@ -184,7 +380,7 @@ export default function AdminMaterialsPage() {
     <div className="flex-1 flex flex-col">
       <DashboardHeader
         title="Manajemen Materi Pembelajaran ATPH"
-        subtitle="Kelola modul pembelajaran, gambar, video praktik, lampiran PDF, dan status rilis siswa"
+        subtitle="Kelola modul pembelajaran, unggah file PDF/dokumen, cover gambar, video praktik, dan status rilis siswa"
         onRefresh={loadData}
       />
 
@@ -239,7 +435,7 @@ export default function AdminMaterialsPage() {
 
           <button
             onClick={handleOpenAdd}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
+            className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01]"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Materi Baru</span>
@@ -255,7 +451,7 @@ export default function AdminMaterialsPage() {
                   <th className="py-4 px-6">Modul Materi & Topik</th>
                   <th className="py-4 px-6">Kategori ATPH</th>
                   <th className="py-4 px-6">Kelas Target</th>
-                  <th className="py-4 px-6">Media</th>
+                  <th className="py-4 px-6">Berkas & Media</th>
                   <th className="py-4 px-6">Status</th>
                   <th className="py-4 px-6 text-right">Aksi</th>
                 </tr>
@@ -287,10 +483,31 @@ export default function AdminMaterialsPage() {
                         {m.targetClassName || 'Semua Kelas'}
                       </td>
                       <td className="py-4 px-6">
-                        <div className="flex items-center gap-1.5 text-slate-400">
-                          {m.videoUrl && <span title="Ada Video YouTube"><Video className="w-4 h-4 text-rose-500" /></span>}
-                          {m.pdfUrl && <span title="Ada PDF"><FileText className="w-4 h-4 text-emerald-600" /></span>}
-                          {m.imageUrl && <span title="Ada Gambar"><ImageIcon className="w-4 h-4 text-teal-600" /></span>}
+                        <div className="flex items-center gap-2 text-slate-400">
+                          {m.attachments && m.attachments.length > 0 && (
+                            <span
+                              title={`${m.attachments.length} Berkas Lampiran Terunggah`}
+                              className="inline-flex items-center gap-1 text-[11px] font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md"
+                            >
+                              <Paperclip className="w-3.5 h-3.5" />
+                              <span>{m.attachments.length} Berkas</span>
+                            </span>
+                          )}
+                          {m.videoUrl && (
+                            <span title="Ada Video Tutorial">
+                              <Video className="w-4 h-4 text-rose-500" />
+                            </span>
+                          )}
+                          {m.pdfUrl && !m.attachments?.length && (
+                            <span title="Ada Dokumen PDF">
+                              <FileText className="w-4 h-4 text-emerald-600" />
+                            </span>
+                          )}
+                          {m.imageUrl && (
+                            <span title="Ada Foto Cover">
+                              <ImageIcon className="w-4 h-4 text-teal-600" />
+                            </span>
+                          )}
                         </div>
                       </td>
                       <td className="py-4 px-6">
@@ -310,12 +527,14 @@ export default function AdminMaterialsPage() {
                         <div className="inline-flex items-center gap-1">
                           <button
                             onClick={() => handleOpenEdit(m)}
+                            title="Edit Materi & Lampiran"
                             className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(m.id, m.title)}
+                            title="Hapus Materi"
                             className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -331,14 +550,24 @@ export default function AdminMaterialsPage() {
         </div>
       </div>
 
-      {/* MODAL EDITOR MATERI PEMBELAJARAN */}
+      {/* MODAL EDITOR MATERI PEMBELAJARAN (DENGAN FITUR UPLOAD FILE) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs overflow-y-auto">
           <div className="w-full max-w-3xl my-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                {editingMaterial ? 'Edit Modul Materi ATPH' : 'Buat Modul Materi Baru'}
-              </h3>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/30">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    {editingMaterial ? 'Edit Modul Materi ATPH' : 'Buat Modul Materi Baru'}
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Lengkapi judul, modul teks, unggahan dokumen/PDF, dan media praktik
+                  </p>
+                </div>
+              </div>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-white"
@@ -347,7 +576,7 @@ export default function AdminMaterialsPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4">
+            <form onSubmit={handleSave} className="space-y-5">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Judul Materi Pembelajaran *
@@ -441,31 +670,249 @@ export default function AdminMaterialsPage() {
                   rows={2}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Ringkasan isi materi yang tampil pada kartu preview..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  placeholder="Ringkasan materi yang tampil pada kartu pratinjau siswa..."
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 />
+              </div>
+
+              {/* SEKSI UNGGAH FILE DOKUMEN / MODUL (PDF, DOCX, PPTX, EXCEL, ZIP) */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Paperclip className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <label className="text-xs font-bold text-slate-900 dark:text-white">
+                      Unggah File Modul / Lampiran Materi (PDF, Dokumen, dll.)
+                    </label>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={isUploadingFile}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-wait text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors"
+                  >
+                    {isUploadingFile ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <UploadCloud className="w-3.5 h-3.5" />
+                    )}
+                    <span>{isUploadingFile ? uploadProgress || 'Mengunggah...' : 'Pilih & Upload File'}</span>
+                  </button>
+                </div>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.txt,.rar,.7z"
+                  onChange={handleDocumentUpload}
+                  className="hidden"
+                />
+
+                <p className="text-[11px] text-slate-500">
+                  File diunggah ke Supabase Cloud Storage — siswa dapat langsung mengunduh (PDF, Word, PowerPoint, Excel, ZIP).
+                </p>
+
+                {/* Upload error notification */}
+                {uploadError && (
+                  <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px] font-bold flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    <span>{uploadError}</span>
+                  </div>
+                )}
+
+                {/* Uploaded Attachments List */}
+                {attachments.length > 0 ? (
+                  <div className="space-y-2 pt-2">
+                    {attachments.map((att) => (
+                      <div
+                        key={att.id}
+                        className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3 shadow-2xs"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                            <FileText className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                              {att.name}
+                            </p>
+                            <p className="text-[10px] text-slate-400">
+                              Ukuran: {att.fileSize} • Tipe: {att.fileType.toUpperCase()}
+                              {att.fileUrl?.includes('supabase.co') && (
+                                <span className="ml-1 text-emerald-600">• ☁ Cloud</span>
+                              )}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <a
+                            href={att.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={att.name}
+                            className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800"
+                            title="Unduh Berkas"
+                          >
+                            <Download className="w-4 h-4" />
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAttachment(att.id)}
+                            className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-slate-800"
+                            title="Hapus Lampiran"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Add more files button */}
+                    <button
+                      type="button"
+                      disabled={isUploadingFile}
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full p-2 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-emerald-500 text-xs font-semibold text-slate-500 hover:text-emerald-600 transition-colors"
+                    >
+                      + Tambah file lainnya
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => !isUploadingFile && fileInputRef.current?.click()}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer bg-white dark:bg-slate-900 transition-all ${
+                      isDragging
+                        ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20 scale-[1.01]'
+                        : 'border-slate-300 dark:border-slate-700 hover:border-emerald-500'
+                    }`}
+                  >
+                    {isUploadingFile ? (
+                      <>
+                        <Loader2 className="w-6 h-6 mx-auto text-emerald-600 mb-2 animate-spin" />
+                        <p className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
+                          {uploadProgress || 'Sedang mengunggah file ke cloud...'}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <UploadCloud className="w-8 h-8 mx-auto text-slate-400 mb-2" />
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                          Klik atau seret file ke area ini untuk mengunggah
+                        </p>
+                        <p className="text-[10px] text-slate-400 mt-1">
+                          Bisa pilih satu atau beberapa file sekaligus (maks. 50MB per file)
+                        </p>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* SEKSI UNGGAH GAMBAR COVER & URL MEDIA */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Upload Gambar Cover */}
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <ImageIcon className="w-4 h-4 text-emerald-600" />
+                      <span>Foto Cover / Ilustrasi</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current?.click()}
+                      className="text-xs font-bold text-emerald-600 hover:underline"
+                    >
+                      Unggah Foto
+                    </button>
+                  </div>
+
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverImageUpload}
+                    className="hidden"
+                  />
+
+                  {formData.imageUrl ? (
+                    <div className="relative h-28 w-full rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900 group">
+                      <img
+                        src={formData.imageUrl}
+                        alt="Preview Cover"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormData((prev) => ({ ...prev, imageUrl: '' }))}
+                        className="absolute top-2 right-2 p-1 rounded-lg bg-rose-600 text-white shadow-xs"
+                        title="Hapus Foto"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => imageInputRef.current?.click()}
+                      className="border border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-4 text-center cursor-pointer hover:border-emerald-500 bg-white dark:bg-slate-900 transition-colors"
+                    >
+                      <ImageIcon className="w-5 h-5 mx-auto text-slate-400 mb-1" />
+                      <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                        Klik untuk unggah foto dari komputer
+                      </p>
+                    </div>
+                  )}
+
+                  <input
+                    type="url"
+                    value={formData.imageUrl}
+                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                    placeholder="Atau tempel URL gambar (https://...)"
+                    className="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-[11px] focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+
+                {/* Video YouTube URL */}
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2.5">
+                  <label className="block text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <Video className="w-4 h-4 text-rose-500" />
+                    <span>Video YouTube Praktik Lapangan</span>
+                  </label>
+                  <p className="text-[11px] text-slate-500">
+                    Masukkan URL embed video YouTube untuk tutorial budidaya atau greenhouse.
+                  </p>
+                  <input
+                    type="url"
+                    value={formData.videoUrl}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    placeholder="https://www.youtube.com/embed/..."
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Tujuan Pembelajaran (1 baris per tujuan)
+                  Tujuan Pembelajaran (1 baris per poin)
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={formData.learningObjectivesText}
                   onChange={(e) => setFormData({ ...formData, learningObjectivesText: e.target.value })}
                   placeholder="1. Siswa mampu memahami...\n2. Siswa dapat mempraktikkan..."
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Isi Materi Pembelajaran (Markdown / Teks Terstruktur) *
+                  Isi Materi Pembelajaran (Teks / Panduan) *
                 </label>
                 <textarea
-                  rows={8}
-                  required
+                  rows={7}
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                   placeholder="Tuliskan materi selengkapnya di sini..."
@@ -473,46 +920,13 @@ export default function AdminMaterialsPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    URL Foto Header / Tanaman
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                    placeholder="https://images.unsplash.com/..."
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
-                  />
+              {/* Save validation error banner */}
+              {uploadError && (
+                <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px] font-bold flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{uploadError}</span>
                 </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    URL Embed Video YouTube
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.videoUrl}
-                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                    placeholder="https://www.youtube.com/embed/..."
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    Tautan File PDF Lampiran
-                  </label>
-                  <input
-                    type="url"
-                    value={formData.pdfUrl}
-                    onChange={(e) => setFormData({ ...formData, pdfUrl: e.target.value })}
-                    placeholder="https://.../modul.pdf"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
-                  />
-                </div>
-              </div>
+              )}
 
               <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
                 <button
@@ -524,9 +938,11 @@ export default function AdminMaterialsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20"
+                  disabled={isUploadingFile}
+                  className="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-60 disabled:cursor-not-allowed shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.01] flex items-center gap-2"
                 >
-                  {editingMaterial ? 'Perbarui Materi' : 'Terbitkan Modul'}
+                  {isUploadingFile && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {editingMaterial ? 'Perbarui Materi' : 'Terbitkan Modul & Berkas'}
                 </button>
               </div>
             </form>

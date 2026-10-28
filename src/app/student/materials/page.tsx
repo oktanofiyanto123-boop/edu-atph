@@ -144,13 +144,19 @@ export default function StudentMaterialsPage() {
                       </p>
 
                       <div className="pt-2 flex items-center gap-3 text-xs text-slate-400">
+                        {mat.attachments && mat.attachments.length > 0 && (
+                          <span className="flex items-center gap-1 text-teal-600 dark:text-teal-400 font-semibold text-[11px] bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md">
+                            <FileText className="w-3.5 h-3.5" />
+                            <span>{mat.attachments.length} Berkas</span>
+                          </span>
+                        )}
                         {mat.videoUrl && (
                           <span className="flex items-center gap-1 text-rose-500 font-semibold text-[11px]">
                             <Video className="w-3.5 h-3.5" />
                             <span>Video</span>
                           </span>
                         )}
-                        {mat.pdfUrl && (
+                        {mat.pdfUrl && !mat.attachments?.length && (
                           <span className="flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
                             <FileText className="w-3.5 h-3.5" />
                             <span>PDF</span>

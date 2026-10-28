@@ -26,3 +26,10 @@ export const getSupabaseClient = (): SupabaseClient | null => {
   }
   return client;
 };
+
+export const getSupabaseConfig = () => {
+  return {
+    url: supabaseUrl,
+    isConfigured: isSupabaseConfigured(),
+  };
+};

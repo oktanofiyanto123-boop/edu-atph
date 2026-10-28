@@ -1,28 +1,39 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 import { DataProvider } from '@/lib/data-provider';
 import { UserProfile } from '@/types';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
+    if (pathname === '/admin/login') {
+      setAuthorized(true);
+      return;
+    }
+
     const user = DataProvider.getCurrentUser();
     setCurrentUser(user);
     if (!user) {
-      router.push('/login');
+      router.push('/admin/login');
     } else if (user.role !== 'admin') {
       // Siswa tidak boleh melihat dashboard admin!
       router.push('/student/dashboard');
     } else {
       setAuthorized(true);
     }
-  }, [router]);
+  }, [router, pathname]);
+
+  // Bypass sidebar and container layout for the admin login page
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   if (!authorized) {
     return (

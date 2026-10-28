@@ -62,6 +62,8 @@ function setItem<T>(key: string, value: T): void {
     localStorage.setItem(key, JSON.stringify(value));
   } catch (e) {
     console.error(`Failed to save ${key} to storage`, e);
+    // Re-throw so callers (e.g. handleSave) can display an error to the user
+    throw e;
   }
 }
 
@@ -116,6 +118,26 @@ export const DataProvider = {
     users.push(newUser);
     setItem(STORAGE_KEYS.USERS, users);
     return newUser;
+  },
+
+  addUsers(newUsersList: Omit<UserProfile, 'id' | 'createdAt'>[]): UserProfile[] {
+    const users = this.getUsers();
+    const createdUsers: UserProfile[] = [];
+    const now = Date.now();
+    const nowIso = new Date().toISOString();
+
+    newUsersList.forEach((u, idx) => {
+      const newUser: UserProfile = {
+        ...u,
+        id: `usr-${now}-${idx}`,
+        createdAt: nowIso,
+      };
+      users.push(newUser);
+      createdUsers.push(newUser);
+    });
+
+    setItem(STORAGE_KEYS.USERS, users);
+    return createdUsers;
   },
 
   updateUser(id: string, updates: Partial<UserProfile>): UserProfile | null {
@@ -210,7 +232,33 @@ export const DataProvider = {
 
   // --- MATERIALS ---
   getMaterials(): TeachingMaterial[] {
-    return getItem<TeachingMaterial[]>(STORAGE_KEYS.MATERIALS, INITIAL_MATERIALS);
+    let stored = getItem<TeachingMaterial[]>(STORAGE_KEYS.MATERIALS, INITIAL_MATERIALS);
+    let hasChanges = false;
+
+    // Synchronize stored items with fresh INITIAL_MATERIALS (e.g. updated PDF attachments or content)
+    const updatedStored = stored.map((sm) => {
+      const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
+      if (initMatch) {
+        const needsUpdate =
+          !sm.pdfUrl ||
+          sm.pdfUrl.includes('dummy.pdf') ||
+          (initMatch.updatedAt && sm.updatedAt && initMatch.updatedAt > sm.updatedAt) ||
+          sm.id === 'mat-media-tanam';
+        if (needsUpdate) {
+          hasChanges = true;
+          return { ...sm, ...initMatch };
+        }
+      }
+      return sm;
+    });
+
+    const missing = INITIAL_MATERIALS.filter((im) => !updatedStored.some((sm) => sm.id === im.id));
+    if (missing.length > 0 || hasChanges) {
+      const merged = [...missing, ...updatedStored];
+      setItem(STORAGE_KEYS.MATERIALS, merged);
+      return merged;
+    }
+    return updatedStored;
   },
 
   getMaterialById(id: string): TeachingMaterial | undefined {
@@ -248,6 +296,51 @@ export const DataProvider = {
     materials = materials.filter((m) => m.id !== id);
     setItem(STORAGE_KEYS.MATERIALS, materials);
     return true;
+  },
+
+  /**
+   * Strip large base64 data URLs from stored materials to free localStorage quota.
+   * Call once when quota issues are detected (attachments > 256KB).
+   */
+  cleanupMaterialBase64(): number {
+    const materials = this.getMaterials();
+    let cleaned = 0;
+    const updated = materials.map((m) => {
+      let changed = false;
+      const cleanAttachments = (m.attachments || []).map((att) => {
+        if (att.fileUrl.startsWith('data:') && att.fileUrl.length > 262144) {
+          changed = true;
+          cleaned++;
+          return { ...att, fileUrl: '' };
+        }
+        return att;
+      });
+      let cleanImageUrl = m.imageUrl;
+      if (m.imageUrl?.startsWith('data:') && m.imageUrl.length > 262144) {
+        cleanImageUrl = '';
+        changed = true;
+        cleaned++;
+      }
+      let cleanPdfUrl = m.pdfUrl;
+      if (m.pdfUrl?.startsWith('data:') && m.pdfUrl.length > 262144) {
+        cleanPdfUrl = '';
+        changed = true;
+        cleaned++;
+      }
+      if (changed) {
+        return { ...m, attachments: cleanAttachments, imageUrl: cleanImageUrl, pdfUrl: cleanPdfUrl };
+      }
+      return m;
+    });
+    if (cleaned > 0) {
+      try {
+        setItem(STORAGE_KEYS.MATERIALS, updated);
+      } catch {
+        // If still full, clear materials entirely as last resort
+        localStorage.removeItem(STORAGE_KEYS.MATERIALS);
+      }
+    }
+    return cleaned;
   },
 
   // --- PROGRESS ---
@@ -375,7 +468,14 @@ export const DataProvider = {
 
   // --- QUIZZES ---
   getQuizzes(): Quiz[] {
-    return getItem<Quiz[]>(STORAGE_KEYS.QUIZZES, INITIAL_QUIZZES);
+    const stored = getItem<Quiz[]>(STORAGE_KEYS.QUIZZES, INITIAL_QUIZZES);
+    const missing = INITIAL_QUIZZES.filter((iq) => !stored.some((sq) => sq.id === iq.id));
+    if (missing.length > 0) {
+      const merged = [...missing, ...stored];
+      setItem(STORAGE_KEYS.QUIZZES, merged);
+      return merged;
+    }
+    return stored;
   },
 
   getQuizById(id: string): Quiz | undefined {
@@ -412,7 +512,13 @@ export const DataProvider = {
 
   // --- QUIZ QUESTIONS ---
   getQuizQuestions(quizId?: string): QuizQuestion[] {
-    const questions = getItem<QuizQuestion[]>(STORAGE_KEYS.QUIZ_QUESTIONS, INITIAL_QUIZ_QUESTIONS);
+    const stored = getItem<QuizQuestion[]>(STORAGE_KEYS.QUIZ_QUESTIONS, INITIAL_QUIZ_QUESTIONS);
+    const missing = INITIAL_QUIZ_QUESTIONS.filter((iq) => !stored.some((sq) => sq.id === iq.id));
+    let questions = stored;
+    if (missing.length > 0) {
+      questions = [...stored, ...missing];
+      setItem(STORAGE_KEYS.QUIZ_QUESTIONS, questions);
+    }
     if (quizId) {
       return questions.filter((q) => q.quizId === quizId);
     }

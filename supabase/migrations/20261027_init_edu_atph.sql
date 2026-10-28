@@ -269,62 +269,100 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Profiles: Anyone authenticated can read profiles; users can update own profile; admin full access
+-- Profiles Policies
+DROP POLICY IF EXISTS "Public read profiles" ON public.profiles;
 CREATE POLICY "Public read profiles" ON public.profiles FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Users update own profile" ON public.profiles;
 CREATE POLICY "Users update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Admin full manage profiles" ON public.profiles;
 CREATE POLICY "Admin full manage profiles" ON public.profiles FOR ALL USING (public.is_admin());
 
--- Classes & Categories: Authenticated users can read; Admin can insert/update/delete
+-- Classes & Categories Policies
+DROP POLICY IF EXISTS "Anyone read classes" ON public.classes;
 CREATE POLICY "Anyone read classes" ON public.classes FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin manage classes" ON public.classes;
 CREATE POLICY "Admin manage classes" ON public.classes FOR ALL USING (public.is_admin());
 
+DROP POLICY IF EXISTS "Anyone read categories" ON public.material_categories;
 CREATE POLICY "Anyone read categories" ON public.material_categories FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin manage categories" ON public.material_categories;
 CREATE POLICY "Admin manage categories" ON public.material_categories FOR ALL USING (public.is_admin());
 
--- Teaching Materials: Published materials visible to all, drafts only to admin
+-- Teaching Materials Policies
+DROP POLICY IF EXISTS "Read published materials" ON public.teaching_materials;
 CREATE POLICY "Read published materials" ON public.teaching_materials FOR SELECT 
   USING (status = 'published' OR public.is_admin());
+
+DROP POLICY IF EXISTS "Admin manage materials" ON public.teaching_materials;
 CREATE POLICY "Admin manage materials" ON public.teaching_materials FOR ALL USING (public.is_admin());
 
--- Learning Progress: Students manage own progress; Admin read all
+-- Learning Progress Policies
+DROP POLICY IF EXISTS "Students manage own progress" ON public.learning_progress;
 CREATE POLICY "Students manage own progress" ON public.learning_progress 
   FOR ALL USING (auth.uid() = student_id OR public.is_admin());
 
--- Assignments: Published visible to students; Admin manage all
+-- Assignments Policies
+DROP POLICY IF EXISTS "Students read assignments" ON public.assignments;
 CREATE POLICY "Students read assignments" ON public.assignments FOR SELECT 
   USING (status = 'published' OR public.is_admin());
+
+DROP POLICY IF EXISTS "Admin manage assignments" ON public.assignments;
 CREATE POLICY "Admin manage assignments" ON public.assignments FOR ALL USING (public.is_admin());
 
--- Submissions: Students insert and view their own; Admin manage all
+-- Submissions Policies
+DROP POLICY IF EXISTS "Students view own submissions" ON public.submissions;
 CREATE POLICY "Students view own submissions" ON public.submissions FOR SELECT 
   USING (auth.uid() = student_id OR public.is_admin());
+
+DROP POLICY IF EXISTS "Students insert own submissions" ON public.submissions;
 CREATE POLICY "Students insert own submissions" ON public.submissions FOR INSERT 
   WITH CHECK (auth.uid() = student_id);
+
+DROP POLICY IF EXISTS "Students update own submission before graded" ON public.submissions;
 CREATE POLICY "Students update own submission before graded" ON public.submissions FOR UPDATE 
   USING (auth.uid() = student_id AND status != 'sudah_dinilai');
+
+DROP POLICY IF EXISTS "Admin manage all submissions" ON public.submissions;
 CREATE POLICY "Admin manage all submissions" ON public.submissions FOR ALL USING (public.is_admin());
 
--- Quizzes: Published visible; Admin manage all
+-- Quizzes Policies
+DROP POLICY IF EXISTS "Students view published quizzes" ON public.quizzes;
 CREATE POLICY "Students view published quizzes" ON public.quizzes FOR SELECT 
   USING (is_published = true OR public.is_admin());
+
+DROP POLICY IF EXISTS "Admin manage quizzes" ON public.quizzes;
 CREATE POLICY "Admin manage quizzes" ON public.quizzes FOR ALL USING (public.is_admin());
 
--- Quiz Questions: Students can read questions during quiz; Admin manage all
+-- Quiz Questions Policies
+DROP POLICY IF EXISTS "Students view questions" ON public.quiz_questions;
 CREATE POLICY "Students view questions" ON public.quiz_questions FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin manage questions" ON public.quiz_questions;
 CREATE POLICY "Admin manage questions" ON public.quiz_questions FOR ALL USING (public.is_admin());
 
--- Quiz Attempts: Students manage own attempts; Admin read all
+-- Quiz Attempts Policies
+DROP POLICY IF EXISTS "Students view and insert attempts" ON public.quiz_attempts;
 CREATE POLICY "Students view and insert attempts" ON public.quiz_attempts 
   FOR ALL USING (auth.uid() = student_id OR public.is_admin());
 
--- Grades: Students view own; Admin manage all
+-- Grades Policies
+DROP POLICY IF EXISTS "Students view own grades" ON public.grades;
 CREATE POLICY "Students view own grades" ON public.grades FOR SELECT 
   USING (auth.uid() = student_id OR public.is_admin());
+
+DROP POLICY IF EXISTS "Admin manage grades" ON public.grades;
 CREATE POLICY "Admin manage grades" ON public.grades FOR ALL USING (public.is_admin());
 
--- Announcements: Viewable if published; Admin manage all
+-- Announcements Policies
+DROP POLICY IF EXISTS "Students view announcements" ON public.announcements;
 CREATE POLICY "Students view announcements" ON public.announcements FOR SELECT 
   USING (is_published = true OR public.is_admin());
+
+DROP POLICY IF EXISTS "Admin manage announcements" ON public.announcements;
 CREATE POLICY "Admin manage announcements" ON public.announcements FOR ALL USING (public.is_admin());
 
 -- ====================================================================

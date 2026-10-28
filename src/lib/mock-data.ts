@@ -219,6 +219,216 @@ export const INITIAL_USERS: UserProfile[] = [
 
 export const INITIAL_MATERIALS: TeachingMaterial[] = [
   {
+    id: 'mat-manajemen-agribisnis-tanaman-x',
+    title: 'Bab 1: Manajemen Agribisnis Tanaman (Dasar-Dasar Agribisnis Tanaman Kelas X)',
+    slug: 'manajemen-agribisnis-tanaman-kelas-x',
+    description: 'Panduan lengkap modul pembelajaran Bab 1: Mengenal alur 4 subsistem agribisnis, 10 karakteristik agribisnis, 5 fungsi manajemen (POACE & 6M), perencanaan produksi tanaman, serta implementasi SMK3LH di SMK Pertanian.',
+    categoryId: 'cat-1',
+    categoryName: 'Dasar-Dasar Agribisnis Tanaman',
+    targetClassId: 'cls-10-atph',
+    targetClassName: 'X ATPH',
+    topic: 'Sistem Agribisnis, Fungsi Manajemen (6M & POACE), dan SMK3LH',
+    learningObjectives: [
+      'Mampu mengidentifikasi proses dan alur bisnis bidang agribisnis tanaman serta 4 subsistem utamanya (hulu, budi daya, hilir, dan layanan pendukung).',
+      'Menganalisis 10 karakteristik khas agribisnis menurut Downey & Erickson yang membedakannya dengan industri manufaktur lain.',
+      'Mendeskripsikan 5 fungsi manajemen (Perencanaan 6W/1H, Pengorganisasian, Pengarahan/Motivasi, Pengawasan Preventif-Represif, dan Evaluasi).',
+      'Menerapkan perencanaan produksi pertanian (pemilihan komoditas, lokasi, skala usaha, penjadwalan hitung mundur panen cabai, serta sistem pengadaan buat vs beli).',
+      'Menerapkan Sistem Manajemen Keselamatan dan Kesehatan Kerja Serta Lingkungan Hidup (SMK3LH) berdasarkan PP No. 50 Tahun 2012 di lingkungan kebun dan laboratorium agribisnis.',
+    ],
+    content: `
+# BAB I: MANAJEMEN AGRIBISNIS TANAMAN
+**Mata Pelajaran:** Dasar-Dasar Agribisnis Tanaman  
+**Jenjang:** SMK/MAK Kelas X (Fase E) — Program Keahlian Agribisnis Tanaman  
+**Buku Referensi Resmi:** Ani Susanti & Yustinanda Rahma Dewi (Kemendikbudristek RI, 2023)
+
+---
+
+## 🌾 Pertanyaan Pemantik
+Setiap hari di meja makan kita selalu tersedia nasi hangat lengkap dengan lauk pauk seperti tempe, tahu, sayuran, dan sambal cabai segar. Pernahkah kalian membayangkan perjalanan panjang makanan tersebut hingga tersaji di meja makan?
+
+Produk pertanian tersebut mengalami proses yang panjang sebelum sampai ke tangan konsumen:
+1. Mulai dari pemuliaan dan pengadaan **benih** unggul,
+2. Pengolahan lahan dan **budi daya** di sawah atau greenhouse,
+3. Pemanenan, penyortiran, dan **pengolahan hasil**, hingga
+4. Distribusi rantai pasok dan **pemasaran** ke supermarket atau pasar tradisional.
+
+Banyak sekali pihak yang terlibat dalam mata rantai ini. Diperlukan sebuah **sistem agribisnis yang terencana dan terkelola secara terpadu** agar produk pertanian dapat sampai ke tangan konsumen dengan mutu prima, kuantitas terjaga, dan harga yang menguntungkan petani.
+
+---
+
+## A. Sistem Agribisnis Tanaman
+
+### 1. Definisi Agribisnis
+Istilah agribisnis pertama kali diperkenalkan oleh **Davis dan Golberg (1957)**:
+> *"Agribisnis adalah penjumlahan keseluruhan dari semua kegiatan yang menyangkut manufaktur dan distribusi dari sarana produksi pertanian, kegiatan yang dilakukan usaha tani, serta penyimpanan, pengolahan, dan distribusi produk pertanian, serta produk-produk lain yang dihasilkan dari produk pertanian."*
+
+Agribisnis bukan hanya sekadar bercocok tanam (budi daya), melainkan suatu **sistem utuh** yang terdiri atas subsistem yang saling terkait, tersinkronisasi, dan berkesinambungan.
+
+### 2. Empat Subsistem Agribisnis Tanaman
+Berdasarkan alur proses bisnisnya, sistem agribisnis terbagi menjadi 3 subsistem utama dan 1 subsistem pendukung:
+
+1. **Subsistem Agribisnis Hulu (Up-stream Agribusiness):**
+   - Mencakup seluruh kegiatan industri penyedia sarana produksi pertanian (saprotan).
+   - *Contoh:* Industri benih/bibit bermutu, produsen pupuk organik & anorganik, produsen pestisida nabati/kimia, serta industri alat dan mesin pertanian (alsintan seperti traktor, cultivator, sprayer).
+
+2. **Subsistem Budi Daya / Usaha Tani (On-farm Agribusiness):**
+   - Sering disebut sebagai **pertanian primer**.
+   - Meliputi seluruh kegiatan teknis budi daya tanaman di lahan terbuka maupun greenhouse: penyiapan lahan/media tanam, pembibitan, penanaman, pemeliharaan, irigasi, pemupukan berimbang, pengendalian Organisme Pengganggu Tanaman (OPT), hingga panen.
+   - *Pelaku:* Petani mandiri, kelompok tani (Poktan/Gapoktan), perkebunan rakyat, hingga Perseroan Terbatas Perkebunan (PTPN/swasta).
+
+3. **Subsistem Agribisnis Hilir (Down-stream Agribusiness):**
+   - Mencakup kegiatan penanganan pascapanen, pengolahan hasil pertanian (agroindustri), penyimpanan (cold storage), pengemasan, distribusi logistik, dan pemasaran.
+   - *Contoh:* Penggilingan gabah menjadi beras kemasan premium, pabrik pengolahan cabai menjadi saus sambal, industri tepung tapioka, pedagang besar, grosir, pasar modern/supermarket, dan pengecer.
+
+4. **Subsistem Layanan Pendukung Agribisnis (Supporting Services):**
+   - Menyediakan jasa penunjang yang vital agar ketiga subsistem di atas dapat berjalan optimal.
+   - *Contoh:*
+     - Lembaga Keuangan (Bank & Koperasi Pertanian) untuk modal usaha.
+     - Lembaga Penelitian dan Pengembangan (R&D / Balai Penelitian Tanaman) untuk teknologi baru.
+     - Lembaga Penyuluhan Pertanian untuk transfer teknologi kepada petani.
+     - Lembaga Pendidikan & Pelatihan (SMK Pertanian, Perguruan Tinggi).
+     - Jasa Transportasi & Distribusi Rantai Dingin.
+
+### 💡 Pojok Info: Peran Koperasi Unit Desa (KUD)
+Koperasi memiliki peran bersejarah dalam agribisnis pedesaan Indonesia:
+- **1963:** Pembentukan *Koperta* untuk memenuhi kebutuhan bahan pangan pokok (khususnya beras).
+- **1966–1967:** Berkembang menjadi *BUUD (Badan Usaha Unit Desa)* yang bertugas mengatasi kendala produksi, penyaluran pupuk, pembelian gabah, dan penggilingan beras ke Dolog.
+- **Transformasi KUD:** Melalui 3 tahap pembinaan pemerintah:
+  1. *Ofisialisasi* (didampingi penuh oleh pemerintah),
+  2. *Deofisialisasi/Debirokratisasi* (ketergantungan mulai dikurangi), dan
+  3. *Otonomi* (kemandirian penuh koperasi desa).
+
+---
+
+## B. Fungsi Manajemen dalam Agribisnis
+
+### 1. Karakteristik Khusus Manajemen Agribisnis
+Menurut **Hasibuan (2017)**, manajemen adalah ilmu dan seni yang mengatur pemanfaatan sumber daya manusia dan sumber daya lainnya secara efektif dan efisien guna mencapai target tertentu.
+
+Menurut **Downey dan Erickson (1992)**, manajemen agribisnis memiliki karakteristik unik yang membedakannya secara mendasar dari manajemen industri manufaktur lainnya:
+1. Keanekaragaman jenis bisnis yang luar biasa luas (dari hulu hingga hilir).
+2. Jumlah pelaku usaha yang sangat besar (jutaan petani dan pelaku UMKM).
+3. Terkait sangat erat dengan usaha tani primer (on-farm).
+4. Keragaman skala usaha (dari skala pekarangan/rumah tangga hingga korporasi multinasional).
+5. Persaingan pasar yang sangat ketat, khususnya pada komoditas segar.
+6. Falsafah cara hidup (*the way of life*) tradisional yang masih kuat di kalangan petani.
+7. Badan usaha agribisnis cenderung berbasis keluarga (*family farming*).
+8. **Produksi bersifat musiman (*seasonality*).**
+9. **Sangat tergantung pada faktor alam dan iklim (biologis & cuaca).**
+10. Berdampak langsung terhadap kebijakan pangan strategis pemerintah.
+
+### 2. Lima Fungsi Manajemen dalam Agribisnis (Rahim & Hastuti, 2005)
+Untuk menggerakkan roda agribisnis, wajib diterapkan 5 fungsi manajerial:
+
+#### a. Fungsi Perencanaan (Planning)
+Menurut **Manullang (1996)**, perencanaan yang baik memuat unsur 6W/1H:
+- **Way (Cara):** Penjabaran perincian langkah kegiatan dan pemanfaatan faktor-faktor produksi untuk menghasilkan produk.
+- **Why (Mengapa):** Alasan pemilihan komoditas dan strategi untuk mencapai target profit serta kepuasan konsumen (*customer satisfaction*).
+- **Where (Di mana):** Pemilihan lokasi fisik usaha tani/pabrik (mempertimbangkan akses bahan baku, ketersediaan air, dan pasar).
+- **When (Kapan):** Ketetapan jadwal mulai dan selesainya tiap tahap pekerjaan.
+- **Who (Siapa):** Penetapan kualifikasi tenaga kerja (manajer kebun, mandor, operator greenhouse, pekerja lapang).
+- **How (Bagaimana):** Penetapan SOP teknis budidaya, standar mutu, dan efisiensi mekanisasi vs manual.
+
+#### b. Fungsi Pengorganisasian (Organizing)
+Menurut **Terry dan Rue (1993)**, pengorganisasian adalah mengelompokkan kegiatan penting dan mendelegasikan wewenang kerja.
+- Menyusun bagan struktur organisasi yang jelas (alur komando, koordinasi, dan pembinaan).
+- Menempatkan SDM sesuai kompetensinya (*the right man on the right place*). Contoh: Operator greenhouse harus memiliki kompetensi budidaya hidroponik bersertifikat.
+
+#### c. Fungsi Pengarahan / Penggerakan (Actuating / Leading)
+Pemimpin perusahaan memberikan instruksi kerja, briefing harian, dan motivasi.
+Menurut **Hasibuan (2010)**, terdapat dua jenis motivasi kerja:
+1. **Motivasi Positif (Insentif Positif):** Penghargaan berupa pujian, sertifikat karyawan teladan, bonus, atau kenaikan upah atas prestasi kerja baik. Dampak: Semangat kerja meningkat secara berkelanjutan.
+2. **Motivasi Negatif (Insentif Negatif):** Pemberian teguran tertulis atau sanksi bagi pekerja yang lalai. Efektif dalam jangka pendek tetapi kurang baik untuk hubungan kerja jangka panjang.
+
+#### d. Fungsi Pengawasan (Controlling)
+Mengukur ketercapaian target dan melakukan tindakan koreksi bila terjadi deviasi/penyimpangan:
+- **Pengawasan Preventif:** Dilakukan *sebelum* pekerjaan berlangsung untuk mencegah kesalahan (misal: kalibrasi sprayer sebelum aplikasi pestisida).
+- **Pengawasan Represif:** Dilakukan *setelah* kegiatan selesai diukur berdasarkan standar baku yang ditetapkan (misal: grading berat buah cabai hasil panen).
+
+#### e. Fungsi Evaluasi (Evaluation)
+Menilai keberhasilan sistem usaha tani secara berkala dari aspek rasio input-output, efisiensi biaya, dan kendala lapangan untuk perbaikan musim tanam berikutnya.
+
+### ⚙️ Mekanisme Kerja 6M dalam Agribisnis:
+Sistem manajerial mengelola 6 sumber daya utama:
+1. **Man (Manusia):** Tenaga kerja terampil, mandor bersertifikat LSP, agronomis.
+2. **Money (Uang):** Modal kerja, arus kas, pembiayaan kredit perbankan.
+3. **Material (Bahan Baku):** Benih bersertifikat, pupuk, media tanam, mulsa plastik.
+4. **Machines (Mesin):** Traktor roda dua, transplanter, pompa irigasi tetes, combine harvester.
+5. **Methods (Metode):** Standar Operasional Prosedur (SOP) dan Good Agricultural Practices (GAP).
+6. **Market (Pasar):** Saluran pemasaran, kontrak suplai supermarket, pasar lelang cabai.
+
+---
+
+## C. Penerapan Manajemen dalam Proses Bisnis Tanaman
+
+Menurut **Said dan Intan (2001)**, penerapan manajemen operasional mencakup:
+
+### 1. Perencanaan Produksi Pertanian
+- **Pemilihan Komoditas:** Mempertimbangkan permintaan pasar tinggi, kesesuaian iklim (ketinggian tempat, curah hujan), dan ketersediaan modal.
+- **Pemilihan Lokasi:** Dekat dengan sumber air melimpah, aksesibilitas transportasi jalan raya, serta ketersediaan tenaga kerja sekitar.
+- **Penentuan Skala Usaha:** Skala kecil (pekarangan/sayuran daun), menengah, atau skala luas (perkebunan PIR - Perkebunan Inti Rakyat).
+
+### 2. Penjadwalan Produksi Mundur (Contoh Kasus Agribisnis Cabai)
+Harga cabai merah di Indonesia cenderung melonjak tinggi pada bulan **Desember dan Januari** (musim perayaan akhir tahun dan musim hujan).
+- Agribisnis cabai memerlukan waktu panen **3 bulan** setelah tanam.
+- Pembibitan dan pengolahan lahan memerlukan **1,5 bulan**.
+- **Perhitungan Mundur Penjadwalan:**
+  - Target panen: Bulan Desember.
+  - Tanam bibit di lahan: Akhir Agustus hingga awal September.
+  - Semai benih di persemaian tray: **Pertengahan bulan Juli**.
+
+### 3. Pengorganisasian Sarana: Buat Sendiri vs Membeli
+Manajer harus menghitung rasio biaya ekonomis:
+- Contoh bibit: Apakah lebih hemat membuat persemaian sendiri (membutuhkan greenhouse semai dan tenaga terampil) atau membeli bibit siap tanam dari nursery tersertifikasi?
+
+---
+
+## D. Sistem Manajemen K3LH (SMK3LH) di Agribisnis Tanaman
+
+Sektor pertanian memiliki potensi bahaya kerja yang cukup tinggi:
+- Paparan zat kimia beracun (insektisida, fungisida, herbisida),
+- Bahaya pengoperasian alat mekanis (traktor, mesin perontok padi, pemotong rumput),
+- Ergonomi kerja (beban angkat berat, posisi membungkuk seharian).
+
+### Regulasi SMK3 di Indonesia:
+- **Permenaker No. 05 Tahun 1996**, diperkuat dengan
+- **Peraturan Pemerintah (PP) No. 50 Tahun 2012** tentang Penerapan Sistem Manajemen Keselamatan dan Kesehatan Kerja.
+
+> **Ketentuan Wajib SMK3:** Wajib diterapkan oleh perusahaan yang mempekerjakan minimal **100 tenaga kerja** ATAU memiliki **potensi bahaya tinggi** (seperti penggunaan bahan kimia beracun dan alat berat).
+
+### Tujuan Utama Penerapan SMK3LH:
+1. Mencegah terjadinya kecelakaan kerja (*zero accident*).
+2. Mencegah timbulnya **Penyakit Akibat Kerja (PAK)** seperti keracunan pestisida kronis atau gangguan saluran pernapasan.
+3. Menciptakan lingkungan kebun dan laboratorium yang aman, sehat, nyaman, serta produktif.
+4. Menjaga kelestarian lingkungan hidup dari pencemaran residu kimiawi.
+
+---
+
+## 📌 Rangkuman Intisari Bab 1
+1. Agribisnis terdiri dari 4 subsistem: **Hulu**, **Budi Daya (On-farm)**, **Hilir**, dan **Layanan Pendukung**.
+2. Manajemen agribisnis bersifat unik karena produknya bersifat musiman, mudah rusak (*perishable*), dan sangat dipengaruhi iklim biologis.
+3. Lima pilar fungsi manajemen adalah: **Perencanaan (6W/1H)**, **Pengorganisasian**, **Pengarahan (Motivasi Positif/Negatif)**, **Pengawasan (Preventif & Represif)**, dan **Evaluasi**.
+4. Pengelolaan 6M (Man, Money, Material, Machines, Methods, Market) adalah kunci efisiensi agribisnis modern.
+5. Penerapan **SMK3LH** melindungi kesehatan petani dan pekerja agribisnis dari bahaya bahan kimia dan mekanisasi pertanian.
+    `,
+    imageUrl: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80',
+    videoUrl: 'https://www.youtube.com/embed/-H1ZTKuj7eI',
+    pdfUrl: '/templates/template_siswa_atph.csv',
+    attachments: [
+      {
+        id: 'att-buku-dasar-atph-x',
+        name: 'Modul_Bab_1_Manajemen_Agribisnis_Tanaman_Kelas_X.pdf',
+        fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        fileSize: '3.8 MB',
+        fileType: 'pdf',
+      },
+    ],
+    status: 'published',
+    orderIndex: 1,
+    createdAt: '2026-08-01T07:00:00Z',
+    updatedAt: '2026-10-27T08:00:00Z',
+  },
+  {
     id: 'mat-hidroponik-nft',
     title: 'Teknologi Budidaya Hidroponik Sistem NFT pada Tanaman Selada',
     slug: 'teknologi-budidaya-hidroponik-nft-selada',
@@ -288,44 +498,182 @@ Untuk mencapai kualitas selada krispi dan bebas rasa pahit:
   },
   {
     id: 'mat-media-tanam',
-    title: 'Standar Formulasi & Sterilisasi Media Tanam Organik Pembibitan',
-    slug: 'standar-formulasi-sterilisasi-media-tanam',
-    description: 'Teknik formulasi media persemaian hortikultura dengan perbandingan tanah subur, arang sekam bakar, dan pupuk kandang matang terfermentasi.',
+    title: 'Penyiapan Media Tanam: Fondasi Rumah Bagi Akar & Keberhasilan Budidaya',
+    slug: 'penyiapan-media-tanam',
+    description: 'Modul Pembelajaran Lengkap & Dokumen PDF Full Penyiapan Media Tanam: Konsep rumah bagi akar, 5 fungsi biologis rizosfer, perbandingan 6 bahan baku, formula 1:1:1, uji mutu cepat, serta komparasi sistem Tanah, Hidroponik, Aeroponik, dan Akuaponik.',
     categoryId: 'cat-2',
     categoryName: 'Penyiapan Media Tanam',
     targetClassId: 'cls-10-atph',
     targetClassName: 'X ATPH',
-    topic: 'Karakteristik Fisik dan Kimia Tanah Pertanian',
+    topic: 'Fisika & Kimia Media Tanam, Formulasi Campuran, dan Sistem Media Modern',
     learningObjectives: [
-      'Mengetahui komposisi ideal media tanam bibit cabai dan tomat (2:1:1)',
-      'Melakukan pengujian kematangan pupuk kompos (uji bau, warna, dan C/N ratio)',
-      'Memahami proses sterilisasi media tanam menggunakan uap air panas dan solarisasi matahari',
+      'Memahami 5 fungsi mendasar media tanam sebagai zona perakaran yang sehat (penopang, air, oksigen, hara, mikroba).',
+      'Menganalisis karakteristik fisik dan kimia 6 bahan media (tanah topsoil, kompos, sekam bakar, cocopeat, pasir, pupuk kandang).',
+      'Menerapkan formula awal standar 1:1:1 (Tanah : Kompos : Sekam Bakar) dengan tekstur gembur, remah, dan aeratif.',
+      'Menerapkan K3LH dan tahapan teknis penyiapan media: seleksi/pengayakan, pencampuran homogen, dan pengisian wadah.',
+      'Melakukan uji cepat kualitas media pra-tanam (uji remas kepalan, uji laju drainase, uji aroma humus, dan cek pH).',
+      'Menguasai logika penyiapan media pada 4 sistem pertanian: Konvensional/Polybag, Hidroponik (Rockwool/Hydroton), Aeroponik (Kabut tanpa media padat), dan Akuaponik (Simbiosis Growbed Ikan-Bakteri-Tanaman).',
     ],
     content: `
-### Kriteria Fisik Media Tanam Unggul
-Media tanam yang ideal untuk pembibitan tanaman hortikultura harus memenuhi syarat kegemburan (porositas), aerasi yang baik, dan kapasitas menahan air (*water holding capacity*) yang seimbang.
+# BAB PENYIAPAN MEDIA TANAM: RUMAH BAGI AKAR
+**Mata Pelajaran:** Dasar-Dasar Agribisnis Tanaman (ATPH)  
+**Jenjang:** SMK/MAK Kelas X (Fase E) — Agribisnis Tanaman Pangan dan Hortikultura  
+**Sumber Modul:** Dokumen Panduan Resmi Penyiapan Media Tanam (28 Halaman Modul Lengkap)
 
-#### Formula Standar Persemaian:
-- **2 Bagian Topsoil:** Lapisan tanah atas yang kaya akan bahan organik.
-- **1 Bagian Arang Sekam:** Berfungsi menjaga porositas, memperbaiki aerasi, dan menstabilkan pH tanah.
-- **1 Bagian Kompos Fermentasi:** Sumber hara makro (N, P, K) dan mikroorganisme tanah menguntungkan (*Trichoderma sp.*).
+---
+
+## 🌿 1. Pendahuluan: Mengapa Media Tanam Begitu Krusial?
+Media tanam yang tepat merupakan salah satu fondasi utama keberhasilan budidaya tanaman. Bagian tanaman yang tampak subur di atas permukaan tanah—mulai dari batang kokoh, daun hijau mengilap, bunga serempak, hingga buah lebat—seluruhnya ditopang oleh apa yang terjadi di bawah permukaan: **kesehatan perakaran di dalam media tanam**.
+
+Akar membutuhkan kondisi lingkungan rizosfer yang seimbang antara pasokan kelembapan dan udara. Jika media terlalu padat dan becek, akar akan mengalami hipoksia (kekurangan oksigen) dan membusuk (*damping-off* atau busuk akar). Sebaliknya, bila media terlalu porous tanpa daya ikat air, tanaman akan mudah mengalami stres kekeringan.
+
+---
+
+## 🛡️ 2. Lima Fungsi Utama, Satu Zona Akar Sehat
+Akar tanaman bukan sekadar jangkar penahan angin, melainkan organ penyerap aktif. Media tanam yang ideal menjalankan 5 fungsi esensial:
+
+1. **Penopang Mekanis Tanaman:** Menyediakan stabilitas fisik agar batang tanaman dapat berdiri tegak menyongsong radiasi sinar matahari.
+2. **Penyedia Air & Kelembapan Lapang:** Menahan cadangan air kapiler tanpa mengorbankan pori-pori drainase (menjaga *water holding capacity*).
+3. **Penyuplai Oksigen (Aerasi Perakaran):** Menyediakan pori aerasi agar bulu-bulu akar dapat berespirasi secara aerobik untuk menghasilkan energi serapan nutrisi.
+4. **Penyedia & Penyangga Nutrisi (Kapasitas Tukar Kation / KTK):** Mengikat ion hara makro (N, P, K, Ca, Mg, S) dan mikro (Fe, Mn, Zn, B, Cu, Mo) agar tidak hilang tercuci air siraman.
+5. **Rumah Koloni Mikroorganisme Menguntungkan:** Menjadi habitat simbiosis jamur mikoriza dan bakteri rizosfer (*PGPR - Plant Growth-Promoting Rhizobacteria*) yang memproteksi akar dari patogen tular tanah.
+
+---
+
+## ⚖️ 3. Media yang Baik Itu Seimbang
+Kunci media tanam unggul terletak pada **keseimbangan fisik dan kimia**:
+- **Keseimbangan Drainase & Retensi Air:** Air siraman harus leluasa meresap tanpa menggenang (bebas becek), namun media tetap terasa lembap seperti spons sehabis diperas.
+- **Tingkat Kemasaman (pH) Ideal (5.8 – 6.8):** Rentang pH netral hingga agak masam ini menjamin seluruh unsur hara tersedia dalam bentuk larutan tanah yang siap diserap akar.
+- **Kondisi Bebas Patogen (Higienis):** Bebas dari spora jamur parasit (*Fusarium sp.*, *Phytophthora sp.*), nematoda bintil akar, telur hama penggerek, dan biji gulma.
+
+---
+
+## 🧪 4. Enam Bahan Utama & Karakteristik Masing-Masing
+Sebelum mencampur, seorang teknisi ATPH wajib mengenali karakter masing-masing bahan baku:
+
+| Nama Bahan | Karakteristik Utama | Kelebihan | Kelemahan / Catatan Kritis | Proporsi Pemakaian |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Topsoil (Tanah Lapisan Atas)** | Lapisan tanah 0–20 cm bertekstur lempung berpasir | Struktur padat alami, mengikat akar kokoh, mengandung mineral tanah asli | Rentan memadat jika disiram berulang-ulang, berat bobot | 30% – 40% |
+| **2. Kompos Organik Matang** | Hasil dekomposisi sisa hijauan/daun berwarna cokelat kehitaman | Kaya bahan organik (C-organik), memicu mikrobiologi tanah, meningkatkan KTK | Harus dipastikan benar-benar matang (dingin, C/N ratio 10–20) | 20% – 30% |
+| **3. Arang Sekam Padi** | Hasil karbonisasi sekam padi tanpa menjadi abu putih | Bobot sangat ringan, pori aerasi tinggi, menaikkan pH, steril alami | Miskin unsur hara kimiawi, cepat mengalirkan air | 25% – 35% |
+| **4. Pasir Kasar / Pasir Malang** | Butiran silika vulkanik remah berdiameter 1–3 mm | Memperlancar drainase secara instan, mencegah media becek | Bobot berat, tidak mengikat nutrisi, tidak menahan air | 10% – 15% (Opsional) |
+| **5. Cocopeat (Serbuk Sabut Kelapa)** | Serbuk pengolahan sabut kelapa yang telah diayak | Daya serap air luar biasa (menampung 8–9x bobot kering) | Mengandung zat tanin alami (wajib dicuci hingga air bilasan bening) | 15% – 25% |
+| **6. Pupuk Kandang Terfermentasi** | Kotoran sapi/kambing/unggas yang telah difermentasi mikroba | Nutrisi makro lengkap pelepasan lambat (*slow release*), menyuburkan tanah | Tidak boleh digunakan mentah (panas fermentasi merusak akar muda) | 10% – 20% |
+
+---
+
+## 🥣 5. Rumus Formulasi Awal: 1 + 1 + 1
+Bagi pemula dan standar pembibitan hortikultura di SMK Pertanian, gunakan formula dasar teruji:
+
+$$\mathbf{1\ Bagian\ Topsoil} + \mathbf{1\ Bagian\ Kompos\ Matang} + \mathbf{1\ Bagian\ Arang\ Sekam}$$
+
+**Karakter Hasil:**
+Campuran terasa remah, gembur, mudah melepaskan air berlebih, namun mempertahankan kelembapan mikro di sekitar akar.
+
+---
+
+## 🦺 6. Prosedur K3LH (Kesehatan, Keselamatan Kerja & Lingkungan Hidup)
+Penyiapan media tanam melibatkan debu arang, jamur kompos, dan alat tajam. SOP K3LH yang wajib dipatuhi:
+1. **Gunakan Sarung Tangan:** Melindungi tangan dari bakteri tanah, goresan kerikil tajam, dan gigitan serangga.
+2. **Gunakan Masker Debu:** Mencegah spora jamur dan partikel silika halus dari sekam bakar terhirup ke saluran pernapasan.
+3. **Posisikan Tubuh Ergonomis:** Hindari membungkuk saat menyekop dalam waktu lama; tekuk lutut saat mengangkat ember media berat.
+4. **Alat Kerja Standar:** Siapkan cangkul, sekop tangan, ayakan kawat (mesh 0.5–1 cm), ember ukur, dan wadah polybag/tray.
+
+---
+
+## 📋 7. Tiga Langkah Kerja Baku Pembuatan Media Tanam
+### Langkah 1: Pilih, Periksa, dan Bersihkan (Sortir & Ayak)
+- Ambil tanah lapisan atas (topsoil), jemur sebentar agar tidak menggumpal basah.
+- Ayak tanah dan kompos menggunakan kawat kasa untuk memisahkan bongkahan batu, plastik, ranting kayu keras, dan sisa akar mati.
+- Cuci cocopeat jika menggunakan bahan sabut hingga kadar garam dan tanin hilang.
+
+### Langkah 2: Campur Sampai Homogen
+- Hampar bahan secara berlapis: lapisan tanah, di atasnya lapisan kompos, lalu arang sekam.
+- Gunakan sekop untuk membalik tumpukan dari sisi luar ke tengah secara memutar minimal 3–4 kali pengadukan sampai corak warna tercampur rata merata (tidak ada kantong tanah liat tersendiri).
+- Jika campuran terlalu kering, perciki air bersih sedikit demi sedikit sampai mencapai kelembapan ideal (40–50%).
+
+### Langkah 3: Isi Wadah Tanpa Memadatkan
+- Masukkan media ke dalam polybag, pot, atau tray semai.
+- **Peringatan Penting:** Cukup ketuk-ketuk dasar polybag ke tanah secara perlahan agar media merata mengisi rongga bawah. **JANGAN menekan media dengan kepalan tangan terlalu kuat**, karena tekanan padat akan merusak pori-pori makro yang dibutuhkan untuk sirkulasi oksigen.
+- Sisakan ruang 1–2 cm dari bibir atas wadah untuk menampung air siraman.
+
+---
+
+## 🔍 8. Empat Uji Cepat Kualitas Media Pra-Tanam
+Sebelum bibit dipindahkan, lakukan pengujian cepat lapangan:
+1. **Uji Kepal / Remas:** Ambil segenggam media basah, remas kuat lalu buka telapak tangan.
+   - *Lolos:* Membentuk kepalan utuh, namun saat disentuh lembut dengan jari langsung buyar/remah.
+   - *Gagal:* Terlalu liat/lengket seperti dodol (kurang arang sekam) atau tidak bisa membentuk kepalan sama sekali (kurang tanah/kompos).
+2. **Uji Laju Drainase:** Siramkan satu gayung air ke dalam pot/polybag berlubang.
+   - *Lolos:* Air meresap lenyap dalam waktu 5–10 detik dan segera menetes keluar lewat lubang bawah tanpa genangan di permukaan.
+3. **Uji Aroma (Bau):** Dekatkan media ke hidung.
+   - *Lolos:* Beraroma segar alami seperti tanah humus hutan sehabis hujan.
+   - *Gagal:* Berbau busuk menyengat atau bau amonia asam tajam (menandakan kompos/pupuk kandang belum matang sempurna).
+4. **Uji pH:** Ukur dengan soil pH meter (target nilai: 6.0 – 6.8).
+
+---
+
+## 💧 9. Logika Media Tanpa Tanah (Soilless): Hidroponik, Aeroponik & Akuaponik
+Modul PDF juga membedah cara akar hidup di era pertanian modern:
+
+### A. Media Hidroponik (Nutrisi Hadir Lewat Larutan)
+- Media di hidroponik bersifat **inert** (tidak menyumbang nutrisi kimiawi). Fungsinya murni sebagai pegangan akar.
+- **Rockwool:** Serat batuan basal dengan kapasitas simpan air dan aerasi seimbang. Ideal untuk semai benih presisi.
+- **Hydroton:** Butiran tanah liat bulat yang dibakar dengan suhu tinggi. Aerasi sangat maksimal, dapat dicuci dan digunakan kembali berulang-ulang.
+- **Perlite & Vermikulit:** Batuan vulkanik kembang yang sangat steril dan ringan untuk menjaga kelembapan mikro.
+
+### B. Media Aeroponik (Akar Menggantung Bebas di Udara)
+- Sistem aeroponik **tidak menggunakan media padat di zona perakaran**.
+- Akar menggantung bebas di ruang gelap bersuhu sejuk dan disemprot kabut nutrisi berukuran mikro (droplet 20–50 mikron) secara bersiklus.
+- **Penyangga:** Hanya busa (*sponge block*) atau *foam collar* kecil yang menjepit pangkal batang pada bibir netpot.
+- **Kelebihan:** Oksigen 100% melimpah di zona perakaran, memacu laju metabolisme tercepat di antara semua sistem.
+- **Tantangan:** Sangat bergantung pada kontinuitas listrik dan kebersihan nozzle pengkabut agar tidak tersumbat.
+
+### C. Media Akuaponik (Satu Sirkulasi, Tiga Kehidupan)
+- Menghubungkan ekosistem **Ikan (Akuakultur)**, **Bakteri Pengurai**, dan **Tanaman (Hidroponik)**.
+- Media di wadah tanaman (*growbed*) seperti kerikil vulkanik atau hydroton berfungsi ganda:
+  1. Penopang fisik perakaran sayuran.
+  2. **Biofilter:** Rumah koloni bakteri nitrifikasi (*Nitrosomonas* dan *Nitrobacter*) yang mengubah feses ikan (amonia beracun) menjadi nitrat (makanan lezat bagi sayuran).
+
+---
+
+## 📊 10. Matriks Komparasi 4 Sistem Media Tanam
+| Indikator | 1. Tanah / Polybag Tradisional | 2. Hidroponik Substrat | 3. Aeroponik Modern | 4. Akuaponik Terpadu |
+| :--- | :--- | :--- | :--- | :--- |
+| **Bentuk Fisik Media** | Campuran tanah, kompos, sekam | Rockwool, hydroton, cocopeat | Tanpa media (hanya spons leher batang) | Kerikil / hydroton biofilter |
+| **Sumber Hara** | Hara organik tanah & pupuk susulan | Pupuk anorganik terukur (AB Mix) | Kabut pupuk anorganik (AB Mix) | Feses ikan hasil daur ulang bakteri |
+| **Kebutuhan Air** | Boros (banyak rembes & menguap) | Hemat (sistem tertutup/resirkulasi) | Sangat hemat (kabut mikro terarah) | Sangat hemat (air berputar terus) |
+| **Pasokan Oksigen Akar** | Tergantung porositas tanah | Cukup hingga baik | **Maksimal (100% Udara Bebas)** | Baik (sistem pasang-surut bell siphon) |
+| **Resiko Kegagalan Listrik** | Sangat rendah (tahan berhari-hari) | Rendah hingga sedang | **Tinggi (akar mengering dalam hitungan jam)** | Sedang (oksigen ikan terganggu) |
+
+---
+
+## 🎯 11. Tugas Refleksi & Studi Kasus Siswa ATPH
+1. Anda diberi modal untuk menanam 100 bibit cabai rawit merah di pekarangan sekolah yang memiliki tanah liat merah padat. Bagaimana Anda memodifikasi formula 1:1:1 agar tanaman cabai tidak terserang layu bakteri?
+2. Mengapa cocopeat mentah dari pengrajin kelapa tidak boleh langsung digunakan untuk menyemai benih selada? Jelaskan proses pencucian yang benar!
+3. Pada sistem aeroponik, apa konsekuensinya jika nozzle kabut mengalami penyumbatan selama 4 jam di siang hari yang terik? Langkah preventif apa yang harus disiapkan?
+
+---
+*Unduh dan pelajari dokumen PDF modul 28 slide selengkapnya pada pemutar/lampiran di bawah untuk referensi presentasi visual dan diagram teknis.*
     `,
     imageUrl: 'https://images.unsplash.com/photo-1592417817098-8f3d6910985c?auto=format&fit=crop&w=1200&q=80',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    pdfUrl: '/materials/penyiapan-media-tanam.pdf',
     attachments: [
       {
-        id: 'att-3',
-        name: 'Panduan_Sterilisasi_Tanah.pdf',
-        fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        fileSize: '1.8 MB',
+        id: 'att-media-tanam-full',
+        name: 'Penyiapan_media_tanam_full.pdf',
+        fileUrl: '/materials/penyiapan-media-tanam.pdf',
+        fileSize: '12.5 MB',
         fileType: 'pdf',
       },
     ],
     orderIndex: 2,
     status: 'published',
     createdAt: '2026-08-05T08:00:00Z',
-    updatedAt: '2026-08-05T08:00:00Z',
+    updatedAt: '2026-10-28T07:30:00Z',
   },
+
   {
     id: 'mat-pht-hortikultura',
     title: 'Pengendalian Hama Terpadu (PHT) Tanaman Cabai Merah',
@@ -454,6 +802,20 @@ export const INITIAL_SUBMISSIONS: Submission[] = [
 
 export const INITIAL_QUIZZES: Quiz[] = [
   {
+    id: 'quiz-manajemen-agribisnis-x',
+    title: 'Evaluasi Bab 1: Manajemen Agribisnis Tanaman (Kelas X ATPH)',
+    description: 'Kuis evaluasi komprehensif Bab I mencakup 4 subsistem agribisnis, 10 karakteristik agribisnis, fungsi manajemen (POACE & 6M), perencanaan produksi tanaman, serta penerapan SMK3LH di SMK Pertanian.',
+    targetClassId: 'cls-10-atph',
+    targetClassName: 'X ATPH',
+    topic: 'Manajemen Agribisnis Tanaman',
+    durationMinutes: 30,
+    maxAttempts: 2,
+    passingScore: 75,
+    isPublished: true,
+    questionCount: 10,
+    createdAt: '2026-08-01T08:00:00Z',
+  },
+  {
     id: 'quiz-dasar-hidroponik',
     title: 'Evaluasi Pembelajaran: Prinsip Hidroponik & Nutrisi Tanaman',
     description: 'Kuis interaktif untuk mengukur pemahaman konsep nutrisi tanaman, fungsi hara makro mikro, serta teknik NFT dan aeroponik.',
@@ -470,6 +832,166 @@ export const INITIAL_QUIZZES: Quiz[] = [
 ];
 
 export const INITIAL_QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: 'q-mgt-1',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Istilah "Agribisnis" pertama kali diperkenalkan secara ilmiah pada tahun 1957 oleh...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Malayu S.P. Hasibuan' },
+      { id: 'B', text: 'Davis dan Golberg' },
+      { id: 'C', text: 'Downey dan Erickson' },
+      { id: 'D', text: 'George R. Terry dan Leslie Rue' },
+    ],
+    correctAnswer: 'B',
+    explanation: 'Istilah agribisnis pertama kali diperkenalkan oleh Davis dan Golberg pada tahun 1957 yang mendefinisikan agribisnis sebagai penjumlahan keseluruhan dari semua kegiatan manufaktur, budidaya, hingga distribusi produk pertanian.',
+    points: 10,
+    orderIndex: 1,
+  },
+  {
+    id: 'q-mgt-2',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Perusahaan atau industri yang memproduksi benih unggul, pupuk organik, pestisida nabati, dan traktor tangan termasuk ke dalam...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Subsistem Agribisnis Hulu (Up-stream Agribusiness)' },
+      { id: 'B', text: 'Subsistem Budi Daya / Usaha Tani (On-farm Agribusiness)' },
+      { id: 'C', text: 'Subsistem Agribisnis Hilir (Down-stream Agribusiness)' },
+      { id: 'D', text: 'Subsistem Layanan Pendukung Agribisnis' },
+    ],
+    correctAnswer: 'A',
+    explanation: 'Subsistem Agribisnis Hulu mencakup seluruh kegiatan penyediaan sarana produksi pertanian (saprotan) seperti benih, pupuk, pestisida, dan alat mesin pertanian (alsintan).',
+    points: 10,
+    orderIndex: 2,
+  },
+  {
+    id: 'q-mgt-3',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Kegiatan penggilingan gabah menjadi beras, pengolahan cabai menjadi saus sambal, serta pengemasan dan distribusi ke pasar swalayan merupakan bagian dari...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Subsistem Agribisnis Hulu' },
+      { id: 'B', text: 'Subsistem Pertanian Primer' },
+      { id: 'C', text: 'Subsistem Agribisnis Hilir (Down-stream Agribusiness)' },
+      { id: 'D', text: 'Subsistem Layanan Pendukung' },
+    ],
+    correctAnswer: 'C',
+    explanation: 'Subsistem Agribisnis Hilir meliputi kegiatan pascapanen, pengolahan hasil pertanian (agroindustri), distribusi logistik, dan pemasaran hasil panen ke tangan konsumen.',
+    points: 10,
+    orderIndex: 3,
+  },
+  {
+    id: 'q-mgt-4',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Manakah di bawah ini lembaga yang berperan dalam Subsistem Layanan Pendukung Agribisnis (Supporting Services)?',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Pabrik pestisida kimia dan produsen traktor' },
+      { id: 'B', text: 'Petani cabai dan buruh pemetik tomat' },
+      { id: 'C', text: 'Bank, Koperasi Tani, Balai Penelitian Pertanian (R&D), dan Balai Penyuluhan' },
+      { id: 'D', text: 'Pabrik saus sambal dan pedagang grosir pasar induk' },
+    ],
+    correctAnswer: 'C',
+    explanation: 'Subsistem layanan pendukung menyediakan jasa vital penunjang sistem agribisnis, seperti pembiayaan modal (Bank/Koperasi), riset & inovasi (R&D), penyuluhan lapangan, dan lembaga diklat SMK Pertanian.',
+    points: 10,
+    orderIndex: 4,
+  },
+  {
+    id: 'q-mgt-5',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Salah satu karakteristik agribisnis menurut Downey dan Erickson (1992) yang membedakannya secara tajam dari industri manufaktur lainnya adalah...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Produksi dapat diatur konstan setiap hari tanpa terpengaruh cuaca' },
+      { id: 'B', text: 'Produksi agribisnis bersifat musiman dan sangat tergantung pada kondisi biologis serta alam' },
+      { id: 'C', text: 'Jumlah pelakunya sangat sedikit dan hanya dikuasai satu perusahaan raksasa' },
+      { id: 'D', text: 'Produk agribisnis bersifat tahan lama dan tidak pernah mengalami kebusukan' },
+    ],
+    correctAnswer: 'B',
+    explanation: 'Produksi pertanian sangat unik karena bersifat musiman (seasonality), mudah rusak (perishable), dan sangat dipengaruhi oleh faktor eksternal lingkungan alam dan cuaca.',
+    points: 10,
+    orderIndex: 5,
+  },
+  {
+    id: 'q-mgt-6',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Dalam unsur perencanaan agribisnis 6W/1H menurut Manullang (1996), unsur "Way" (cara) menjelaskan tentang...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Alasan mengapa target profit perusahaan harus dicapai' },
+      { id: 'B', text: 'Penjabaran perincian langkah kegiatan yang dibutuhkan dalam penciptaan produk dengan memanfaatkan faktor produksi' },
+      { id: 'C', text: 'Kualifikasi pengalaman dan sertifikasi keahlian pegawai kebun' },
+      { id: 'D', text: 'Penetapan jadwal waktu kapan panen dimulai dan berakhir' },
+    ],
+    correctAnswer: 'B',
+    explanation: 'Unsur "Way" (cara) merupakan penjabaran dari perincian kegiatan apa saja yang dibutuhkan dalam penciptaan suatu produk agribisnis dengan memanfaatkan faktor-faktor produksi.',
+    points: 10,
+    orderIndex: 6,
+  },
+  {
+    id: 'q-mgt-7',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Petani cabai menargetkan panen raya pada bulan Desember–Januari karena harga cabai tinggi. Jika masa budidaya tanaman di lahan adalah 3 bulan dan masa pembibitan di tray adalah 1,5 bulan, maka kegiatan pembibitan sebaiknya dimulai pada...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Awal bulan November' },
+      { id: 'B', text: 'Pertengahan bulan Juli' },
+      { id: 'C', text: 'Awal bulan Oktober' },
+      { id: 'D', text: 'Akhir bulan Desember' },
+    ],
+    correctAnswer: 'B',
+    explanation: 'Melalui teknik perhitungan mundur (penjadwalan produksi): Target panen Desember -> tanam di lahan akhir Agustus/awal September (3 bulan mundur) -> pembibitan dimulai 1,5 bulan sebelumnya, yaitu pertengahan Juli.',
+    points: 10,
+    orderIndex: 7,
+  },
+  {
+    id: 'q-mgt-8',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Menurut Hasibuan (2010), pemberian motivasi kepada bawahan berupa pujian, penghargaan, sertifikat, atau bonus atas kinerja yang berprestasi disebut...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Motivasi represif' },
+      { id: 'B', text: 'Motivasi positif (insentif positif)' },
+      { id: 'C', text: 'Motivasi preventif' },
+      { id: 'D', text: 'Motivasi negatif (insentif negatif)' },
+    ],
+    correctAnswer: 'B',
+    explanation: 'Motivasi positif (insentif positif) memotivasi bawahan dengan memberikan apresiasi sehingga kepuasan dan semangat kerja meningkat secara jangka panjang.',
+    points: 10,
+    orderIndex: 8,
+  },
+  {
+    id: 'q-mgt-9',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Tindakan pengawasan yang dilakukan SEBELUM terjadinya kesalahan atau penyimpangan dalam proses produksi agribisnis (seperti kalibrasi alat sprayer sebelum menyemprot) dinamakan...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Pengawasan preventif' },
+      { id: 'B', text: 'Pengawasan represif' },
+      { id: 'C', text: 'Pengawasan komparatif' },
+      { id: 'D', text: 'Pengawasan pascatindakan' },
+    ],
+    correctAnswer: 'A',
+    explanation: 'Pengawasan preventif dilakukan sebelum terjadinya kesalahan/penyelewengan guna melakukan tindakan pencegahan dini.',
+    points: 10,
+    orderIndex: 9,
+  },
+  {
+    id: 'q-mgt-10',
+    quizId: 'quiz-manajemen-agribisnis-x',
+    questionText: 'Berdasarkan Peraturan Pemerintah (PP) No. 50 Tahun 2012, penerapan Sistem Manajemen Keselamatan dan Kesehatan Kerja (SMK3) diwajibkan bagi perusahaan yang...',
+    questionType: 'multiple_choice',
+    options: [
+      { id: 'A', text: 'Hanya memiliki kantor di gedung bertingkat tinggi' },
+      { id: 'B', text: 'Mempekerjakan pekerja minimal 100 orang atau memiliki potensi bahaya tinggi' },
+      { id: 'C', text: 'Memiliki modal usaha minimal 50 miliar rupiah' },
+      { id: 'D', text: 'Hanya mengekspor komoditas buah ke luar negeri' },
+    ],
+    correctAnswer: 'B',
+    explanation: 'PP No. 50 Tahun 2012 mewajibkan penerapan SMK3 bagi perusahaan yang mempekerjakan pekerja minimal 100 orang ATAU yang ruang lingkup pekerjaannya memiliki tingkat potensi bahaya tinggi (misalnya bahan kimia pestisida dan alsintan alat berat).',
+    points: 10,
+    orderIndex: 10,
+  },
   {
     id: 'q-1',
     quizId: 'quiz-dasar-hidroponik',

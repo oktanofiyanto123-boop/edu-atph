@@ -66,8 +66,9 @@ export default function DashboardHeader({ title, subtitle, onRefresh }: Dashboar
   };
 
   const handleLogout = () => {
+    const wasAdmin = currentUser?.role === 'admin';
     DataProvider.logout();
-    router.push('/login');
+    router.push(wasAdmin ? '/admin/login' : '/login');
   };
 
   return (
