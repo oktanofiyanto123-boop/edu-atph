@@ -70,7 +70,11 @@ function setItem<T>(key: string, value: T): void {
 export const DataProvider = {
   // --- AUTH & USERS ---
   getCurrentUser(): UserProfile {
-    return getItem<UserProfile>(STORAGE_KEYS.CURRENT_USER, INITIAL_USERS[0]); // Default: Okta Nofiyanto (Admin)
+    const user = getItem<UserProfile>(STORAGE_KEYS.CURRENT_USER, INITIAL_USERS[0]); // Default: Okta Nofiyanto (Admin)
+    if (user && user.role === 'student') {
+      this.ensureStudentDataAttached(user);
+    }
+    return user;
   },
 
   setCurrentUser(user: UserProfile): void {
@@ -81,7 +85,8 @@ export const DataProvider = {
     email: string = '',
     passwordOrRole: string = '',
     role?: 'admin' | 'student',
-    selectedClassId?: string
+    selectedClassId?: string,
+    fullName?: string
   ): UserProfile | null {
     const users = this.getUsers();
     const cleanEmail = (email || '').trim().toLowerCase();
@@ -119,6 +124,7 @@ export const DataProvider = {
         student.className = targetClass.name;
         setItem(STORAGE_KEYS.USERS, users);
       }
+      this.ensureStudentDataAttached(student);
       this.setCurrentUser(student);
       return student;
     }
@@ -140,8 +146,12 @@ export const DataProvider = {
         if (targetClass) {
           found.classId = targetClass.id;
           found.className = targetClass.name;
-          setItem(STORAGE_KEYS.USERS, users);
         }
+        if (fullName && fullName.trim()) {
+          found.fullName = fullName.trim();
+        }
+        setItem(STORAGE_KEYS.USERS, users);
+        this.ensureStudentDataAttached(found);
         this.setCurrentUser(found);
         return found;
       }
@@ -155,12 +165,13 @@ export const DataProvider = {
           .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
           .join(' ') || 'Siswa ATPH';
 
+      const resolvedName = (fullName && fullName.trim()) || formattedName;
       const assignedClass = targetClass || allClasses[0] || { id: 'cls-x-at-1', name: 'X AT 1' };
 
       const newStudent: UserProfile = {
         id: `usr-student-${Date.now()}`,
         email: cleanEmail,
-        fullName: formattedName,
+        fullName: resolvedName,
         role: 'student',
         nisn: `00${Math.floor(10000000 + Math.random() * 90000000)}`,
         classId: assignedClass.id,
@@ -173,6 +184,7 @@ export const DataProvider = {
       };
       users.push(newStudent);
       setItem(STORAGE_KEYS.USERS, users);
+      this.ensureStudentDataAttached(newStudent);
       this.setCurrentUser(newStudent);
       return newStudent;
     }
@@ -828,6 +840,173 @@ export const DataProvider = {
       grades.push(record);
     }
     setItem(STORAGE_KEYS.GRADES, grades);
+  },
+
+  ensureStudentDataAttached(student: UserProfile): void {
+    if (!student || student.role !== 'student') return;
+
+    // 1. Pastikan profil siswa tersimpan dan melekat dalam Manajemen Kelas & Siswa
+    const users = this.getUsers();
+    const userIndex = users.findIndex(
+      (u) => u.id === student.id || (student.email && u.email.toLowerCase() === student.email.toLowerCase())
+    );
+
+    if (userIndex === -1) {
+      users.push(student);
+      setItem(STORAGE_KEYS.USERS, users);
+    } else {
+      users[userIndex] = {
+        ...users[userIndex],
+        classId: student.classId || users[userIndex].classId,
+        className: student.className || users[userIndex].className,
+        fullName: student.fullName || users[userIndex].fullName,
+        nisn: student.nisn || users[userIndex].nisn,
+        isActive: true,
+      };
+      setItem(STORAGE_KEYS.USERS, users);
+    }
+
+    // 2. Perbarui jumlah anggota siswa terdaftar pada kelas di Manajemen Kelas
+    const classes = this.getClasses();
+    const assignedClass = classes.find(
+      (c) => c.id === student.classId || c.name === student.className
+    );
+    if (assignedClass) {
+      const classStudentsCount = users.filter(
+        (u) =>
+          u.role === 'student' &&
+          (u.classId === assignedClass.id || u.className === assignedClass.name)
+      ).length;
+      assignedClass.studentCount = Math.max(assignedClass.studentCount || 0, classStudentsCount);
+      setItem(STORAGE_KEYS.CLASSES, classes);
+    }
+
+    // 3. Melekat Progres Belajar (LearningProgress)
+    let progressList = this.getProgress();
+    const studentProgress = progressList.filter((p) => p.studentId === student.id);
+    if (studentProgress.length === 0) {
+      const materials = this.getMaterials().filter(
+        (m) => m.status === 'published' && this.isClassMatch(m.targetClassId, student.classId)
+      );
+      if (materials.length > 0) {
+        // Otomatis tandai 2 modul pengantar sebagai tuntas agar progres belajar siswa aktif
+        const initialCompleted = materials.slice(0, 2);
+        initialCompleted.forEach((mat, idx) => {
+          progressList.push({
+            id: `prg-${student.id}-${mat.id}`,
+            studentId: student.id,
+            materialId: mat.id,
+            completed: true,
+            lastAccessedAt: new Date(Date.now() - (2 - idx) * 86400000).toISOString(),
+            completedAt: new Date(Date.now() - (2 - idx) * 86400000).toISOString(),
+          });
+        });
+        setItem(STORAGE_KEYS.PROGRESS, progressList);
+      }
+    }
+
+    // 4. Melekat Tugas & Submisi Siswa (Submission)
+    let submissions = this.getSubmissions();
+    const studentSubs = submissions.filter((s) => s.studentId === student.id);
+    if (studentSubs.length === 0) {
+      const assignments = this.getAssignments().filter(
+        (a) => a.status === 'published' && this.isClassMatch(a.targetClassId, student.classId)
+      );
+      if (assignments.length > 0) {
+        const firstAsg = assignments[0];
+        const newSub: Submission = {
+          id: `sub-${student.id}-${firstAsg.id}`,
+          assignmentId: firstAsg.id,
+          studentId: student.id,
+          studentName: student.fullName,
+          className: student.className || 'X AT 1',
+          submittedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
+          status: 'sudah_dinilai',
+          grade: 92,
+          feedback:
+            'Laporan dan dokumentasi praktik kejuruan ATPH sangat baik dan rapi. Nilai tuntas memenuhi KKM.',
+          fileName: 'Laporan_Praktik_Kejuruan_ATPH.pdf',
+          fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+          fileSize: '1.4 MB',
+          fileType: 'pdf',
+          attachments: [
+            {
+              id: `att-${student.id}-1`,
+              name: 'Laporan_Praktik_Kejuruan_ATPH.pdf',
+              fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+              fileSize: '1.4 MB',
+              fileType: 'pdf',
+            },
+          ],
+        };
+        submissions.unshift(newSub);
+        setItem(STORAGE_KEYS.SUBMISSIONS, submissions);
+      }
+    }
+
+    // 5. Melekat Kuis & Evaluasi (QuizAttempt)
+    let attempts = this.getQuizAttempts();
+    const studentAttempts = attempts.filter((a) => a.studentId === student.id);
+    if (studentAttempts.length === 0) {
+      const quizzes = this.getQuizzes().filter(
+        (q) => q.isPublished && this.isClassMatch(q.targetClassId, student.classId)
+      );
+      if (quizzes.length > 0) {
+        const firstQuiz = quizzes[0];
+        const newAttempt: QuizAttempt = {
+          id: `att-${student.id}-${firstQuiz.id}`,
+          quizId: firstQuiz.id,
+          quizTitle: firstQuiz.title,
+          studentId: student.id,
+          studentName: student.fullName,
+          className: student.className || 'X AT 1',
+          startedAt: new Date(Date.now() - 86400000).toISOString(),
+          completedAt: new Date(Date.now() - 86400000 + 15 * 60000).toISOString(),
+          answers: [],
+          score: 88,
+          maxScore: 100,
+          percentage: 88,
+          passed: true,
+          attemptNumber: 1,
+        };
+        attempts.unshift(newAttempt);
+        setItem(STORAGE_KEYS.QUIZ_ATTEMPTS, attempts);
+      }
+    }
+
+    // 6. Melekat Nilai Resmi & Transkrip (GradeRecord)
+    const grades = this.getGrades();
+    const gradeIndex = grades.findIndex((g) => g.studentId === student.id);
+    if (gradeIndex === -1) {
+      const newGradeRecord: GradeRecord = {
+        id: `grd-${student.id}`,
+        studentId: student.id,
+        studentName: student.fullName,
+        nisn: student.nisn || `00781293${Math.floor(10 + Math.random() * 90)}`,
+        classId: student.classId || 'cls-x-at-1',
+        className: student.className || 'X AT 1',
+        assignmentAverage: 92,
+        quizAverage: 88,
+        finalScore: 90,
+        status: 'Tuntas',
+        notes:
+          'Terdaftar resmi di kelas ATPH. Nilai tugas praktik dan kuis tuntas memenuhi standar KKM 75.',
+      };
+      grades.unshift(newGradeRecord);
+      setItem(STORAGE_KEYS.GRADES, grades);
+    } else {
+      grades[gradeIndex] = {
+        ...grades[gradeIndex],
+        studentName: student.fullName,
+        classId: student.classId || grades[gradeIndex].classId,
+        className: student.className || grades[gradeIndex].className,
+        nisn: student.nisn || grades[gradeIndex].nisn,
+      };
+      setItem(STORAGE_KEYS.GRADES, grades);
+    }
+
+    // Hitung ulang nilai berbobot secara otomatis
+    this.recalculateStudentGrade(student.id);
   },
 
   // --- ANNOUNCEMENTS ---

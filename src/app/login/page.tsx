@@ -27,6 +27,7 @@ import {
   MoreVertical,
   Layers,
   Check,
+  User,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 
@@ -39,6 +40,7 @@ type InstallPlatform = 'android' | 'ios' | 'desktop' | null;
 
 export default function StudentLoginPage() {
   const router = useRouter();
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedClass, setSelectedClass] = useState('cls-x-at-1');
@@ -201,7 +203,7 @@ export default function StudentLoginPage() {
       }
 
       // Login akun siswa dengan email sendiri, password skaneba123, dan kelas yang dipilih
-      const user = DataProvider.login(cleanEmail, cleanPassword, 'student', selectedClass);
+      const user = DataProvider.login(cleanEmail, cleanPassword, 'student', selectedClass, fullName.trim());
       if (user && user.role === 'student') {
         router.push('/student/dashboard');
       } else {
@@ -408,6 +410,27 @@ export default function StudentLoginPage() {
               </div>
               <p className="text-[11px] text-slate-500 mt-1">
                 Akun langsung terhubung ke Manajemen Kelas & Siswa guru sesuai rombel di atas.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Nama Lengkap Siswa <span className="text-[10px] text-slate-400 font-normal">(Opsional)</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <User className="w-4 h-4" />
+                </div>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Contoh: Muhammad Farhan (Kosongkan jika auto)"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 text-slate-900 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+              <p className="text-[11px] text-slate-500 mt-1">
+                Nama akan tercatat di Manajemen Kelas guru dan Transkrip Rapor Nilai resmi.
               </p>
             </div>
 
