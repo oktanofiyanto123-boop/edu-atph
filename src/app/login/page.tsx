@@ -24,6 +24,9 @@ import {
   KeyRound,
   Info,
   School,
+  MoreVertical,
+  Layers,
+  Check,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 
@@ -49,12 +52,14 @@ export default function StudentLoginPage() {
   const [platform, setPlatform] = useState<InstallPlatform>('android');
   const [isInstalled, setIsInstalled] = useState(false);
   const [showIosGuide, setShowIosGuide] = useState(false);
+  const [showAndroidGuide, setShowAndroidGuide] = useState(false);
   const [installSuccessMessage, setInstallSuccessMessage] = useState('');
+  const [installOnLogin, setInstallOnLogin] = useState(true);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Detect standalone mode (already installed)
+    // Detect standalone mode (already installed as Android App / PWA)
     const isStandalone =
       (window.navigator as any).standalone === true ||
       window.matchMedia('(display-mode: standalone)').matches;
@@ -82,6 +87,22 @@ export default function StudentLoginPage() {
     return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
   }, []);
 
+  const triggerNativePrompt = async () => {
+    if (deferredPrompt) {
+      try {
+        await deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          setIsInstalled(true);
+          setInstallSuccessMessage('Aplikasi Android EduATPH berhasil dipasang!');
+          setDeferredPrompt(null);
+        }
+      } catch (err) {
+        console.warn('Install error:', err);
+      }
+    }
+  };
+
   const handleInstallClick = useCallback(async () => {
     if (platform === 'ios') {
       setShowIosGuide(true);
@@ -89,23 +110,11 @@ export default function StudentLoginPage() {
     }
 
     if (deferredPrompt) {
-      try {
-        await deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          setIsInstalled(true);
-          setInstallSuccessMessage('Aplikasi EduATPH berhasil dipasang!');
-          setDeferredPrompt(null);
-        }
-      } catch (err) {
-        console.warn('Install error:', err);
-      }
+      await triggerNativePrompt();
     } else {
       // Fallback instructions if prompt is unavailable
       if (platform === 'android') {
-        alert(
-          'Untuk memasang aplikasi: Ketuk tombol menu titik tiga (⋮) di browser Chrome Anda, lalu pilih "Tambahkan ke Layar Utama" atau "Install Aplikasi".'
-        );
+        setShowAndroidGuide(true);
       } else {
         alert(
           'Untuk memasang aplikasi di Laptop/PC: Klik ikon Pasang/Install (tanda panah atau komputer kecil) di address bar browser Anda, atau buka Menu > Install EduATPH.'
@@ -114,10 +123,19 @@ export default function StudentLoginPage() {
     }
   }, [deferredPrompt, platform]);
 
-  const handleStudentQuickLogin = () => {
+  const handleStudentQuickLogin = async (withInstall = false) => {
     setLoading(true);
     setErrorMessage('');
     setShowAdminRedirect(false);
+
+    if (withInstall || installOnLogin) {
+      if (deferredPrompt && !isInstalled) {
+        await triggerNativePrompt();
+      } else if (platform === 'android' && !isInstalled && !deferredPrompt) {
+        // Show guide if prompt not available
+        setShowAndroidGuide(true);
+      }
+    }
 
     setTimeout(() => {
       const user = DataProvider.login('', 'student', undefined, selectedClass);
@@ -130,7 +148,7 @@ export default function StudentLoginPage() {
     }, 350);
   };
 
-  const handleFormLogin = (e: React.FormEvent) => {
+  const handleFormLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanEmail = email.trim().toLowerCase();
     const cleanPassword = password.trim();
@@ -157,6 +175,11 @@ export default function StudentLoginPage() {
     setLoading(true);
     setErrorMessage('');
     setShowAdminRedirect(false);
+
+    // If install on login is active and prompt available, trigger Android install immediately
+    if (installOnLogin && deferredPrompt && !isInstalled) {
+      await triggerNativePrompt();
+    }
 
     setTimeout(() => {
       // Cek apakah akun yang diinput adalah administrator
@@ -217,39 +240,55 @@ export default function StudentLoginPage() {
           Gunakan email masing-masing dengan kata sandi <strong>skaneba123</strong>
         </p>
 
-        {/* TOMBOL INSTALL APLIKASI (PWA) KHUSUS SISWA */}
+        {/* ANDROID APP PROMINENT INSTALL BANNER (APK / PWA) */}
         <div className="mt-4 mb-2">
           {isInstalled ? (
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-semibold">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 text-xs font-bold shadow-xs">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span>Aplikasi EduATPH Telah Terpasang di Perangkat Ini</span>
+              <span>EduATPH Terpasang dalam Mode Aplikasi Android Standalone</span>
             </div>
           ) : (
-            <button
-              type="button"
-              onClick={handleInstallClick}
-              className="w-full group relative overflow-hidden p-3 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/40 border border-emerald-400/40 transition-all hover:scale-[1.02] flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0 group-hover:rotate-6 transition-transform">
-                  <Download className="w-5 h-5 text-white" />
-                </div>
-                <div className="text-left">
-                  <p className="text-xs sm:text-sm font-extrabold flex items-center gap-1.5 leading-tight">
-                    <span>Pasang Aplikasi EduATPH</span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] bg-white/25 font-bold uppercase">
-                      PWA
-                    </span>
-                  </p>
-                  <p className="text-[11px] text-emerald-100/90 leading-tight">
-                    Kompatibel di {platformLabel} • Akses Cepat & Ringan
-                  </p>
+            <div className="rounded-2xl p-3.5 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/40 text-white shadow-xl space-y-2.5 text-left">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shadow-xs">
+                    <Smartphone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs sm:text-sm font-black text-white leading-tight">
+                        Aplikasi Android EduATPH
+                      </p>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500 text-slate-950 uppercase">
+                        WebAPK
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-emerald-200/90 leading-tight">
+                      Layar Penuh • Ikon di Layar Utama HP • Bebas Alamat URL
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-1 pr-1">
-                <PlatformIcon className="w-5 h-5 text-emerald-200 group-hover:scale-110 transition-transform" />
+
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleInstallClick}
+                  className="flex-1 py-2 px-3 rounded-xl font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md shadow-emerald-500/25 flex items-center justify-center gap-1.5 transition-all active:scale-95"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Pasang Aplikasi Android</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAndroidGuide(true)}
+                  className="py-2 px-3 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-slate-200 border border-white/15 transition-all"
+                  title="Lihat cara pasang di Chrome"
+                >
+                  <span>Cara Pasang (⋮)</span>
+                </button>
               </div>
-            </button>
+            </div>
           )}
         </div>
       </div>
@@ -294,7 +333,7 @@ export default function StudentLoginPage() {
 
             <button
               type="button"
-              onClick={handleStudentQuickLogin}
+              onClick={() => handleStudentQuickLogin(true)}
               disabled={loading}
               className="w-full p-3.5 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-500 bg-emerald-50/60 dark:bg-emerald-950/30 hover:bg-emerald-50 text-emerald-950 dark:text-emerald-200 flex items-center justify-between text-left transition-all group shadow-xs"
             >
@@ -304,10 +343,10 @@ export default function StudentLoginPage() {
                 </div>
                 <div>
                   <p className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                    Masuk Cepat Siswa (Rizky Pratama)
+                    Masuk Cepat & Pasang Aplikasi Android
                   </p>
                   <p className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">
-                    Akun Percobaan Siswa • Tanpa input sandi
+                    Akun Siswa Demo • Langsung memicu install aplikasi
                   </p>
                 </div>
               </div>
@@ -427,6 +466,23 @@ export default function StudentLoginPage() {
               </div>
             </div>
 
+            {/* Checkbox auto install Android App saat login */}
+            {!isInstalled && (
+              <div className="p-2.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={installOnLogin}
+                    onChange={(e) => setInstallOnLogin(e.target.checked)}
+                    className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700"
+                  />
+                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                    Otomatis pasang aplikasi ke Layar Utama HP saat Masuk
+                  </span>
+                </label>
+              </div>
+            )}
+
             {/* Petunjuk kata sandi default */}
             <div className="p-2.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 flex items-start gap-2 text-[11px] text-emerald-900 dark:text-emerald-200">
               <Info className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
@@ -435,13 +491,20 @@ export default function StudentLoginPage() {
               </div>
             </div>
 
+            {/* Submit Button with Android App emphasis */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+              className="w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-95"
             >
-              <LogIn className="w-4 h-4" />
-              <span>{loading ? 'Memverifikasi Akun Siswa...' : 'Masuk ke Ruang Belajar'}</span>
+              <Smartphone className="w-4 h-4 text-emerald-200" />
+              <span>
+                {loading
+                  ? 'Memverifikasi & Mempersiapkan Aplikasi...'
+                  : installOnLogin && !isInstalled
+                  ? 'Masuk & Pasang Aplikasi Android'
+                  : 'Masuk ke Ruang Belajar'}
+              </span>
             </button>
           </form>
 
@@ -471,6 +534,103 @@ export default function StudentLoginPage() {
           </Link>
         </div>
       </div>
+
+      {/* MODAL PANDUAN PASANG APLIKASI DI HP ANDROID */}
+      {showAndroidGuide && (
+        <div className="fixed inset-0 z-[10000] flex items-end sm:items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-sm rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl overflow-hidden animate-in slide-in-from-bottom-6 text-white">
+            <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <Smartphone className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">Pasang Aplikasi di HP Android</h3>
+                  <p className="text-[10px] text-emerald-400">Google Chrome / Samsung Internet</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowAndroidGuide(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-3.5">
+              <p className="text-slate-300 text-xs leading-relaxed">
+                Pasang EduATPH ke Layar Utama HP Android Anda dalam 3 langkah mudah:
+              </p>
+
+              <div className="space-y-2.5">
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-slate-800/80 border border-slate-700">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    1
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>Ketuk Menu Titik Tiga</span>
+                      <span className="p-0.5 rounded bg-slate-700 font-mono text-[10px]">⋮</span>
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Berada di pojok kanan atas browser Google Chrome Anda.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-slate-800/80 border border-slate-700">
+                  <div className="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-400 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    2
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">
+                      Pilih &quot;Pasang Aplikasi&quot; atau &quot;Tambahkan ke Layar Utama&quot;
+                    </p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">
+                      Menu dengan ikon download atau tanda panah ke bawah.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 rounded-2xl bg-emerald-950/60 border border-emerald-600/40">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500 text-slate-950 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    3
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-emerald-200">
+                      Ketuk &quot;Install / Pasang&quot;
+                    </p>
+                    <p className="text-[11px] text-slate-300 mt-0.5">
+                      Ikon EduATPH akan muncul di layar HP Anda layaknya aplikasi Android resmi dari Play Store!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2 space-y-2">
+                {deferredPrompt && (
+                  <button
+                    onClick={async () => {
+                      await triggerNativePrompt();
+                      setShowAndroidGuide(false);
+                    }}
+                    className="w-full py-2.5 rounded-xl font-bold text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-md flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Coba Munculkan Tombol Install Otomatis</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowAndroidGuide(false)}
+                  className="w-full py-2.5 rounded-xl font-semibold text-xs bg-white/10 hover:bg-white/15 text-slate-200 transition-colors"
+                >
+                  Saya Mengerti, Tutup Panduan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MODAL PANDUAN INSTALL IPHONE / IPAD (iOS) */}
       {showIosGuide && (
@@ -536,4 +696,3 @@ export default function StudentLoginPage() {
     </div>
   );
 }
-
