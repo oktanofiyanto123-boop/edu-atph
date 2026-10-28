@@ -1144,6 +1144,8 @@ export const DataProvider = {
     localStorage.removeItem(STORAGE_KEYS.GRADES);
     localStorage.removeItem(STORAGE_KEYS.ANNOUNCEMENTS);
     localStorage.removeItem(STORAGE_KEYS.PROGRESS);
+    localStorage.removeItem(STORAGE_KEYS.DELETED_MATERIALS);
+    localStorage.removeItem(STORAGE_KEYS.DELETED_USERS);
     this.setCurrentUser(INITIAL_USERS[0]);
   },
 };
