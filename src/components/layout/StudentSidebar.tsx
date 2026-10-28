@@ -15,9 +15,12 @@ import {
   ArrowLeft,
   ChevronRight,
   GraduationCap,
+  PanelLeftClose,
+  Smartphone,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 import { UserProfile } from '@/types';
+import { useStudentNav } from '@/context/StudentNavContext';
 
 const STUDENT_NAV_ITEMS = [
   { label: 'Dashboard Siswa', href: '/student/dashboard', icon: LayoutDashboard },
@@ -31,31 +34,50 @@ const STUDENT_NAV_ITEMS = [
 
 export default function StudentSidebar() {
   const pathname = usePathname();
+  const nav = useStudentNav();
+  const isSidebarHidden = nav?.isSidebarHidden ?? false;
+  const setIsSidebarHidden = nav?.setIsSidebarHidden ?? (() => {});
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     setCurrentUser(DataProvider.getCurrentUser());
   }, []);
 
+  // When hidden, do not render sidebar to allow 100% full-screen dashboard
+  if (isSidebarHidden) {
+    return null;
+  }
+
   return (
-    <aside className="w-72 flex-shrink-0 min-h-screen bg-slate-900 text-slate-300 border-r border-slate-800 flex flex-col justify-between">
+    <aside className="w-72 flex-shrink-0 min-h-screen bg-slate-900 text-slate-300 border-r border-slate-800 flex flex-col justify-between transition-all duration-300 z-30">
       <div>
         {/* Brand header */}
         <div className="p-6 border-b border-slate-800">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-all">
-              <Sprout className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl text-white tracking-tight">EduATPH</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-400 border border-teal-500/30">
-                  SISWA
-                </span>
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-all">
+                <Sprout className="w-6 h-6" />
               </div>
-              <p className="text-[11px] text-slate-400 font-medium">Ruang Belajar Digital</p>
-            </div>
-          </Link>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-xl text-white tracking-tight">EduATPH</span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-400 border border-teal-500/30">
+                    SISWA
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 font-medium">Ruang Belajar Digital</p>
+              </div>
+            </Link>
+
+            {/* Toggle hide sidebar into iPhone Home button */}
+            <button
+              onClick={() => setIsSidebarHidden(true)}
+              title="Sembunyikan menu menjadi Tombol Home iPhone"
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+              <PanelLeftClose className="w-5 h-5" />
+            </button>
+          </div>
 
           {/* Student badge */}
           <div className="mt-5 p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center gap-3">
@@ -71,6 +93,22 @@ export default function StudentSidebar() {
               </p>
             </div>
           </div>
+
+          {/* Hide Menu Banner Hint */}
+          <div className="mt-4">
+            <button
+              onClick={() => setIsSidebarHidden(true)}
+              className="w-full py-2 px-3 rounded-xl bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-between transition-all group"
+            >
+              <div className="flex items-center gap-2">
+                <Smartphone className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                <span>Mode Tombol Home iPhone</span>
+              </div>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                Layar Penuh
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Navigation list */}
@@ -81,7 +119,7 @@ export default function StudentSidebar() {
           <nav className="space-y-1">
             {STUDENT_NAV_ITEMS.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
+              const isActive = pathname === item.href || (item.href !== '/student/dashboard' && pathname?.startsWith(item.href));
               return (
                 <Link
                   key={item.href}

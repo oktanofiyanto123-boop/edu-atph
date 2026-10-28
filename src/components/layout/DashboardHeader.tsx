@@ -14,9 +14,15 @@ import {
   Sparkles,
   ChevronDown,
   RefreshCw,
+  PanelLeft,
+  PanelLeftClose,
+  Maximize2,
+  Minimize2,
+  Smartphone,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 import { UserProfile } from '@/types';
+import { useStudentNav } from '@/context/StudentNavContext';
 
 interface DashboardHeaderProps {
   title: string;
@@ -26,6 +32,7 @@ interface DashboardHeaderProps {
 
 export default function DashboardHeader({ title, subtitle, onRefresh }: DashboardHeaderProps) {
   const router = useRouter();
+  const studentNav = useStudentNav();
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [isDark, setIsDark] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -72,16 +79,43 @@ export default function DashboardHeader({ title, subtitle, onRefresh }: Dashboar
   };
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between px-6 py-4 glass-panel border-b border-slate-200/80 dark:border-slate-800 backdrop-blur-md">
-      <div>
-        <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-            {subtitle}
-          </p>
+    <header className="sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-4 glass-panel border-b border-slate-200/80 dark:border-slate-800 backdrop-blur-md">
+      <div className="flex items-center gap-3">
+        {/* Student Sidebar Toggle Button (if in student space) */}
+        {studentNav && (
+          <button
+            onClick={studentNav.toggleSidebar}
+            title={
+              studentNav.isSidebarHidden
+                ? 'Tampilkan Menu Samping'
+                : 'Sembunyikan Menu (Mode Tombol Home iPhone)'
+            }
+            className="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 transition-all flex items-center gap-1.5 text-xs font-semibold shadow-xs"
+          >
+            {studentNav.isSidebarHidden ? (
+              <>
+                <PanelLeft className="w-4 h-4 text-emerald-500" />
+                <span className="hidden md:inline">Buka Menu</span>
+              </>
+            ) : (
+              <>
+                <PanelLeftClose className="w-4 h-4 text-slate-400 hover:text-emerald-500" />
+                <span className="hidden md:inline">Sembunyikan Menu</span>
+              </>
+            )}
+          </button>
         )}
+
+        <div>
+          <h1 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1 sm:line-clamp-none">
+              {subtitle}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="flex items-center gap-3 sm:gap-4">
@@ -93,6 +127,21 @@ export default function DashboardHeader({ title, subtitle, onRefresh }: Dashboar
             className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
+          </button>
+        )}
+
+        {/* Fullscreen toggle for immersive learning */}
+        {studentNav && (
+          <button
+            onClick={studentNav.toggleFullscreen}
+            title={studentNav.isFullscreen ? 'Keluar Layar Penuh' : 'Mode Layar Penuh'}
+            className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-xs"
+          >
+            {studentNav.isFullscreen ? (
+              <Minimize2 className="w-4 h-4 text-amber-500" />
+            ) : (
+              <Maximize2 className="w-4 h-4 text-teal-600" />
+            )}
           </button>
         )}
 

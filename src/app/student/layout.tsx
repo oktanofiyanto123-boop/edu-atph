@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import StudentSidebar from '@/components/layout/StudentSidebar';
+import IPhoneHomeButton from '@/components/layout/IPhoneHomeButton';
+import { StudentNavProvider } from '@/context/StudentNavContext';
 import { DataProvider } from '@/lib/data-provider';
 import { UserProfile } from '@/types';
 
-export default function StudentLayout({ children }: { children: React.ReactNode }) {
+function StudentLayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [authorized, setAuthorized] = useState(false);
@@ -33,11 +35,25 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+      {/* Student Navigation Sidebar (hideable into iPhone Home button) */}
       <StudentSidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+
+      {/* Main Student Page Content (Expands to full screen width when sidebar is hidden) */}
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto w-full">
         {children}
-      </div>
+      </main>
+
+      {/* Floating iPhone Home Button (AssistiveTouch) for quick navigation */}
+      <IPhoneHomeButton />
     </div>
+  );
+}
+
+export default function StudentLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <StudentNavProvider>
+      <StudentLayoutContent>{children}</StudentLayoutContent>
+    </StudentNavProvider>
   );
 }

@@ -15,6 +15,7 @@ import {
   X,
   ExternalLink,
   Sparkles,
+  Eye,
 } from 'lucide-react';
 import { DataProvider } from '@/lib/data-provider';
 import { Submission, ClassItem, Assignment } from '@/types';
@@ -185,9 +186,8 @@ export default function AdminSubmissionsPage() {
                                 href={att.fileUrl || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                download={att.name}
                                 className="hover:opacity-80 transition-opacity"
-                                title={att.name}
+                                title={`Buka ${att.name}`}
                               >
                                 <FileBadge fileName={att.name} fileSize={att.fileSize} fileType={att.fileType} />
                               </a>
@@ -285,16 +285,27 @@ export default function AdminSubmissionsPage() {
                         className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs"
                       >
                         <FileBadge fileName={att.name} fileSize={att.fileSize} fileType={att.fileType} />
-                        <a
-                          href={att.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          download={att.name}
-                          className="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 flex items-center gap-1 transition-colors"
-                        >
-                          <Download className="w-3.5 h-3.5" />
-                          <span>Unduh</span>
-                        </a>
+                        <div className="flex items-center gap-1.5">
+                          <a
+                            href={att.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 flex items-center gap-1 transition-colors"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Buka</span>
+                          </a>
+                          <a
+                            href={att.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={att.name}
+                            className="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 flex items-center gap-1 transition-colors"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            <span>Unduh</span>
+                          </a>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -310,10 +321,9 @@ export default function AdminSubmissionsPage() {
                     href={activeSubmission.fileUrl || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    download={activeSubmission.fileName}
                     className="font-bold text-emerald-600 hover:underline flex items-center gap-1"
                   >
-                    <span>Unduh & Buka</span>
+                    <span>Buka Berkas</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>

@@ -467,7 +467,7 @@ Sektor pertanian memiliki potensi bahaya kerja yang cukup tinggi:
     `,
     imageUrl: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80',
     videoUrl: 'https://www.youtube.com/embed/-H1ZTKuj7eI',
-    pdfUrl: '/templates/template_siswa_atph.csv',
+    pdfUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
     attachments: [
       {
         id: 'att-buku-dasar-atph-x',

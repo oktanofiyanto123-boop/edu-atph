@@ -322,9 +322,8 @@ export default function StudentAssignmentsPage() {
                               href={att.fileUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              download={att.name}
                               className="hover:scale-[1.02] transition-transform"
-                              title="Klik untuk membuka / mengunduh berkas"
+                              title="Klik untuk membuka berkas di tab baru"
                             >
                               <FileBadge
                                 fileName={att.name}
