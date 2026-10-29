@@ -441,16 +441,19 @@ export const DataProvider = {
       .map((sm) => {
         const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
         if (initMatch) {
-          // If this is Bab IV Pengelolaan Faktor Produksi, ensure it reflects PDF-only mode
+          // Sync Bab IV to full content & complete attachments from INITIAL_MATERIALS
           if (initMatch.id === 'mat-bab-iv-pengelolaan-faktor-produksi-x') {
-            if (sm.content !== '' || sm.videoUrl !== '' || sm.pdfUrl !== initMatch.pdfUrl) {
+            if (sm.content !== initMatch.content || !sm.content || (sm.learningObjectives && sm.learningObjectives.length === 0)) {
               hasChanges = true;
               return {
                 ...sm,
-                content: '',
-                videoUrl: '',
-                imageUrl: '',
-                learningObjectives: [],
+                title: initMatch.title,
+                description: initMatch.description,
+                topic: initMatch.topic,
+                content: initMatch.content,
+                videoUrl: initMatch.videoUrl,
+                imageUrl: initMatch.imageUrl,
+                learningObjectives: initMatch.learningObjectives,
                 pdfUrl: initMatch.pdfUrl,
                 attachments: initMatch.attachments,
               };
