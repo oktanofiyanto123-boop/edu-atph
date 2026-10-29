@@ -483,6 +483,414 @@ Sektor pertanian memiliki potensi bahaya kerja yang cukup tinggi:
     updatedAt: '2026-10-27T08:00:00Z',
   },
   {
+    id: 'mat-bab-iv-pengelolaan-faktor-produksi-x',
+    title: 'BAB IV: Pengelolaan Faktor Produksi (Dasar-Dasar Agribisnis Tanaman Kelas X)',
+    slug: 'bab-iv-pengelolaan-faktor-produksi-kelas-x',
+    description: 'Modul materi lengkap BAB IV: Memahami 4 faktor produksi (tanah/lahan, tenaga kerja/HOK, modal tetap & bergerak, keahlian/manajemen), pengelolaan sumber daya alam (pertanian berkelanjutan, PHT, konservasi lahan & air, biopori, rorak, agroforestri, pertanian organik & regeneratif), pengelolaan SDM pertanian (RDK/RDKK), serta manajemen produksi tanaman.',
+    categoryId: 'cat-1',
+    categoryName: 'Dasar-Dasar Agribisnis Tanaman',
+    targetClassId: 'cls-10-atph',
+    targetClassName: 'X ATPH',
+    topic: 'Pengelolaan Faktor Produksi (Tanah, Tenaga Kerja, Modal, dan Keahlian/Manajemen)',
+    learningObjectives: [
+      'Memahami pengelolaan sumber daya pendukung (sumber daya alam, sumber daya manusia, dan sumber daya pendukung lainnya / faktor produksi lainnya) pada proses produksi tanaman.',
+      'Mengklasifikasikan empat faktor produksi: tanah/lahan, tenaga kerja (TKDK & TKLK, perhitungan HOK), modal (tetap dan bergerak), serta keahlian manajerial.',
+      'Menganalisis prinsip pertanian berkelanjutan (aspek ekonomi, ekologi, sosial, budaya) dan konsep Pengendalian Hama Terpadu (PHT) dengan musuh alami Trichogramma sp. serta Ambang Ekonomi (AE).',
+      'Menerapkan teknik konservasi lahan dan air (terasering, rorak/parit buntu, biopori, embung, metode vegetatif, dan agroforestri stratifikasi tajuk).',
+      'Mendeskripsikan 4 prinsip pertanian organik dan 4 teknik kunci pertanian regeneratif (pengolahan tanah konservasi, keanekaragaman tanaman, rotasi & penutup tanah).',
+      'Mengidentifikasi peran strategis SDM pertanian (petani/pengusaha tani, pelaku agribisnis, aparat pemerintah) serta pembagian peran dalam kelompok tani (RDK dan RDKK).',
+      'Memahami fungsi manajemen produksi tanaman (perencanaan, pengorganisasian, pelaksanaan, evaluasi) beserta tugas dan keterampilan manajerial.',
+    ],
+    content: `# BAB IV: PENGELOLAAN FAKTOR PRODUKSI
+
+**KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI REPUBLIK INDONESIA, 2023**  
+**Mata Pelajaran:** Dasar-Dasar Agribisnis Tanaman untuk SMK/MAK Kelas X  
+**Penulis:** Ani Susanti, Yustinanda Rahma Dewi  
+**ISBN:** 978-623-194-505-1 (no.jil.lengkap PDF) / 978-623-194-506-8 (jil.1 PDF)  
+
+---
+
+### 🎯 Tujuan Pembelajaran
+Setelah mempelajari materi ini melalui literasi, diskusi, observasi dan identifikasi, dan bermain peran, Kalian mampu memahami pengelolaan sumber daya pendukung (sumber daya alam, sumber daya manusia, sumber daya pendukung lainnya /faktor produksi lainnya).
+
+### 💡 Pertanyaan Pemantik
+Apakah kalian tahu tentang sumber daya pendukung pada proses produksi tanaman? Apa saja sumber pendukung tersebut? Bagaimana mengelola sumber daya pendukung tersebut supaya produksi tanaman optimal?
+
+---
+
+### 🗺️ Peta Konsep
+**Peta Konsep Pengelolaan Faktor Produksi:**
+- **Pengelolaan Faktor Produksi**
+  - **Pengelolaan Sumber Daya Alam**
+  - **Pengelolaan Sumber Daya Manusia**
+  - **Pengelolaan Faktor Produksi Lainnya**
+- Berlanjut menuju **BAB V**
+
+---
+
+## PENGANTAR FAKTOR PRODUKSI
+
+Sebelum membahas tentang pengelolaan sumber daya pendukung proses produksi tanaman, alangkah baiknya kita memahami terlebih dahulu tentang faktor produksi. Faktor produksi merupakan benda-benda yang diciptakan oleh alam atau dibuat oleh manusia dan dapat dimanfaatkan untuk menghasilkan barang dan jasa. Demikian halnya dengan kegiatan produksi pertanian yang juga membutuhkan ketersediaan faktor produksi.
+
+Sebagai ilustrasi, silakan simak tayangan berikut:  
+📺 **Tayangan Audio Visual Budi daya Tanaman Vanili** (Sumber: Rekayasa Teknologi, 2022):  
+Tautan: https://www.youtube.com/watch?v=rSQ5PQGDzU0
+
+Berdasarkan tayangan audiovisual pada tautan atau barcode diatas, kita dapat mengklasifikasikan faktor produksi menjadi empat jenis, yaitu tanah, tenaga kerja, modal dan keahlian.
+
+Berikut penjelasan tentang empat faktor produksi, yaitu tanah, tenaga kerja, modal dan keahlian:
+
+### 1. Tanah
+Tanah dan segala yang tumbuh di atasnya, serta yang terdapat di dalamnya (seperti benda-benda tambang). Sebagai tempat hidup beberapa makhluk hidup, tanah terdiri atas beberapa komponen, yaitu bahan padatan atau mineral, bahan organik, air dan udara. Bahan padatan penyusun tanah berupa batuan yang terbentuk secara alami, tersusun atas campuran mineral dan senyawa dengan berbagai komposisi. Batuan tersebut mengalami pelapukan menjadi bahan pembentuk tanah yang mengandung mineral berupa ion-ion positif dan ion-ion negatif. Contoh ion positif yang ada dalam tanah yaitu ion Kalium (K⁺), Magnesium (Mg²⁺), dan Kalsium (Ca²⁺), sedangkan ion negatif, yaitu ion nitrat (NO₃⁻), dan fosfat (PO₄²⁻). Ion yang terkandung dalam mineral merupakan nutrisi bagi tanaman.
+
+Bahan organik tanah terdiri atas sisa-sisa makhluk hidup yang mati, daun yang gugur atau feses (kotoran hewan) yang telah diuraikan oleh bakteri dan jamur. Hasil penguraian ini disebut humus. Humus memiliki peran penting bagi kesuburan tanah dan tanaman yang ada di atasnya.
+
+Kondisi tanah, air dan udara akan menempati daerah pori-pori tanah (rongga) yang terletak di antara partikel tanah. Rongga udara dapat dijumpai di antara batuan dalam tanah atau di antara batuan dan partikel tanah atau di antara partikel tanah dengan akar tanaman atau di antara batuan dengan akar tanaman ataupun karena aktivitas hewan.
+
+Dalam perkembangan saat ini untuk faktor produksi tanah, lebih tepat digunakan istilah lahan sebab maknanya lebih luas. Menurut Kamus Besar Bahasa Indonesia (KBBI) lahan adalah tanah terbuka atau tanah garapan. Selain itu, menurut Ngadisih (2020) lahan adalah lingkungan fisik (abiotik) dan biotik berkaitan dengan daya dukung untuk kehidupan dan kesejahteraan manusia. 
+
+Untuk lebih memperjelas perbedaan pengertian tanah dan lahan, mari kita simak tayangan audiovisual:  
+📺 **Tayangan Audio Visual Pengertian Tanah dan Lahan** (Sumber: Kanal Pengetahuan Fakultas Teknologi Pertanian UGM, 2021):  
+Tautan: https://www.youtube.com/watch?v=1tut4wAt7GA
+
+### 2. Tenaga Kerja
+Tenaga kerja (*labor*) merupakan setiap usaha yang dihasilkan dari sebagian atau seluruh kemampuan jasmani dan rohani manusia dan atau kemampuan fisik ternak atau mesin yang digunakan untuk kegiatan produksi barang dan atau jasa. Tenaga kerja diperlukan untuk melaksanakan kegiatan budi daya tanaman seperti pengolahan lahan, penanaman, pemupukan, pemeliharaan, pengendalian hama dan penyakit, pemanenan, pascapanen, dan lain-lainnya.
+
+Sumber tenaga kerja dalam usaha tani dibedakan sebagai berikut:
+a. **Tenaga Kerja Dalam Keluarga (family labour)/TKDK**, yaitu seluruh tenaga kerja yang terdapat dalam keluarga, baik manusia, ternak ataupun tenaga mesin.
+b. **Tenaga Kerja Luar Keluarga (hired labour)/TKLK**, yaitu seluruh tenaga kerja yang berasal dari luar keluarga, baik manusia, ternak maupun tenaga mesin.
+
+Satuan tenaga kerja yang digunakan biasanya dalam menghitung analisis usaha tani disebut **Hari Orang Kerja (HOK)**. Umumnya 1 HOK usaha tani dihitung 8 jam per hari, sudah termasuk dengan waktu istirahat selama 1 jam.
+
+### 3. Modal
+Modal (*capital*) merupakan semua jenis barang dan atau jasa yang jika diolah bersama dengan faktor produksi lain akan menghasilkan barang dan atau jasa baru atau menunjang kegiatan produksi barang dan atau jasa baru. Modal dapat berupa alat produksi seperti mesin, peralatan, bangunan dan lain-lain. Seluruh barang dan atau jasa yang memiliki sifat produktif dan dapat digunakan untuk kegiatan produksi berikutnya disebut barang modal/barang investasi/barang modal riil (*real capital goods*).
+
+Modal berikutnya disebut **modal operasional**, yaitu modal dalam bentuk tunai yang dapat ditukarkan dengan barang modal lain misalnya sarana produksi dan tenaga kerja.
+
+### 4. Keahlian
+Faktor keahlian (*skill*) atau kecakapan tata laksana/kewirausahaan (*entrepreneurship*) adalah keahlian manajerial atau kecakapan tata laksana/kewirausahaan yang berperan dalam mengelola faktor produksi tanah, tenaga kerja dan modal pada kegiatan produksi barang dan atau jasa. Faktor produksi keahlian diperlukan agar ketiga faktor produksi yang lain berfungsi optimum.
+
+Faktor produksi (*input*) perlu dikelola untuk menunjang terlaksananya kegiatan produksi tanaman. Bagaimana pengelolaannya mari kita pelajari bersama.
+
+---
+
+## A. PENGELOLAAN SUMBER DAYA ALAM
+
+### Apersepsi Awal
+Apakah Kalian sering membantu orang tua Kalian yang berprofesi sebagai petani atau sering melihat aktivitas budi daya tanaman di lahan? Menurut Kalian, faktor sumber daya alam apa saja yang harus diperhatikan untuk menunjang keberhasilan budi daya tanaman tersebut? Bagaimana cara mengelolanya?
+
+**Kata Kunci:** sumber daya alam, tanah, air, makhluk hidup
+
+### Materi
+Mari kita pelajari lebih dalam tentang pengelolaan sumber daya alam untuk menunjang keberhasilan budi daya tanaman. Pengelolaan sumber daya alam pertanian tak lepas dari upaya mewujudkan pertanian yang berkelanjutan.
+
+**Pertanian berkelanjutan** adalah sebuah sistem usaha tani secara menyeluruh (*holistik*), yang harus memenuhi empat kriteria, yaitu aspek ekonomi, ekologi, sosial, dan budaya:
+- Dari **aspek ekonomi**, harus menguntungkan.
+- Pada **aspek ekologi**, pertanian berkelanjutan diharapkan bersahabat dan ramah lingkungan.
+- Dari **aspek sosial**, pertanian berkelanjutan harus berkeadilan dan diterima oleh masyarakat, misalnya dalam hal akses pasar semua pelaku pertanian mempunyai akses yang sama baik itu pelaku usahatani skala kecil maupun besar.
+- Dari **aspek budaya**, pertanian berkelanjutan secara kultural cocok diterapkan serta teknisnya mudah dilakukan.
+
+Berikut merupakan audio visual tentang budi daya padi organik dengan metode *System of Rice Intensification* (SRI) yang menerapkan konsep pertanian berkelanjutan:  
+📺 **Tayangan Audio Visual Budi Daya Padi Organik dengan Metode System of Rice Intensification (SRI)** (Sumber: TV Tani Indonesia, 2021):  
+Tautan: https://www.youtube.com/watch?v=lPRPued7hDk
+
+#### Bagan Konsep Holistik Pertanian Berkelanjutan:
+Keterkaitan dalam konsep pertanian berkelanjutan menghubungkan:
+- **Faktor Produksi / Saprodi Pertanian** ➔ **Pengetahuan dan Keyakinan Petani** (Sistem Sosial)
+- **Hama dan Penyakit** ➔ **Tanaman / Ternak / Ikan** ➔ **Keberlanjutan Produksi** ➔ **Keanekaragaman Hayati**
+- **Tanah** ➔ **Biota Tanah** ➔ **Sistem Ekonomi**
+- **Degradasi** ➔ **Kuantitas dan Kualitas Air** ➔ **Sistem Politik**
+
+Setelah kalian menyimak tayangan audio visual dan mencermati bagan yang disajikan, mari kita diskusikan tentang pengelolaan sumber daya alam. Terlebih dahulu kita identifikasi sumber daya alam apa saja yang tercakup di dalamnya. Selanjutnya kalian coba eksplorasi bagaimana pengelolaan sumber daya alam tersebut yang sesuai dengan konsep pertanian berkelanjutan.
+
+Sebelumnya, silahkan kalian membentuk kelompok dengan anggota 4-5 siswa. Pilih salah satu teman kalian sebagai ketua kelompok dan satu lagi sebagai notulis. Ketua kelompok bertugas mengatur jalannya diskusi dan membagi tugas atau peran anggota kelompok. Sedangkan notulis bertugas mencatat hasil diskusi dan eksplorasi kalian bisa menggali informasi lebih mendalam melalui internet, buku penunjang maupun sumber lainnya. Hasil eksplorasi dan diskusi dicatat, dianalisis dan selanjutnya disimpulkan. Presentasikan hasil diskusi kalian di depan teman kelas dan konfirmasikan dengan guru atau pembimbing. Berikut contoh blangko diskusi. Blangko diskusi ini dapat dikembangkan sesuai kebutuhan.
+
+#### Tabel 4.1 Blangko Aktivitas Diskusi
+| Aktivitas Belajar | : ......................................................................... |
+|---|---|
+| **Hari / Tanggal Aktivitas** | : ......................................................................... |
+| **Kelompok** | : ......................................................................... |
+| **Nama Anggota Kelompok** | : ......................................................................... |
+
+| Identifikasi Sumber Daya Alam | Cara Pengelolaannya |
+|---|---|
+| 1. .................................................... | .................................................... |
+| 2. .................................................... | .................................................... |
+| 3. .................................................... | .................................................... |
+
+**Diskusi:**  
+..................................................................................................................................  
+..................................................................................................................................  
+..................................................................................................................................  
+
+**Kesimpulan:**  
+..................................................................................................................................  
+..................................................................................................................................  
+
+---
+
+### Pendalaman Pengelolaan Sumber Daya Alam
+
+Bagaimana hasil diskusinya? Apakah kalian telah mengetahui cara pengelolaan sumber daya alam? Mari kita pelajari lebih dalam tentang pengelolaan sumber daya alam yang sudah kalian diskusikan. Sumber daya alam pertanian meliputi tanah, air, makhluk hidup (tumbuhan, hewan, manusia, dan mikrob), iklim, cuaca, curah hujan, batuan mineral, dan sebagainya.
+
+Dalam memanfaatkan sumber daya alam untuk pertanian perlu memperhatikan pelestarian lingkungan, dengan prinsip tidak merusak ekosistem. *System of Rice Intensification* (SRI) merupakan salah satu metode pertanian yang menggunakan konsep kearifan lokal yang dapat menghemat penggunaan air, memperbaiki sifat fisik dan kimia tanah, mengembalikan kesuburan dan daya dukung tanah, dapat memulihkan ekosistem, dan menawarkan solusi substitusi pupuk anorganik dengan pupuk organik berbahan dasar kotoran hewan dan lain sebagainya.
+
+#### 1. Pengendalian Hama Terpadu (PHT)
+Pengelolaan sumber daya alam pertama adalah **Pengendalian Hama Terpadu (PHT)**. Metode ini menggunakan pendekatan untuk mengendalikan hama dengan cara mengkombinasikan metode biologi, fisik, kimia, dan budaya dalam upaya untuk meminimalkan biaya, gangguan kesehatan dan risiko-risiko lingkungan.
+
+Beberapa cara yang dapat dilakukan di antaranya:
+- **Penggunaan musuh alami hama** berupa serangga (*insect*), reptil atau binatang-binatang yang diseleksi untuk mengendalikan hama, yang dikenal dengan istilah **agen pengendalian hayati**. Sebagai contoh *Trichogramma sp.* sebagai musuh alami dari parasit telur dan parasit larva hama penggerek batang tanaman.
+- Metode ini memperhatikan **Ambang Ekonomi (AE)**. Ambang Ekonomi adalah kepadatan populasi hama yang memerlukan tindakan pengendalian untuk mencegah terjadinya peningkatan populasi hama. Istilah ini digunakan untuk pengambilan keputusan pengendalian hama sesuai dengan konsep pengendalian hama terpadu (PHT) supaya tidak menimbulkan kerugian ekonomi akibat serangan hama.
+- **Penggunaan tanaman perangkap hama**, berfungsi sebagai pemikat (*atraktan*) yang menjauhkan hama dari tanaman utama.
+- **Penggunaan drainase dan mulsa** sebagai metode alami untuk menurunkan infeksi jamur sebagai upaya menurunkan kebutuhan terhadap fungisida sintetis.
+- Melakukan **rotasi tanaman** untuk memutus siklus populasi pertumbuhan hama.
+
+#### 2. Konservasi Lahan dan Air
+Upaya pengelolaan sumber daya alam yang ketiga adalah **konservasi lahan dan air**. Konservasi lahan dan air dapat dilakukan dengan beberapa metode:
+
+**a. Cara Teknis Mekanis:**
+- **Terasering / Teras:** Pembuatan teras bertujuan untuk mengurangi panjang lereng, mengurangi kecepatan aliran permukaan (*run off*) dan memperbesar peresapan air oleh tanah. Macam-macam teras diantaranya: teras bangku, teras individu, teras kebun, teras batu, teras kredit, teras datar, teras guludan, dan teras saluran.
+- **Guludan**
+- **Rorak / Parit Buntu:** Rorak adalah teknik konservasi tanah dan air berupa pembuatan lubang-lubang buntu yang umumnya berukuran 100 cm x 40 cm x 40 cm yang berfungsi untuk meresapkan air ke tanah dan menampung sedimen tanah dari bidang olah (disebut juga teras saluran). Hasil penelitian Monde (2010) dalam Sallata (2017) menunjukkan, rorak yang diberi mulsa secara vertikal efektif menekan aliran permukaan hingga 73% dan menekan erosi tanah 76%. Pemberian mulsa 6 ton/ha pada lahan kakao umur ≤ 3 tahun dapat menurunkan jumlah aliran permukaan hingga 71% dan erosi 87%.
+- **Biopori:** Lubang resapan biopori dibuat sedalam 80-100 cm dengan diameter 10-30 cm yang berfungsi untuk menampung air hujan dan meresapkannya kembali ke dalam tanah. Prinsip kerja lubang resapan biopori ini sederhana. Lubang yang telah dibuat kemudian diberi sampah organik seperti sampah dedaunan, yang akan memicu biota tanah seperti cacing, serangga dan akar tanaman untuk membuat rongga-rongga (lubang) di dalam tanah.
+- **Waduk kecil, embung, sumur resapan, bendungan, dan pengolahan tanah menurut kontur:** Dimaksudkan untuk mengurangi erosi, memperlambat aliran air permukaan dan menampung serta menyalurkan aliran air permukaan.
+
+**b. Metode Vegetatif:**
+Memanfaatkan tanaman atau vegetasi maupun sisa-sisa tanaman sebagai media pelindung tanah dari erosi. Metode ini bertujuan memperbaiki sifat-sifat tanah baik fisik, kimia maupun biologi, menghambat laju aliran permukaan, dan meningkatkan kandungan lengas tanah.
+
+**c. Metode Kimiawi:**
+Penggunaan bahan-bahan kimia organik maupun anorganik yang bertujuan untuk memperbaiki sifat tanah dan menekan erosi. Namun teknik ini jarang digunakan petani karena membutuhkan dana cukup besar, kesulitan dalam pengadaan, dan hasilnya tidak jauh berbeda dengan pemanfaatan bahan-bahan alami.
+
+#### 3. Konservasi dan Perlindungan Sumber Daya Air
+Dalam pertanian, menjaga kualitas air/lahan basah dengan konservasi dan perlindungan sumber daya air sangat penting. Biasanya lahan basah berperan dalam melakukan penyaringan nutrisi (pupuk anorganik) dan pestisida. Berikut langkah-langkah yang ditujukan untuk menjaga kualitas air, antara lain:
+1. Mengurangi tambahan senyawa kimia sintetis ke dalam lapisan tanah bagian atas (*top soil*) yang dapat mencuci hingga muka air tanah (*water table*).
+2. Menggunakan irigasi tetes (*drip irrigation*).
+3. Menggunakan jalur-jalur konservasi sepanjang tepi saluran air.
+
+#### 4. Diversifikasi Tanaman
+Upaya konservasi berikutnya adalah dengan diversifikasi tanaman. Bertanam dengan jenis tanaman yang bervariasi di lahan pertanian dapat mengurangi kondisi ekstrem dari cuaca, hama pengganggu tanaman, dan harga pasar. Peningkatan diversifikasi tanaman dan jenis tanaman lain seperti pohon-pohon dan rumput-rumputan, juga dapat memberikan kontribusi terhadap konservasi lahan, habitat binatang, dan meningkatkan populasi serangga yang bermanfaat.
+
+Beberapa langkah konkret yang dapat dilakukan di antaranya:
+1. Menciptakan sarana penyediaan air, yang menciptakan lingkungan bagi katak, burung, dan binatang-binatang lainnya yang memakan serangga dan *insect* lainnya.
+2. Menanam tanaman-tanaman yang berbeda untuk meningkatkan pendapatan sepanjang tahun dan meminimalkan pengaruh dari kegagalan menanam sejenis tanaman saja.
+3. Penanaman tanaman-tanaman seperti gandum dan semanggi pada akhir musim panen tanaman sayuran dan sereal, dapat menyediakan beberapa manfaat termasuk menekan pertumbuhan gulma.
+
+#### 5. Pengelolaan Nutrisi Tanaman
+Pengelolaan nutrisi tanaman dengan baik dapat meningkatkan kondisi tanah dan melindungi lingkungan tanah. Penggunaan sumber daya nutrisi alami di lahan pertanian perlu ditingkatkan, seperti pupuk kandang, dan tanaman kacang-kacangan (*leguminosae*) sebagai penutup tanah dapat mengurangi biaya penggunaan pupuk anorganik yang harus dikeluarkan. Tanaman leguminosae dapat bersimbiosis dengan bakteri penambat nitrogen, untuk menyuplai ketersediaan unsur N di dalam tanah. Beberapa jenis pupuk organik yang dapat digunakan antara lain: kompos, kascing (kompos cacing), pupuk hijau (dedaunan).
+
+Ilustrasi simbiosis mutualisme antara tanaman dengan Rhizobacteria dan mikoriza dapat disimak pada tautan:  
+📺 **Tayangan Audio Visual Simbiosis Tanaman dengan Rhizobakteri dan Mikoriza** (Sumber: Deki Kun Farm, 2022):  
+Tautan: https://www.youtube.com/watch?v=enLlU-7MFxs
+
+#### 6. Agroforestri (Wanatani)
+Konservasi lahan lainnya adalah agroforestri (wanatani). Agroforestri merupakan suatu sistem tata guna lahan yang permanen, yaitu tanaman semusim dan tanaman tahunan ditanam bersamaan atau dalam rotasi membentuk suatu tajuk berlapis sehingga sangat efektif untuk melindungi tanah dari hempasan air hujan. Contohnya, budi daya pertanaman jagung di sela-sela tanaman jati.
+
+Secara ekologi dan ekonomi, sistem agroforestri ini memberikan manfaat sebagai berikut:
+1. Hasil tanaman musiman dan tanaman tahunan dapat diperoleh secara berkesinambungan sehingga akan menambah pendapatan petani.
+2. Sistem ini dapat mencegah terjadinya serangan hama secara total, seperti yang sering terjadi pada tanaman satu jenis (monokultur). Keanekaragaman jenis tanaman dalam sistem agroforestri memungkinkan terbentuknya stratifikasi (tingkatan) tajuk yang mengisi ruang secara berlapis ke arah vertikal:
+   - **Stratum A:** Tanaman tertinggi (>38 m)
+   - **Stratum B:** Tanaman bertajuk (28 m)
+   - **Stratum C:** Perdu (17 m)
+   - **Stratum D:** Semak-semak / belukar (5 m)
+   - **Stratum E:** Tanaman penutup tanah
+
+Hal ini bermanfaat melindungi tanah dari hempasan air hujan.
+
+#### 7. Pertanian Organik
+Pertanian berkelanjutan tidak terlepas dari konsep pertanian organik. Apakah yang dimaksud dengan pertanian organik? Pertanian organik merupakan sistem produksi pertanian terpadu yang menghindari penggunaan pestisida kimia, zat pengatur tumbuh dan pupuk buatan atau sintetis, hasil rekayasa genetik, serta menekan pencemaran tanah, air, dan udara.
+
+Prinsip-prinsip pertanian organik menurut Sulaiman (2007) antara lain sebagai berikut:
+1. **Prinsip ekologi:** artinya pertanian organik harus dibangun berdasarkan siklus dan sistem ekologi kehidupan.
+2. **Prinsip kesehatan:** artinya pertanian organik harus mempertahankan dan meningkatkan kesuburan tanah, kesehatan tanaman, hewan, dan manusia sebagai sesuatu yang utuh dan tidak terpisahkan.
+3. **Prinsip keadilan:** artinya pertanian organik harus membangun hubungan yang mampu menjamin keadilan terkait dengan lingkungan dan kesempatan hidup bersama.
+4. **Prinsip perlindungan:** artinya pertanian organik harus dikelola secara hati-hati dan bertanggung jawab untuk melindungi kesehatan dan kesejahteraan generasi sekarang dan mendatang serta lingkungan hidup.
+
+#### 8. Pertanian Regeneratif
+Sejalan dengan konsep pertanian organik, saat ini dikenal istilah pertanian regeneratif. Apakah itu? Pertanian regeneratif adalah suatu konsep pertanian yang mengembalikan kesuburan tanah dengan cara mengikat kembali karbon yang ada di atmosfer ke dalam tanah. 
+
+Bagaimana caranya? Tanaman mengambil karbon dari atmosfer untuk fotosintesis, hasil fotosintesis berupa gula sebagian diedarkan ke akar untuk memberi makan mikroorganisme tanah yang menggunakan karbon untuk membangun tanah. Dengan kata lain, pertanian regeneratif merupakan sistem prinsip dan praktik pertanian yang berupaya merehabilitasi dan meningkatkan seluruh ekosistem tanah dengan memprioritaskan pada kesehatan tanah.
+
+Terdapat empat teknik kunci pertanian regeneratif, yaitu sebagai berikut:
+1. **Pengolahan tanah konservasi:** yaitu menerapkan praktik pengolahan tanah seminimal mungkin. Pengolahan ini bertujuan untuk meminimalkan gangguan fisik tanah dan menjaga karbon tidak lepas ke atmosfer.
+2. **Keanekaragaman tanaman di lahan:** akan menciptakan tanah yang kaya nutrisi, bervariasi, dan produktivitas tinggi. Penanaman tanaman yang berbeda akan melepaskan karbohidrat (gula) yang berbeda pula melalui akarnya sehingga dapat memperkaya nutrisi tanah.
+3. **Rotasi dan tanaman penutup:** Rotasi tanaman dan penyebaran tanaman penutup dapat membantu memasukkan lebih banyak bahan organik ke tanah serta menghindari masalah penyakit dan hama secara alami.
+4. **Menghindari kekacauan:** yaitu meminimalkan gangguan fisik seperti pengolahan lahan, juga berupaya berhati-hati terhadap aktivitas kimiawi maupun biologis yang dapat merusak kesehatan tanah dalam jangka waktu panjang karena hal ini akan mengganggu hubungan alami antara mikroorganisme tanah dengan akar tanaman.
+
+---
+
+## B. PENGELOLAAN SUMBER DAYA MANUSIA
+
+### Apersepsi Awal
+Apakah pernah terbayang dalam benak kalian, suatu saat sumber daya manusia di bidang pertanian berkurang bahkan tidak ada sebab hilangnya minat generasi muda sebagai penerus dalam bidang pertanian? Siapa lagi yang akan memproduksi bahan pangan untuk kita?
+
+Kalian setelah lulus dari SMK Pertanian tentunya ingin bekerja bahkan ada yang tertarik sebagai pengusaha di bidang pertanian. Seandainya kalian sebagai pengusaha yang memiliki karyawan/pekerja atau seandainya kalian diterima di sebuah perusahaan sebagai mandor atau supervisor, bagaimana kalian mengatur karyawan/pekerja? Hal-hal apa saja yang perlu kalian siapkan?
+
+**Kata Kunci:** sumber daya manusia, petani, pelaku usaha pertanian, mandor, supervisor, manajer, manajerial
+
+### Materi
+Dalam menjalankan proses bisnis pada agribisnis tanaman tidak terlepas dari peran sumber daya manusia. Dalam setiap subsistem agribisnis selalu melibatkan sumber daya manusia. Sumber daya manusia ini harus dikelola dengan baik supaya kegiatan agribisnis berjalan efektif dan efisien.
+
+Di semester ganjil kalian sudah mempelajari tentang sistem agribisnis, masih ingat dengan subsistem apa saja yang terkait? Iya benar, ada empat subsistem dan satu penunjang. Nah, pada subbab kali ini kalian akan mempelajari bagaimana sumber daya manusia itu berperan dalam setiap subsistem agribisnis tersebut dan penunjangnya.
+
+Saragih (2004) menerangkan pengembangan sumber daya manusia (SDM) merupakan hal pokok yang strategis dan prioritas yang perlu diperhatikan dalam pembangunan sistem dan usaha agribisnis. Siapakah yang dimaksud SDM pertanian? Ya, berikut ini yang dimaksud SDM pertanian:
+1. **Para petani dan pengusaha tani** yang jumlahnya puluhan juta, yang tiap hari berkutat dan menjalankan proses produksi.
+2. **Para pelaku usaha di bidang pertanian dan agribisnis** yang mengusahakan dan menjalankan bisnis pengadaan dan pemasaran, baik sarana produksi yang diperlukan maupun produk yang dihasilkan petani.
+3. **Aparat pemerintah** yang membuat dan mengembangkan kebijakan, seperti membuat Undang-Undang dan peraturan, mengawasi pelaksanaan peraturan tersebut, serta memfasilitasi proses produksi petani.
+
+### 🎭 Bermain Peran
+Nah, untuk kegiatan kali ini bagaimana kalau kalian bermain peran? Kalian bisa mengangkat kasus keseharian yang ada di masyarakat petani. Sebagai contoh bermain peran tentang “Peran Penyuluh Pertanian dalam Mendampingi Penyusunan Rencana Definitif Kelompok Tani (RDK) dan Rencana Definitif Kebutuhan Kelompok Tani (RDKK)” atau tema lainnya yang melibatkan seluruh sumber daya manusia (SDM) dalam pertanian, seperti tema kelangkaan pupuk, serangan hama, atau pengelolaan irigasi dan lain sebagainya.
+
+Dalam bermain peran ini, semua siswa terlibat. Ketua kelas bertugas memimpin dalam pembagian peran, di antaranya: sebagai kelompok tani, Gapoktan, penyuluh, pihak aparat, dan lain-lain. Jumlah anggota kelompok disesuaikan dengan jumlah siswa dalam kelas. Semua siswa diharapkan terlibat dalam bermain peran ini. Berikut contoh blangko pembagian peran. Kalian dapat mengembangkan pembagian peran sesuai dengan kebutuhan skenario.
+
+#### Tabel 4.2 Contoh Pembagian Peran
+| Peran | Nama Peserta Didik | Keterangan |
+|---|---|---|
+| **Kelompok Tani A** | 1. ...<br>2. ...<br>3. ...<br>dst. | Dipilih salah satu peserta didik sebagai ketua kelompok tani |
+| **Kelompok Tani B** | 1. ...<br>2. ...<br>3. ...<br>dst. | Dipilih salah satu peserta didik sebagai ketua kelompok tani |
+| **Penyuluh** | .................................................... | Pendamping teknis lapangan |
+| **Aparat Pemerintah (RT, Kadus, dsb)** | .................................................... | Pembuat kebijakan dan fasilitator |
+| **dst.** | .................................................... | .................................................... |
+
+---
+
+## C. PENGELOLAAN FAKTOR PRODUKSI LAINNYA
+
+### Apersepsi Awal
+Selain sumber daya alam dan sumber daya manusia sebagai faktor produksi, terdapat faktor produksi lain yang juga mendukung produksi tanaman, yaitu modal dan keahlian. Nah, bagaimana pengelolaan faktor produksi lain ini untuk mendukung produksi tanaman supaya optimal? Mari kita pelajari bersama.
+
+**Kata Kunci:** modal tetap, modal bergerak, keahlian
+
+### Materi
+Menurut Hanafie (2010) modal adalah keseluruhan nilai dari sumber-sumber ekonomi non-manusia. Modal dapat diartikan sebagai harta benda yang dapat dipergunakan untuk menghasilkan sesuatu yang menambah produksi atau menambah kekayaan.
+
+Dalam usaha tani modal dapat dibedakan menjadi dua, yaitu modal tetap dan modal bergerak:
+1. **Modal tetap:** adalah barang-barang modal yang digunakan dalam proses produksi yang dapat digunakan beberapa kali. Meskipun pada akhirnya barang tersebut habis, tetapi modal tetap tidak akan habis hanya dalam satu kali produksi. Biasanya untuk ketepatan perhitungan modal tetap dihitung untuk penyusutan nilainya setiap satu kali masa produksi. Contoh modal tetap adalah bangunan, kendaraan *farm*, alat dan mesin pertanian.
+2. **Modal bergerak:** adalah modal yang habis dalam satu kali produksi. Contoh modal bergerak adalah pupuk, bibit, pestisida, bahan bakar untuk mesin pertanian.
+
+Agar lebih jelas kalian bisa menyimak contoh perhitungan sederhana modal awal untuk bertanam cabai, pada tautan berikut:  
+📺 **Tayangan Audio Visual Modal Awal Tanam Cabai** (Sumber: Petani Polycultur, 2022):  
+Tautan: https://www.youtube.com/watch?v=w3TTftfyvkI
+
+### Keahlian dan Manajemen dalam Proses Produksi Tanaman
+Selain modal, faktor produksi lain yang berpengaruh adalah keahlian. Keahlian yang dimaksud adalah manajemen atau aspek pengelolaan, yang artinya kemampuan manusia mengelola atau mengkombinasikan seluruh faktor-faktor produksi dalam waktu tertentu untuk memperoleh hasil dalam proses produksi tanaman.
+
+Secara sederhana, fungsi manajemen meliputi fungsi perencanaan, pengorganisasian, pelaksanaan, dan evaluasi seluruh kegiatan usaha tani. 
+
+#### Tugas dalam Manajemen Produksi Tanaman:
+1. **Memeriksa kebun atau ladang** untuk menentukan jatuh tempo atau kondisi tanaman atau untuk mendeteksi penyakit atau serangan serangga.
+2. **Mengarahkan operasi produksi tumbuhan**, seperti perencanaan, pengolahan, penanaman, fertilisasi, pembudidayaan, penyemprotan, atau pemanenan.
+3. **Mengawasi aktivitas** seperti irigasi, pemakaian zat kimia, panen, pemerahan, pengembangbiakan, atau penilaian untuk meyakinkan ketetapan regulasi keamanan atau standar yang sudah ada.
+4. **Merencanakan kegiatan panen** berdasarkan faktor, seperti kematangan panen atau kondisi cuaca.
+5. **Mencatat arsip keuangan**, operasional, produksi, atau pekerjaan pertanian atau peternakan.
+
+#### Keahlian dalam Manajemen Produksi Tanaman:
+1. **Keterampilan Teknis:** Keahlian untuk melakukan pekerjaan dalam proses produksi tanaman seperti mengoperasikan traktor, memupuk, mengendalikan OPT.
+2. **Manajemen Waktu:** Keahlian untuk mengelola waktu untuk mengerjakan pekerjaan secara efektif dan efisien.
+3. **Pengambilan Keputusan:** Mempertimbangkan kekurangan dan kelebihan dari pilihan tindakan yang potensial untuk memilih tindakan yang paling tepat.
+4. **Pemantauan / Pengawasan:** Memantau / menilai kinerja diri sendiri, individu lain, maupun organisasi untuk melakukan pengembangan atau mengambil tindakan korektif.
+5. **Komunikasi:** Kemampuan untuk berkomunikasi secara efektif dan efisien baik kepada perorangan maupun di depan publik.
+
+#### Aktivitas Diskusi Kelompok:
+1. Bentuklah kelompok diskusi yang terdiri atas 4-5 orang.
+2. Kemudian bermainlah peran seolah-olah Kalian adalah seorang manajer dalam sebuah produksi tanaman. Kalian dibebaskan untuk memilih komoditas yang akan diproduksi. Identifikasilah kebutuhan tenaga kerja dan keterampilan yang dibutuhkan dari tenaga kerja tersebut, modal tetap, dan modal tidak tetap yang digunakan dalam proses produksi komoditas tersebut!
+3. Lalu lakukan penilaian antar-teman dalam satu kelompok, jika menjadi seorang manager kira-kira keterampilan atau keahlian apa saja yang perlu Kalian tingkatkan.
+
+#### Tabel 4.3 Blangko Aktivitas Diskusi
+| Aktivitas Belajar | : ......................................................................... |
+|---|---|
+| **Hari / Tanggal Aktivitas** | : ......................................................................... |
+| **Kelompok** | : ......................................................................... |
+| **Nama Anggota Kelompok** | : ......................................................................... |
+
+| Kegiatan Produksi | Tenaga Kerja | Keterampilan Tenaga Kerja | Modal Tetap | Modal Tidak Tetap |
+|---|---|---|---|---|
+| ... | ... | ... | ... | ... |
+| ... | ... | ... | ... | ... |
+
+| Nama Anggota Kelompok | Keterampilan Manajemen yang Perlu Ditingkatkan | Penjelasan |
+|---|---|---|
+| ... | ... | ... |
+| ... | ... | ... |
+
+**Diskusi:**  
+..................................................................................................................................  
+..................................................................................................................................  
+..................................................................................................................................  
+
+**Kesimpulan:**  
+..................................................................................................................................  
+..................................................................................................................................  
+
+Setelah melakukan berbagai aktivitas belajar dan diskusi, apakah Kalian semakin tertarik untuk menjadi seorang agripreneur atau manajer agribisnis tanaman? Proses pembelajaran ini diharapkan menjadi refleksi dan motivasi kalian dalam mempersiapkan diri menjadi agripreneur, manajer, atau tenaga terampil di bidang agribisnis tanaman.
+
+---
+
+## 📋 RANGKUMAN
+
+1. **Faktor produksi** merupakan benda-benda yang diciptakan oleh alam atau diciptakan oleh manusia yang dapat digunakan untuk memproduksi barang dan jasa. Kegiatan produksi pertanian yang juga membutuhkan ketersediaan faktor produksi.
+2. **Pengelolaan sumber daya alam** tidak lepas dari upaya mewujudkan pertanian yang berkelanjutan. Dalam memanfaatkan sumber daya alam untuk pertanian perlu memperhatikan pelestarian lingkungan, dengan prinsip tidak merusak ekosistem. Pengelolaan sumber daya alam meliputi Konsep Pengendalian Hama Terpadu (PHT) dan konservasi lahan dan air.
+3. **Sumber daya manusia** dalam proses produksi pertanian meliputi petani dan pengusaha tani, pelaku usaha, dan aparat pemerintah:
+   - a. Para petani dan pengusaha tani yang jumlahnya puluhan juta, yang tiap hari berkutat dan menjalankan proses produksi.
+   - b. Para pelaku usaha di bidang pertanian dan agribisnis yang mengusahakan dan menjalankan bisnis pengadaan dan pemasaran, baik sarana produksi yang diperlukan maupun produk yang dihasilkan petani.
+   - c. Aparat pemerintah yang membuat dan mengembangkan kebijakan, seperti membuat undang-undang dan peraturan, mengawasi pelaksanaan peraturan tersebut, serta memfasilitasi proses produksi petani.
+4. Selain sumber daya alam dan sumber daya manusia sebagai faktor produksi, ada faktor produksi lain yang juga mendukung produksi tanaman yaitu **modal dan keahlian**:
+   - a. Modal adalah keseluruhan nilai dari sumber-sumber ekonomi non-manusia. Modal dapat diartikan sebagai harta benda yang dapat dipergunakan untuk menghasilkan sesuatu yang menambah produksi atau menambah kekayaan. Dalam usaha tani modal dibedakan menjadi dua, yaitu modal tetap dan modal bergerak.
+   - b. Keahlian yang dimaksud adalah manajemen atau aspek pengelolaan, yang artinya kemampuan manusia mengelola atau mengkombinasikan seluruh faktor-faktor produksi dalam waktu tertentu untuk memperoleh hasil dalam proses produksi tanaman.
+
+---
+
+## 📝 ASESMEN
+
+### Asesmen Nontes
+**a. Portofolio:**  
+Portofolio kalian berupa laporan hasil diskusi kelompok, laporan hasil observasi kelompok yang telah kalian lakukan.
+
+### Asesmen Tes
+Jawablah pertanyaan-pertanyaan berikut secara jelas:
+1. Menurutmu bagaimana pengelolaan sumber daya alam yang baik?
+2. Jelaskan yang dimaksud sumber daya manusia pada proses produksi tanaman.
+3. Sebutkan dua jenis modal dalam proses produksi tanaman dan berikan contoh masing-masing.
+4. Sebutkan keterampilan manajerial yang paling diperlukan dalam mengatasi konflik di tempat kerja. Jelaskan alasannya.
+
+---
+
+## 🚀 PENGAYAAN
+
+Selamat, kalian telah melewati tahapan belajar di bab ini. Untuk lebih membuka wawasan Kalian silakan simak tayangan audiovisual berikut:  
+📺 **Tayangan Audio Visual Konsep Pertanian Zero Waste** (Sumber: AFH Channel, 2020):  
+Tautan: https://www.youtube.com/watch?v=HnC4C_zSVnI
+
+---
+
+## 🪞 REFLEKSI
+
+Setelah Kalian mempelajari semua materi pada bab ini, saatnya Kalian merefleksikan hasil belajar dengan mencentang pada kolom pemahaman dan kompeten. Centang kolom “Ya” apabila Kalian telah memahami materi yang telah dipelajari. Sebaliknya, centang kolom “Belum”, apabila Kalian belum memahami materi dan perlu mengulanginya lagi.
+
+#### Tabel 4.4 Refleksi Pembelajaran pada Bab IV
+| Materi yang telah saya pelajari | Pemahaman Saya: Ya | Pemahaman Saya: Belum |
+|---|:---:|:---:|
+| Pengelolaan sumber daya alam | [ ] | [ ] |
+| Pengelolaan sumber daya manusia | [ ] | [ ] |
+| Pengelolaan faktor produksi lainnya | [ ] | [ ] |
+`,
+    imageUrl: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80',
+    videoUrl: 'https://www.youtube.com/embed/rSQ5PQGDzU0',
+    pdfUrl: '',
+    attachments: [
+      {
+        id: 'att-bab-iv-pengelolaan-faktor-produksi',
+        name: 'Modul Bab IV - Pengelolaan Faktor Produksi Kelas X.pdf',
+        fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        fileSize: '4.2 MB',
+        fileType: 'pdf',
+      },
+    ],
+    status: 'published',
+    orderIndex: 2,
+    createdAt: '2026-08-05T07:00:00Z',
+    updatedAt: '2026-10-29T08:00:00Z',
+  },
+  {
     id: 'mat-hidroponik-nft',
     title: 'Teknologi Budidaya Hidroponik Sistem NFT pada Tanaman Selada',
     slug: 'teknologi-budidaya-hidroponik-nft-selada',
