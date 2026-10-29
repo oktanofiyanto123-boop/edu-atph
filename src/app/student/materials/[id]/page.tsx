@@ -77,8 +77,12 @@ export default function StudentMaterialDetailPage() {
   const prevMaterial = currentIndex > 0 ? allMaterials[currentIndex - 1] : null;
   const nextMaterial = currentIndex < allMaterials.length - 1 ? allMaterials[currentIndex + 1] : null;
   // Only show PDF viewer mode when the material is genuinely PDF-only
-  // (has a pdfUrl but no rich text content, no video, and no learning objectives)
-  const isPdfOnly = !!material.pdfUrl && !material.content && !material.videoUrl && (!material.learningObjectives || material.learningObjectives.length === 0);
+  // or explicitly configured for PDF display mode
+  const isPdfOnly =
+    !!material.pdfUrl &&
+    (!material.content ||
+      material.id === 'mat-bab-iv-pengelolaan-faktor-produksi-x' ||
+      (!material.videoUrl && (!material.learningObjectives || material.learningObjectives.length === 0)));
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-950 min-h-screen">

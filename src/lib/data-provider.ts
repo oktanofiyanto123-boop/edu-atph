@@ -441,6 +441,22 @@ export const DataProvider = {
       .map((sm) => {
         const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
         if (initMatch) {
+          // If this is Bab IV Pengelolaan Faktor Produksi, ensure it reflects PDF-only mode
+          if (initMatch.id === 'mat-bab-iv-pengelolaan-faktor-produksi-x') {
+            if (sm.content !== '' || sm.videoUrl !== '' || sm.pdfUrl !== initMatch.pdfUrl) {
+              hasChanges = true;
+              return {
+                ...sm,
+                content: '',
+                videoUrl: '',
+                imageUrl: '',
+                learningObjectives: [],
+                pdfUrl: initMatch.pdfUrl,
+                attachments: initMatch.attachments,
+              };
+            }
+          }
+
           // Sync pdfUrl from initial data when stored pdfUrl is empty or placeholder dummy
           const hasDummyPdf = sm.pdfUrl && sm.pdfUrl.includes('dummy.pdf');
           const isMissingPdf = !sm.pdfUrl && !!initMatch.pdfUrl;
