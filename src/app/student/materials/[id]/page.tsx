@@ -31,6 +31,7 @@ function FormattedContent({ content }: { content: string }) {
       | { type: 'h3'; text: string }
       | { type: 'h4'; text: string }
       | { type: 'hr' }
+      | { type: 'page_banner'; pageNum: string; text: string }
       | { type: 'image_callout'; text: string }
       | { type: 'table'; headers: string[]; rows: string[][] }
       | { type: 'list'; items: string[]; ordered: boolean }
@@ -48,6 +49,17 @@ function FormattedContent({ content }: { content: string }) {
 
       if (line === '---') {
         result.push({ type: 'hr' });
+        i++;
+        continue;
+      }
+
+      // Page banner detection: e.g. "112 Dasar-Dasar Agribisnis..." or "Bab IV  Pengelolaan Faktor Produksi 113" or with ###
+      const cleanLine = line.replace(/^###\s+/, '').trim();
+      const pageMatch1 = cleanLine.match(/^(\d{3})\s+Dasar-Dasar Agribisnis Tanaman/i);
+      const pageMatch2 = cleanLine.match(/^Bab IV\s+Pengelolaan Faktor Produksi\s+(\d{3})$/i);
+      if (pageMatch1 || pageMatch2) {
+        const pageNum = pageMatch1 ? pageMatch1[1] : pageMatch2![1];
+        result.push({ type: 'page_banner', pageNum, text: cleanLine });
         i++;
         continue;
       }
@@ -147,11 +159,10 @@ function FormattedContent({ content }: { content: string }) {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1 font-semibold underline underline-offset-2 break-all ${
-              isYoutube
+            className={`inline-flex items-center gap-1 font-semibold underline underline-offset-2 break-all ${isYoutube
                 ? 'text-red-600 hover:text-red-700 dark:text-red-400 font-bold'
                 : 'text-emerald-600 hover:text-emerald-700 dark:text-emerald-400'
-            }`}
+              }`}
           >
             {isYoutube ? '▶ Buka Video di YouTube' : part}
           </a>
@@ -199,6 +210,26 @@ function FormattedContent({ content }: { content: string }) {
             <h4 key={idx} className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 pt-2.5">
               {renderInline(b.text)}
             </h4>
+          );
+        }
+        if (b.type === 'page_banner') {
+          return (
+            <div
+              key={idx}
+              className="my-8 py-3 px-4 sm:px-5 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-slate-100 dark:from-emerald-950/40 dark:via-teal-950/40 dark:to-slate-900 border border-emerald-500/30 dark:border-emerald-700/40 flex items-center justify-between text-xs font-bold text-emerald-900 dark:text-emerald-200 shadow-xs"
+            >
+              <div className="flex items-center gap-2.5">
+                <span className="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-black shadow-xs">
+                  {b.pageNum}
+                </span>
+                <span className="font-extrabold uppercase tracking-wider text-xs text-emerald-950 dark:text-emerald-100">
+                  Halaman {b.pageNum}
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium hidden sm:inline">
+                {b.text}
+              </span>
+            </div>
           );
         }
         if (b.type === 'image_callout') {
@@ -431,11 +462,10 @@ export default function StudentMaterialDetailPage() {
 
             <button
               onClick={handleMarkCompleted}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all ${
-                isCompleted
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all ${isCompleted
                   ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
                   : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20'
-              }`}
+                }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               <span>{isCompleted ? 'Selesai' : 'Tandai Selesai'}</span>
@@ -455,22 +485,20 @@ export default function StudentMaterialDetailPage() {
           <div className="flex items-center gap-2 p-1.5 bg-slate-200/70 dark:bg-slate-800/70 rounded-2xl w-fit">
             <button
               onClick={() => setViewTab('reader')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
-                viewTab === 'reader'
+              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${viewTab === 'reader'
                   ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               <BookOpen className="w-4 h-4 text-emerald-600" />
               <span>Mode Baca Lengkap (24 Halaman)</span>
             </button>
             <button
               onClick={() => setViewTab('pdf')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
-                viewTab === 'pdf'
+              className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${viewTab === 'pdf'
                   ? 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 shadow-sm'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
+                }`}
             >
               <FileText className="w-4 h-4 text-emerald-600" />
               <span>Dokumen PDF Asli</span>

@@ -443,19 +443,10 @@ export const DataProvider = {
         if (initMatch) {
           // Sync Bab IV to full content & complete attachments from INITIAL_MATERIALS
           if (initMatch.id === 'mat-bab-iv-pengelolaan-faktor-produksi-x') {
-            if (sm.content !== initMatch.content || !sm.content || (sm.learningObjectives && sm.learningObjectives.length === 0)) {
+            if (sm.content !== initMatch.content || sm.updatedAt !== initMatch.updatedAt || !sm.content) {
               hasChanges = true;
               return {
-                ...sm,
-                title: initMatch.title,
-                description: initMatch.description,
-                topic: initMatch.topic,
-                content: initMatch.content,
-                videoUrl: initMatch.videoUrl,
-                imageUrl: initMatch.imageUrl,
-                learningObjectives: initMatch.learningObjectives,
-                pdfUrl: initMatch.pdfUrl,
-                attachments: initMatch.attachments,
+                ...initMatch,
               };
             }
           }
@@ -489,7 +480,18 @@ export const DataProvider = {
   },
 
   getMaterialById(id: string): TeachingMaterial | undefined {
-    return this.getMaterials().find((m) => m.id === id || m.slug === id);
+    const list = this.getMaterials();
+    const found = list.find((m) => m.id === id || m.slug === id);
+    if (found) {
+      const initMatch = INITIAL_MATERIALS.find((im) => im.id === found.id);
+      if (initMatch && initMatch.id === 'mat-bab-iv-pengelolaan-faktor-produksi-x') {
+        if (found.content !== initMatch.content || found.updatedAt !== initMatch.updatedAt) {
+          return initMatch;
+        }
+      }
+      return found;
+    }
+    return INITIAL_MATERIALS.find((m) => m.id === id || m.slug === id);
   },
 
   addMaterial(mat: Omit<TeachingMaterial, 'id' | 'createdAt' | 'updatedAt'>): TeachingMaterial {
