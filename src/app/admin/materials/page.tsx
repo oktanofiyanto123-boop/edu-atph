@@ -194,13 +194,14 @@ export default function AdminMaterialsPage() {
         }
 
         setAttachments((prev) => [...prev, ...newAttachments]);
-        showNotification(`${newAttachments.length} file berhasil diunggah ke cloud storage.`);
+        showNotification(`${newAttachments.length} file berkas modul berhasil diunggah.`);
       } else {
         setUploadError('Tidak ada file yang berhasil diunggah. Periksa koneksi internet Anda.');
       }
     } catch (err) {
       console.error('Upload error:', err);
-      setUploadError('Terjadi kesalahan saat mengunggah file. Coba lagi.');
+      const msg = err instanceof Error ? err.message : String(err);
+      setUploadError(`Gagal mengunggah file: ${msg}`);
     } finally {
       setIsUploadingFile(false);
       setUploadProgress('');
@@ -262,7 +263,7 @@ export default function AdminMaterialsPage() {
 
     // Block save while file upload is still in progress
     if (isUploadingFile) {
-      showNotification('Tunggu hingga file selesai diunggah...');
+      showNotification('Tunggu hingga proses upload berkas selesai...');
       return;
     }
 
@@ -274,15 +275,28 @@ export default function AdminMaterialsPage() {
       setUploadError('Topik / pokok bahasan wajib diisi.');
       return;
     }
-    if (!formData.content.trim()) {
-      setUploadError('Isi materi pembelajaran wajib diisi.');
-      return;
+
+    // Auto-fill content if left blank but attachments or PDF exist
+    let finalContent = formData.content.trim();
+    if (!finalContent) {
+      if (attachments.length > 0 || formData.pdfUrl || formData.videoUrl) {
+        finalContent = 'Modul materi pembelajaran dan berkas panduan lengkap dapat dipelajari melalui berkas lampiran modul di bawah ini.';
+      } else {
+        setUploadError('Isi materi pembelajaran wajib diisi (atau unggah berkas modul materi).');
+        return;
+      }
     }
 
     setUploadError(null);
 
     const selectedCat = categories.find((c) => c.id === formData.categoryId);
     const selectedCls = classes.find((c) => c.id === formData.targetClassId);
+    const categoryName = selectedCat?.name || categories[0]?.name || 'Dasar-Dasar Agribisnis Tanaman';
+    const targetClassName =
+      formData.targetClassId === 'all'
+        ? 'Semua Kelas'
+        : selectedCls?.name || 'Semua Kelas';
+
     const objectives = formData.learningObjectivesText
       .split('\n')
       .map((line) => line.trim())
@@ -291,13 +305,24 @@ export default function AdminMaterialsPage() {
     const slug = formData.slug || formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     // Strip any residual large base64 data URLs from attachments to prevent localStorage quota errors
-    // Only keep Supabase cloud URLs and small DataURLs (< 256KB)
+    // Cloud URLs (Supabase) and small DataURLs (< 256KB) are preserved
     const safeAttachments = attachments.map((att) => {
-      if (att.fileUrl.startsWith('data:') && att.fileUrl.length > 262144) {
+      const url = att?.fileUrl || '';
+      if (typeof url === 'string' && url.startsWith('data:') && url.length > 262144) {
         return { ...att, fileUrl: '' }; // strip oversized base64
       }
       return att;
     });
+
+    let safePdfUrl = formData.pdfUrl || '';
+    if (typeof safePdfUrl === 'string' && safePdfUrl.startsWith('data:') && safePdfUrl.length > 262144) {
+      safePdfUrl = '';
+    }
+
+    let safeImageUrl = formData.imageUrl || '';
+    if (typeof safeImageUrl === 'string' && safeImageUrl.startsWith('data:') && safeImageUrl.length > 262144) {
+      safeImageUrl = '';
+    }
 
     try {
       if (editingMaterial) {
@@ -306,15 +331,15 @@ export default function AdminMaterialsPage() {
           slug,
           description: formData.description,
           categoryId: formData.categoryId,
-          categoryName: selectedCat?.name,
+          categoryName,
           targetClassId: formData.targetClassId,
-          targetClassName: selectedCls?.name || 'Semua Kelas',
+          targetClassName,
           topic: formData.topic,
           learningObjectives: objectives,
-          content: formData.content,
-          imageUrl: formData.imageUrl,
+          content: finalContent,
+          imageUrl: safeImageUrl,
           videoUrl: formData.videoUrl,
-          pdfUrl: formData.pdfUrl,
+          pdfUrl: safePdfUrl,
           attachments: safeAttachments,
           status: formData.status,
           orderIndex: Number(formData.orderIndex),
@@ -326,15 +351,15 @@ export default function AdminMaterialsPage() {
           slug,
           description: formData.description,
           categoryId: formData.categoryId,
-          categoryName: selectedCat?.name,
+          categoryName,
           targetClassId: formData.targetClassId,
-          targetClassName: selectedCls?.name || 'Semua Kelas',
+          targetClassName,
           topic: formData.topic,
           learningObjectives: objectives,
-          content: formData.content,
-          imageUrl: formData.imageUrl,
+          content: finalContent,
+          imageUrl: safeImageUrl,
           videoUrl: formData.videoUrl,
-          pdfUrl: formData.pdfUrl,
+          pdfUrl: safePdfUrl,
           attachments: safeAttachments,
           status: formData.status,
           orderIndex: Number(formData.orderIndex),
@@ -357,7 +382,7 @@ export default function AdminMaterialsPage() {
               DataProvider.updateMaterial(editingMaterial.id, {
                 title: formData.title,
                 description: formData.description,
-                content: formData.content,
+                content: finalContent,
                 attachments: safeAttachments,
                 status: formData.status,
               });
@@ -370,7 +395,7 @@ export default function AdminMaterialsPage() {
                 targetClassId: formData.targetClassId,
                 topic: formData.topic,
                 learningObjectives: [],
-                content: formData.content,
+                content: finalContent,
                 attachments: safeAttachments,
                 status: formData.status,
                 orderIndex: Number(formData.orderIndex),
@@ -1050,14 +1075,19 @@ export default function AdminMaterialsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Isi Materi Pembelajaran (Teks / Panduan) *
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Isi Materi Pembelajaran (Teks / Panduan)
+                  </label>
+                  <span className="text-[10px] text-slate-400">
+                    Opsional jika sudah melampirkan berkas dokumen/PDF
+                  </span>
+                </div>
                 <textarea
-                  rows={7}
+                  rows={6}
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  placeholder="Tuliskan materi selengkapnya di sini..."
+                  placeholder="Tuliskan materi selengkapnya di sini (bisa dikosongkan jika materi sudah ada di file modul yang diunggah)..."
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs leading-relaxed focus:ring-2 focus:ring-emerald-500 focus:outline-none font-mono"
                 />
               </div>

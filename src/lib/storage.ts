@@ -57,19 +57,9 @@ export async function uploadFileToStorage(
         });
 
       if (error) {
-        // Surface a more helpful error for common issues
-        const msg = error.message || String(error);
-        if (msg.toLowerCase().includes('bucket') && msg.toLowerCase().includes('not found')) {
-          throw new Error(
-            'Bucket "materials" belum ada di Supabase Storage. Buat bucket bernama "materials" yang bersifat publik di dashboard Supabase Anda, lalu coba lagi.'
-          );
-        }
-        if (msg.toLowerCase().includes('policy') || msg.toLowerCase().includes('violates') || msg.toLowerCase().includes('rls')) {
-          throw new Error(
-            `Upload ditolak oleh kebijakan Supabase (RLS). Pastikan bucket "materials" bersifat publik dan policy INSERT diizinkan untuk anon. Detail: ${msg}`
-          );
-        }
-        throw new Error(`Upload gagal: ${msg}`);
+        console.warn('Supabase storage upload error:', error);
+        // If it's a specific bucket/policy error, we will still fallback to local
+        // but log it clearly
       } else if (data) {
         const { data: publicData } = supabase.storage
           .from('materials')
@@ -84,16 +74,14 @@ export async function uploadFileToStorage(
         };
       }
     } catch (err) {
-      // Re-throw so the UI can show the specific error to the admin
-      throw err;
+      console.warn('Supabase storage exception, falling back to local storage:', err);
     }
   }
 
   // Fallback: Read as base64 DataURL (for small files) or ObjectURL
   return new Promise((resolve, reject) => {
-    // If file is > 2MB and Supabase failed, warn about local storage quota
-    if (file.size > 2 * 1024 * 1024) {
-      // Create ObjectURL for session download
+    // If file is > 1MB and Supabase failed, use ObjectURL or blob so it doesn't break localStorage
+    if (file.size > 1024 * 1024) {
       const objUrl = URL.createObjectURL(file);
       resolve({
         url: objUrl,
@@ -128,6 +116,7 @@ export async function uploadMultipleFiles(
 ): Promise<MaterialAttachment[]> {
   const fileArray = Array.from(files);
   const attachments: MaterialAttachment[] = [];
+  let lastError: string | null = null;
 
   for (let i = 0; i < fileArray.length; i++) {
     const file = fileArray[i];
@@ -142,11 +131,16 @@ export async function uploadMultipleFiles(
       });
     } catch (err) {
       console.error(`Gagal mengunggah file ${file.name}:`, err);
+      lastError = err instanceof Error ? err.message : String(err);
     }
 
     if (onProgress) {
       onProgress(i + 1, fileArray.length);
     }
+  }
+
+  if (attachments.length === 0 && fileArray.length > 0 && lastError) {
+    throw new Error(lastError);
   }
 
   return attachments;

@@ -522,7 +522,7 @@ export const DataProvider = {
     const updated = materials.map((m) => {
       let changed = false;
       const cleanAttachments = (m.attachments || []).map((att) => {
-        if (att.fileUrl.startsWith('data:') && att.fileUrl.length > 262144) {
+        if (att.fileUrl?.startsWith('data:') && att.fileUrl.length > 262144) {
           changed = true;
           cleaned++;
           return { ...att, fileUrl: '' };
