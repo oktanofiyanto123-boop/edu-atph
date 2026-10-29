@@ -88,7 +88,7 @@ export default function StudentMaterialDetailPage() {
       />
 
       {/* Fullscreen Overlay Mode */}
-      {isFullscreen && isPdfOnly && (
+      {isFullscreen && !!material.pdfUrl && (
         <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col p-2 sm:p-4 animate-in fade-in">
           <div className="flex items-center justify-between pb-3 px-2 border-b border-slate-800 text-white">
             <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export default function StudentMaterialDetailPage() {
                 {material.title}
               </span>
               <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-700/50">
-                Layar Penuh
+                Layar Penuh PDF
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ export default function StudentMaterialDetailPage() {
                 className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 flex items-center gap-1.5"
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>Unduh</span>
+                <span>Unduh PDF</span>
               </a>
               <button
                 onClick={() => setIsFullscreen(false)}
@@ -162,15 +162,15 @@ export default function StudentMaterialDetailPage() {
           </div>
 
           <div className="flex items-center flex-wrap gap-2">
-            {isPdfOnly && (
+            {material.pdfUrl && (
               <>
                 <button
                   onClick={() => setIsFullscreen(true)}
-                  className="px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-1.5 transition-colors"
-                  title="Lihat Layar Penuh"
+                  className="px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-1.5 transition-colors shadow-2xs"
+                  title="Lihat Layar Penuh Dokumen PDF"
                 >
                   <Maximize2 className="w-3.5 h-3.5" />
-                  <span>Layar Penuh</span>
+                  <span>Layar Penuh PDF</span>
                 </button>
                 <a
                   href={material.pdfUrl}
@@ -287,13 +287,23 @@ export default function StudentMaterialDetailPage() {
 
               {/* Embedded PDF Viewer (for materials with both content AND pdfUrl) */}
               {!isPdfOnly && material.pdfUrl && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200">
-                    <FileText className="w-4 h-4 text-emerald-600" />
-                    <span>Dokumen PDF Modul Pembelajaran:</span>
+                <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-800 dark:text-slate-200">
+                      <FileText className="w-4 h-4 text-emerald-600" />
+                      <span>Dokumen Buku Siswa PDF Lengkap:</span>
+                    </div>
+                    <button
+                      onClick={() => setIsFullscreen(true)}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 flex items-center gap-1.5 transition-colors"
+                      title="Lihat dalam ukuran layar penuh"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                      <span>Perbesar Layar Penuh</span>
+                    </button>
                   </div>
                   <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900">
-                    <div className="relative w-full h-[60vh] min-h-[500px]">
+                    <div className="relative w-full h-[75vh] min-h-[600px]">
                       <iframe
                         src={`${material.pdfUrl}#toolbar=1&navpanes=1&zoom=page-width`}
                         title={`PDF Viewer - ${material.title}`}
@@ -306,7 +316,7 @@ export default function StudentMaterialDetailPage() {
                       href={material.pdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-1.5 transition-colors"
+                      className="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center gap-1.5 transition-colors"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Buka di Tab Baru</span>
@@ -314,10 +324,10 @@ export default function StudentMaterialDetailPage() {
                     <a
                       href={material.pdfUrl}
                       download
-                      className="px-3 py-2 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 flex items-center gap-1.5 transition-colors"
+                      className="px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 flex items-center gap-1.5 transition-colors"
                     >
                       <Download className="w-3.5 h-3.5" />
-                      <span>Unduh PDF</span>
+                      <span>Unduh Berkas PDF Lengkap</span>
                     </a>
                   </div>
                 </div>

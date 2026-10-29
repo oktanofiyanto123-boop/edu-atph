@@ -441,14 +441,14 @@ export const DataProvider = {
       .map((sm) => {
         const initMatch = INITIAL_MATERIALS.find((im) => im.id === sm.id);
         if (initMatch) {
-          // Only sync the pdfUrl from initial data when the stored one is a
-          // known placeholder dummy file — never overwrite a real URL or empty string
-          // that the admin intentionally left blank.
+          // Sync pdfUrl from initial data when stored pdfUrl is empty or placeholder dummy
           const hasDummyPdf = sm.pdfUrl && sm.pdfUrl.includes('dummy.pdf');
-          if (hasDummyPdf) {
+          const isMissingPdf = !sm.pdfUrl && !!initMatch.pdfUrl;
+          const hasDummyAttachment = (sm.attachments || []).some((a) => a.fileUrl?.includes('dummy.pdf'));
+          const isMissingAttachment = (!sm.attachments || sm.attachments.length === 0) && (initMatch.attachments && initMatch.attachments.length > 0);
+
+          if (hasDummyPdf || isMissingPdf || hasDummyAttachment || isMissingAttachment) {
             hasChanges = true;
-            // Only replace the pdfUrl and attachments from initial; keep all other
-            // admin edits (status, content, title, etc.) intact.
             return {
               ...sm,
               pdfUrl: initMatch.pdfUrl || sm.pdfUrl,

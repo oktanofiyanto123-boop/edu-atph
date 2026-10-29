@@ -875,13 +875,13 @@ Setelah Kalian mempelajari semua materi pada bab ini, saatnya Kalian merefleksik
 `,
     imageUrl: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=80',
     videoUrl: 'https://www.youtube.com/embed/rSQ5PQGDzU0',
-    pdfUrl: '',
+    pdfUrl: '/materials/bab-4-pengelolaan-faktor-produksi-kelas-x.pdf',
     attachments: [
       {
-        id: 'att-bab-iv-pengelolaan-faktor-produksi',
-        name: 'Modul Bab IV - Pengelolaan Faktor Produksi Kelas X.pdf',
-        fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
-        fileSize: '4.2 MB',
+        id: 'att-bab-iv-pengelolaan-faktor-produksi-pdf',
+        name: 'Buku Siswa BAB IV - Pengelolaan Faktor Produksi (Kelas X - 24 Halaman).pdf',
+        fileUrl: '/materials/bab-4-pengelolaan-faktor-produksi-kelas-x.pdf',
+        fileSize: '66.7 KB',
         fileType: 'pdf',
       },
     ],
