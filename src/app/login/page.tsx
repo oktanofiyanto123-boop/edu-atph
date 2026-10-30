@@ -202,6 +202,19 @@ export default function StudentLoginPage() {
       // Login akun siswa dengan email sendiri, password skaneba123, dan kelas yang dipilih
       const user = DataProvider.login(cleanEmail, cleanPassword, 'student', selectedClass, fullName.trim());
       if (user && user.role === 'student') {
+        // Set secure session cookie via server API for persistent auth
+        fetch('/api/auth/student-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: cleanEmail,
+            password: cleanPassword,
+            classId: user.classId,
+            className: user.className,
+            fullName: user.fullName,
+          }),
+        }).catch(() => {});
+
         router.push('/student/dashboard');
       } else {
         setLoading(false);

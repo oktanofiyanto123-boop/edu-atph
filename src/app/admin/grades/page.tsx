@@ -28,9 +28,65 @@ export default function AdminGradesPage() {
   const [kkmThreshold, setKkmThreshold] = useState(75);
   const [showConfig, setShowConfig] = useState(false);
 
-  const loadData = () => {
-    setGrades(DataProvider.getGrades());
+  const loadData = async () => {
+    const baseGrades = DataProvider.getGrades();
     setClasses(DataProvider.getClasses());
+
+    try {
+      const res = await fetch('/api/admin/quiz-attempts', { cache: 'no-store' });
+      const json = await res.json();
+      if (res.ok && json.success && Array.isArray(json.data) && json.data.length > 0) {
+        // Group attempts by studentId
+        const attemptsByStudent = new Map<string, any[]>();
+        json.data.forEach((att: any) => {
+          const list = attemptsByStudent.get(att.studentId) || [];
+          list.push(att);
+          attemptsByStudent.set(att.studentId, list);
+        });
+
+        // Merge or inject real grades from Supabase attempts
+        const updatedGrades = [...baseGrades];
+        attemptsByStudent.forEach((attempts, studentId) => {
+          const avgQuiz = Math.round(attempts.reduce((sum, a) => sum + (a.score || 0), 0) / attempts.length);
+          const firstAtt = attempts[0];
+          const existingIdx = updatedGrades.findIndex(
+            (g) => g.studentId === studentId || g.studentName.toLowerCase() === firstAtt.studentName.toLowerCase()
+          );
+
+          if (existingIdx !== -1) {
+            updatedGrades[existingIdx] = {
+              ...updatedGrades[existingIdx],
+              quizAverage: avgQuiz,
+              nisn: firstAtt.studentNisn && firstAtt.studentNisn !== '-' ? firstAtt.studentNisn : updatedGrades[existingIdx].nisn,
+              className: firstAtt.className || updatedGrades[existingIdx].className,
+              notes: `Mengerjakan ${attempts.length} kuis di Supabase. Rata-rata kuis: ${avgQuiz}.`,
+            };
+          } else {
+            // New student from Supabase
+            updatedGrades.unshift({
+              id: `grd-${studentId}`,
+              studentId,
+              studentName: firstAtt.studentName,
+              nisn: firstAtt.studentNisn || '-',
+              classId: 'cls-10-atph',
+              className: firstAtt.className || 'X ATPH',
+              assignmentAverage: 80,
+              quizAverage: avgQuiz,
+              finalScore: Math.round(80 * 0.6 + avgQuiz * 0.4),
+              status: avgQuiz >= 75 ? 'Tuntas' : 'Belum Tuntas',
+              notes: `Tercatat di Supabase (${attempts.length} kuis dikerjakan).`,
+            });
+          }
+        });
+
+        setGrades(updatedGrades);
+        return;
+      }
+    } catch (err) {
+      console.warn('Failed to fetch remote quiz attempts for grades:', err);
+    }
+
+    setGrades(baseGrades);
   };
 
   useEffect(() => {

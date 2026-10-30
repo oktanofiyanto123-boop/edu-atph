@@ -72,7 +72,30 @@ function setItem<T>(key: string, value: T): void {
 export const DataProvider = {
   // --- AUTH & USERS ---
   getCurrentUser(): UserProfile {
-    const user = getItem<UserProfile>(STORAGE_KEYS.CURRENT_USER, INITIAL_USERS[0]); // Default: Okta Nofiyanto (Admin)
+    let user: UserProfile | null = null;
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+      if (stored) {
+        try {
+          user = JSON.parse(stored);
+        } catch {}
+      }
+      if (!user) {
+        // Try reading from edu_student_session cookie
+        const match = document.cookie.match(/(?:^|;\s*)edu_student_session=([^;]+)/);
+        if (match) {
+          try {
+            user = JSON.parse(decodeURIComponent(match[1]));
+            if (user) {
+              localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+            }
+          } catch {}
+        }
+      }
+    }
+    if (!user) {
+      user = INITIAL_USERS[0]; // Default: Okta Nofiyanto (Admin)
+    }
     if (user && user.role === 'student') {
       this.ensureStudentDataAttached(user);
     }
@@ -170,12 +193,25 @@ export const DataProvider = {
       const resolvedName = (fullName && fullName.trim()) || formattedName;
       const assignedClass = targetClass || allClasses[0] || { id: 'cls-x-at-1', name: 'X AT 1' };
 
+      // Deterministic student ID and NISN based on clean email
+      let hash = 0;
+      let nisnSeed = 0;
+      for (let i = 0; i < cleanEmail.length; i++) {
+        const char = cleanEmail.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash |= 0;
+        nisnSeed = (nisnSeed * 31 + char) % 90000000;
+      }
+      const hex = Math.abs(hash).toString(16).padStart(8, '0');
+      const deterministicStudentId = `usr-std-${hex}`;
+      const deterministicNisn = `00${(10000000 + Math.abs(nisnSeed)).toString()}`;
+
       const newStudent: UserProfile = {
-        id: `usr-student-${Date.now()}`,
+        id: deterministicStudentId,
         email: cleanEmail,
         fullName: resolvedName,
         role: 'student',
-        nisn: `00${Math.floor(10000000 + Math.random() * 90000000)}`,
+        nisn: deterministicNisn,
         classId: assignedClass.id,
         className: assignedClass.name,
         major: 'Agribisnis Tanaman Pangan dan Hortikultura',
@@ -209,6 +245,7 @@ export const DataProvider = {
   logout(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+      document.cookie = 'edu_student_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
     }
   },
 

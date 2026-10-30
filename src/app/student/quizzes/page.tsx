@@ -21,8 +21,18 @@ export default function StudentQuizzesPage() {
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
-  const loadData = () => {
-    const user = DataProvider.getCurrentUser();
+  const loadData = async () => {
+    let user = DataProvider.getCurrentUser();
+    if (!user || user.role !== 'student') {
+      try {
+        const res = await fetch('/api/auth/student-session');
+        const json = await res.json();
+        if (json.authenticated && json.user) {
+          user = json.user;
+          DataProvider.setCurrentUser(user);
+        }
+      } catch {}
+    }
     setCurrentUser(user);
 
     // Published quizzes for student's class
@@ -34,7 +44,21 @@ export default function StudentQuizzesPage() {
     setQuizzes(list);
 
     if (user) {
-      const myAttempts = DataProvider.getQuizAttempts(user.id);
+      let myAttempts = DataProvider.getQuizAttempts(user.id);
+      try {
+        const res = await fetch(`/api/admin/quiz-attempts?studentId=${user.id}`);
+        const json = await res.json();
+        if (res.ok && json.success && Array.isArray(json.data) && json.data.length > 0) {
+          // Merge remote attempts with local attempts
+          const merged = [...json.data];
+          myAttempts.forEach((la) => {
+            if (!merged.some((m) => m.id === la.id)) {
+              merged.push(la);
+            }
+          });
+          myAttempts = merged;
+        }
+      } catch {}
       setAttempts(myAttempts);
     }
   };
