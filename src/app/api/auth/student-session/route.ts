@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'nodejs';
-
 // Generate deterministic unique student ID from clean email
 function generateStudentId(email: string): string {
   const clean = email.trim().toLowerCase();
