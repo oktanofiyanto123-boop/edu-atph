@@ -103,3 +103,4 @@ export async function DELETE() {
   response.cookies.delete('edu_student_session');
   return response;
 }
+

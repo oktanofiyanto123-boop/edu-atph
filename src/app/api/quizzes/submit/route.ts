@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
       studentId,
       studentName,
       studentNisn,
+      studentEmail,
       className,
       answers, // array of { questionId, userAnswer }
       startedAt,
@@ -81,6 +82,7 @@ export async function POST(req: NextRequest) {
     const isPassed = percentage >= passingScore;
     const attemptId = `att-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     const nowIso = new Date().toISOString();
+    const startIso = startedAt || new Date(Date.now() - 15 * 60000).toISOString();
 
     const attemptResult = {
       id: attemptId,
@@ -100,37 +102,60 @@ export async function POST(req: NextRequest) {
       correctCount,
       wrongCount,
       totalQuestions: questions.length,
-      startedAt: startedAt || new Date(Date.now() - 15 * 60000).toISOString(),
+      startedAt: startIso,
       completedAt: nowIso,
+      submittedAt: nowIso,
       status: 'graded' as const,
       answers: evaluatedAnswers,
     };
 
-    // 4. Simpan ke Supabase PostgreSQL tabel quiz_attempts
+    // 4. Simpan ke Supabase PostgreSQL
     let synced = false;
     let syncError: string | null = null;
+    let answersSaved = false;
+    let gradesSaved = false;
+    let studentSaved = false;
 
     try {
       const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
         auth: { persistSession: false },
       });
 
-      // Prepare metadata payload inside answers array
+      // A. Simpan / Perbarui data Siswa ke tabel `students` jika tersedia
+      try {
+        const studentPayload: any = {
+          full_name: studentName,
+          class_name: className || 'X ATPH',
+          nisn: studentNisn || '-',
+        };
+        if (studentEmail) {
+          studentPayload.email = studentEmail.trim().toLowerCase();
+          studentPayload.username = studentEmail.split('@')[0];
+        }
+        const { error: stdErr } = await supabase.from('students').upsert(studentPayload, { onConflict: 'email' });
+        if (!stdErr) studentSaved = true;
+      } catch {}
+
+      // B. Simpan data percobaan ke tabel `quiz_attempts`
       const answersPayload = [
         {
           __meta: true,
           className: className || 'X ATPH',
           studentNisn: studentNisn || '-',
+          subjectName: 'Dasar-Dasar Agribisnis Tanaman',
+          topic: quiz?.topic || 'Pengelolaan Faktor Produksi',
           correctCount,
           wrongCount,
           percentage,
           totalQuestions: questions.length,
           completedAt: nowIso,
+          startedAt: startIso,
         },
         ...evaluatedAnswers,
       ];
 
-      const { data, error } = await supabase
+      // Insert ke quiz_attempts dengan kolom yang kompatibel
+      const { data: attemptData, error: attemptErr } = await supabase
         .from('quiz_attempts')
         .insert({
           id: attemptId,
@@ -138,7 +163,7 @@ export async function POST(req: NextRequest) {
           quiz_title: quizTitle,
           student_id: studentId,
           student_name: studentName,
-          started_at: attemptResult.startedAt,
+          started_at: startIso,
           completed_at: nowIso,
           score: percentage,
           max_score: 100,
@@ -149,12 +174,54 @@ export async function POST(req: NextRequest) {
         .select('*')
         .single();
 
-      if (error) {
-        console.warn('Supabase quiz_attempts insert error:', error.message);
-        syncError = error.message;
-      } else if (data) {
+      if (attemptErr) {
+        console.warn('Supabase quiz_attempts insert error:', attemptErr.message);
+        syncError = attemptErr.message;
+      } else if (attemptData) {
         synced = true;
       }
+
+      // C. Simpan rincian jawaban per nomor ke tabel `quiz_answers` jika tabel tersedia
+      try {
+        const quizAnswersRows = evaluatedAnswers.map((ans) => ({
+          attempt_id: attemptId,
+          question_id: ans.questionId,
+          question_text: ans.questionText,
+          answer: ans.userAnswer,
+          correct_answer: ans.correctAnswer,
+          is_correct: ans.isCorrect,
+          points_awarded: ans.pointsAwarded,
+        }));
+
+        const { error: qAnsErr } = await supabase.from('quiz_answers').insert(quizAnswersRows);
+        if (!qAnsErr) answersSaved = true;
+      } catch (err: any) {
+        console.warn('quiz_answers insert non-fatal error:', err?.message);
+      }
+
+      // D. Simpan nilai ke tabel `grades` jika tabel tersedia
+      try {
+        const gradePayload: any = {
+          student_id: studentId,
+          student_name: studentName,
+          class_name: className || 'X ATPH',
+          quiz_id: quizId,
+          quiz_title: quizTitle,
+          attempt_id: attemptId,
+          score: percentage,
+          assessment_type: 'quiz',
+          subject_name: 'Dasar-Dasar Agribisnis Tanaman',
+          final_score: percentage,
+          quiz_average: percentage,
+          status: isPassed ? 'Tuntas' : 'Belum Tuntas',
+        };
+
+        const { error: grdErr } = await supabase.from('grades').insert(gradePayload);
+        if (!grdErr) gradesSaved = true;
+      } catch (err: any) {
+        console.warn('grades insert non-fatal error:', err?.message);
+      }
+
     } catch (err: any) {
       console.warn('Supabase connection error:', err.message);
       syncError = err.message || 'Koneksi ke Supabase terputus';
@@ -164,6 +231,9 @@ export async function POST(req: NextRequest) {
       success: true,
       synced,
       syncError,
+      answersSaved,
+      gradesSaved,
+      studentSaved,
       attempt: attemptResult,
       message: synced
         ? 'Jawaban kuis dan nilai berhasil disimpan ke server Supabase'

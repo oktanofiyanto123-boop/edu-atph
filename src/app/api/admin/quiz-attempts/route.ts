@@ -54,6 +54,8 @@ export async function GET(req: NextRequest) {
       const wrongCount = meta.wrongCount ?? (answersList.length - correctCount);
       const className = meta.className || 'X ATPH';
       const studentNisn = meta.studentNisn || '-';
+      const subjectName = meta.subjectName || 'Dasar-Dasar Agribisnis Tanaman';
+      const topic = meta.topic || 'Pengelolaan Faktor Produksi';
 
       return {
         id: row.id,
@@ -63,6 +65,8 @@ export async function GET(req: NextRequest) {
         studentName: row.student_name,
         className,
         studentNisn,
+        subjectName,
+        topic,
         score: Number(row.score) || 0,
         maxScore: Number(row.max_score) || 100,
         percentage: Number(row.score) || 0,
@@ -88,3 +92,4 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, error: err.message, data: [] }, { status: 500 });
   }
 }
+
